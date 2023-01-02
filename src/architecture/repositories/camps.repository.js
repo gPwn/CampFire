@@ -62,6 +62,14 @@ class CampsRepository {
         return camp;
     };
 
+    // 캠핑장 중복값 조회
+    getIsExistValue = async (campName, campAddress) => {
+        const camp = await this.#CampsModel.findOne({
+            where: { [Op.or]: [{ campName }, { campAddress }] },
+        });
+        return camp;
+    };
+
     // 캠핑장 예약하기
     updateCamps = async (
         campId,

@@ -16,6 +16,19 @@ class UsersRepository {
         });
         return createUser;
     };
+
+    findOneUserByEmail = async (email) => {
+        return await this.#userModel.findOne({
+            where: { email },
+            attributes: { exclude: ['password'] },
+        });
+    };
+    findOneUserByUserName = async (userName) => {
+        return await this.#userModel.findOne({
+            where: { userName },
+            attributes: { exclude: ['password'] },
+        });
+    };
 }
 
 module.exports = UsersRepository;

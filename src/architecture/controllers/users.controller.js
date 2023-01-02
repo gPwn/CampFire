@@ -33,6 +33,30 @@ class UsersController {
             });
         }
     };
+
+    //아이디/닉네임 통합 중복확인 API
+    findDup = async (req, res) => {
+        const query = req.query;
+        try {
+            const message = await this.usersService.findDup(query);
+            res.status(200).json({ message });
+        } catch (error) {
+            console.log(error);
+            if (error === '이미 사용중인 이메일입니다.') {
+                return res.status(412).json({
+                    errorMessage: '이미 사용중인 이메일입니다.',
+                });
+            }
+            if (error === '이미 사용중인 닉네임입니다.') {
+                return res.status(412).json({
+                    errorMessage: '이미 사용중인 닉네임입니다.',
+                });
+            }
+            res.status(400).json({
+                errorMessage: '중복확인에 실패하였습니다.',
+            });
+        }
+    };
 }
 
 module.exports = UsersController;

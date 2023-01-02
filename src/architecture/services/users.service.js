@@ -62,6 +62,21 @@ class UsersService {
 
         return { accessToken, refreshToken };
     };
+
+    findOneUser = async (userId) => {
+        const user = await this.usersRepository.findOneUser(userId);
+        if (!user) throw '존재하지 않는 사용자입니다.';
+
+        return {
+            userId: user.userId,
+            email: user.email,
+            userName: user.userName,
+            phoneNumber: user.phoneNumber,
+            profileImg: user.profileImg,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        };
+    };
 }
 
 module.exports = UsersService;

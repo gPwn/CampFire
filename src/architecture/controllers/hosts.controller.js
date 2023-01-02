@@ -91,6 +91,24 @@ class HostsController {
             });
         }
     };
+
+    findOneHost = async (req, res) => {
+        try {
+            const { hostId } = req.params;
+            const host = await this.hostsService.findOneHost(hostId);
+            res.status(200).json({ host });
+        } catch (error) {
+            console.log(error);
+            if (error === '존재하지 않는 사용자입니다.') {
+                res.status(404).json({
+                    errorMessage: '존재하지 않는 사용자입니다.',
+                });
+            }
+            res.status(400).json({
+                errorMessage: '사용자 정보 불러오기에 실패하였습니다.',
+            });
+        }
+    };
 }
 
 module.exports = HostsController;

@@ -62,6 +62,21 @@ class HostsService {
 
         return { accessToken, refreshToken };
     };
+
+    findOneHost = async (hostId) => {
+        const host = await this.hostsRepository.findOneHost(hostId);
+        if (!host) throw '존재하지 않는 사용자입니다.';
+
+        return {
+            hostId: host.hostId,
+            email: host.email,
+            userName: host.hostName,
+            phoneNumber: host.phoneNumber,
+            profileImg: host.profileImg,
+            createdAt: host.createdAt,
+            updatedAt: host.updatedAt,
+        };
+    };
 }
 
 module.exports = HostsService;

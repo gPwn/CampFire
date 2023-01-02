@@ -8,5 +8,6 @@ const authLoginHostMiddleware = require('../middlewares/authLoginHost.middleware
 router.post('/signup', upload.single('profileImg'), hostsController.signUp);
 router.get('/signup/findDup', hostsController.findDup);
 router.post('/login', authLoginHostMiddleware, hostsController.logIn);
+router.get('/:hostId', hostsController.findOneHost);
 
 module.exports = router;

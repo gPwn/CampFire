@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const env = process.env;
-const {
-    AuthenticationError,
-} = require('../middlewares/exceptions/error.class');
+const { AuthenticationError } = require('./exceptions/error.class');
 
 const validateToken = function (tokenValue) {
     try {

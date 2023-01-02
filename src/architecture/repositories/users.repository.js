@@ -40,6 +40,12 @@ class UsersRepository {
     updateRefreshToken = async (token, email) => {
         await this.#userModel.update({ token }, { where: { email: email } });
     };
+
+    findOneUser = async (userId) => {
+        return this.#userModel.findOne({
+            where: { userId },
+        });
+    };
 }
 
 module.exports = UsersRepository;

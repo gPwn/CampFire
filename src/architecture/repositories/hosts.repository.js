@@ -40,6 +40,12 @@ class HostsRepository {
     updateRefreshToken = async (token, email) => {
         await this.#hostModel.update({ token }, { where: { email: email } });
     };
+
+    findOneHost = async (hostId) => {
+        return this.#hostModel.findOne({
+            where: { hostId },
+        });
+    };
 }
 
 module.exports = HostsRepository;

@@ -1,23 +1,23 @@
-const UsersRepository = require('../repositories/users.repository');
-const { Users } = require('../../models');
+const HostsRepository = require('../repositories/hosts.repository');
+const { Hosts } = require('../../models');
 require('dotenv').config();
 const hash = require('../../util/auth-encryption.util');
-const { createUserToken } = require('../../util/auth-jwtToken.util.js');
+const { createHostToken } = require('../../util/auth-jwtToken.util.js');
 
-class UsersService {
-    usersRepository = new UsersRepository(Users);
+class HostsService {
+    hostsRepository = new HostsRepository(Hosts);
 
     //회원가입 API
-    signUp = async (email, userName, password, phoneNumber, profileImg) => {
+    signUp = async (email, hostName, password, phoneNumber, profileImg) => {
         const hashValue = hash(password);
-        const user = await this.usersRepository.createUser(
+        const host = await this.hostsRepository.createHost(
             email,
-            userName,
+            hostName,
             hashValue,
             phoneNumber,
             profileImg
         );
-        return user;
+        return host;
     };
 
     //아이디/닉네임 중복확인 API
@@ -25,17 +25,17 @@ class UsersService {
         const prop = Object.keys(query)[0];
         const value = Object.values(query)[0];
         if (prop === 'email') {
-            const user = await this.usersRepository.findOneUserByEmail(value);
-            if (user) {
+            const host = await this.hostsRepository.findOneHostByEmail(value);
+            if (host) {
                 throw '이미 사용중인 이메일입니다.';
             } else {
                 return '이메일 중복확인에 성공하였습니다.';
             }
-        } else if (prop === 'userName') {
-            const user = await this.usersRepository.findOneUserByUserName(
+        } else if (prop === 'hostName') {
+            const host = await this.hostsRepository.findOneHostByHostName(
                 value
             );
-            if (user) {
+            if (host) {
                 throw '이미 사용중인 닉네임입니다.';
             } else {
                 return '닉네임 중복확인에 성공하였습니다.';
@@ -47,21 +47,21 @@ class UsersService {
 
     logIn = async (email, password) => {
         const hashValue = hash(password);
-        const user = await this.usersRepository.findUserByAuth(
+        const host = await this.hostsRepository.findHostByAuth(
             email,
             hashValue
         );
 
-        if (!user) {
+        if (!host) {
             throw '아이디 또는 패스워드가 일치하지 않습니다.';
         }
 
-        const accessToken = createUserToken(user.userId, '1h');
-        const refreshToken = createUserToken('refreshToken', '1d');
-        await this.usersRepository.updateRefreshToken(refreshToken, email);
+        const accessToken = createHostToken(host.hostId, '1h');
+        const refreshToken = createHostToken('refreshToken', '1d');
+        await this.hostsRepository.updateRefreshToken(refreshToken, email);
 
         return { accessToken, refreshToken };
     };
 }
 
-module.exports = UsersService;
+module.exports = HostsService;

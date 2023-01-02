@@ -1,13 +1,13 @@
-const UsersService = require('../services/users.service');
+const HostsService = require('../services/hosts.service');
 const jwt = require('jsonwebtoken');
 
-class UsersController {
-    usersService = new UsersService();
+class HostsController {
+    hostsService = new HostsService();
 
     //회원가입 API
     signUp = async (req, res) => {
         try {
-            const { email, userName, password, phoneNumber } = req.body;
+            const { email, hostName, password, phoneNumber } = req.body;
 
             let profileImg = undefined;
             if (req.file) {
@@ -17,9 +17,9 @@ class UsersController {
                     'https://cdn-icons-png.flaticon.com/512/149/149071.png';
             }
 
-            await this.usersService.signUp(
+            await this.hostsService.signUp(
                 email,
-                userName,
+                hostName,
                 password,
                 phoneNumber,
                 profileImg
@@ -38,7 +38,7 @@ class UsersController {
     findDup = async (req, res) => {
         const query = req.query;
         try {
-            const message = await this.usersService.findDup(query);
+            const message = await this.hostsService.findDup(query);
             res.status(200).json({ message });
         } catch (error) {
             console.log(error);
@@ -62,13 +62,13 @@ class UsersController {
         try {
             const { email, password } = req.body;
 
-            const { accessToken, refreshToken } = await this.usersService.logIn(
+            const { accessToken, refreshToken } = await this.hostsService.logIn(
                 email,
                 password
             );
-            const { userId } = jwt.verify(
+            const { hostId } = jwt.verify(
                 accessToken,
-                process.env.TOKEN_USER_SECRET_KEY
+                process.env.TOKEN_HOST_SECRET_KEY
             );
             console.log(`accessToken = ${accessToken}`);
 
@@ -77,7 +77,7 @@ class UsersController {
                 refreshtoken: `Bearer ${refreshToken}`,
             });
             res.status(200).json({
-                userId: userId,
+                hostId: hostId,
             });
         } catch (error) {
             console.log(error);
@@ -93,4 +93,4 @@ class UsersController {
     };
 }
 
-module.exports = UsersController;
+module.exports = HostsController;

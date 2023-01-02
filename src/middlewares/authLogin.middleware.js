@@ -6,7 +6,7 @@ const {
 
 const validateToken = function (tokenValue) {
     try {
-        jwt.verify(tokenValue, env.TOKEN_SECRET_KEY);
+        jwt.verify(tokenValue, env.TOKEN_USER_SECRET_KEY);
         return true;
     } catch (error) {
         return false;

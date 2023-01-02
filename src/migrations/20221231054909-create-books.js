@@ -44,9 +44,11 @@ module.exports = {
                 type: Sequelize.DataTypes.DATE,
                 allowNull: false,
             },
-            peopleAmount: {
+            adultes: {
                 type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
+            },
+            children: {
+                type: Sequelize.DataTypes.INTEGER,
             },
             createdAt: {
                 allowNull: false,

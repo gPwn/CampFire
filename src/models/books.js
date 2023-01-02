@@ -57,9 +57,11 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATE,
                 allowNull: false,
             },
-            peopleAmount: {
+            adultes: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+            },
+            children: {
+                type: DataTypes.INTEGER,
             },
             createdAt: {
                 allowNull: false,

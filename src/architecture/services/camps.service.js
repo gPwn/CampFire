@@ -25,6 +25,14 @@ class CampsService {
         checkIn,
         checkOut
     ) => {
+        const isExistValue = await this.campsRepository.getIsExistValue(
+            campName,
+            campAddress
+        );
+        if (isExistValue) {
+            throw new ExistError();
+        }
+
         const createdCamp = await this.campsRepository.createCamp(
             hostId,
             campMainImage,

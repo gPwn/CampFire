@@ -1,13 +1,68 @@
 const { Op } = require('sequelize');
-const { Camps, Books, sequelize } = require('../../models');
 
 class CampsRepository {
-    getHostIdCamps = async (campId) => {
-        return await Camps.findOne({
-            where: { campId },
+    #BooksModel;
+    #CampsModel;
+    #HostsModel;
+    #UsersModel;
+    constructor(BooksModel, CampsModel, HostsModel, UsersModel) {
+        this.#BooksModel = BooksModel;
+        this.#CampsModel = CampsModel;
+        this.#HostsModel = HostsModel;
+        this.#UsersModel = UsersModel;
+    }
+
+    // 캠핑장 업로드
+    createCamp = async (
+        hostId,
+        campMainImage,
+        campSubImages,
+        campName,
+        campAddress,
+        campPrice,
+        campDesc,
+        campAmenities,
+        checkIn,
+        checkOut
+    ) => {
+        const createdCamp = await this.#CampsModel.create({
+            hostId,
+            campMainImage,
+            campSubImages,
+            campName,
+            campAddress,
+            campPrice,
+            campDesc,
+            campAmenities,
+            checkIn,
+            checkOut,
         });
+        return createdCamp;
     };
 
+    // 캠핑장 페이지 조회
+    getCampsByPage = async (pageNo) => {
+        const camps = await this.#CampsModel.findAll({
+            offset: pageNo,
+            limit: 8,
+            order: [['createdAt', 'DESC']],
+        });
+        if (camps.length === 0) {
+            return false;
+        } else {
+            return camps;
+        }
+    };
+
+    // 캠핑장 상세 조회
+    findCampById = async (campId) => {
+        const camp = await this.#CampsModel.findOne({
+            where: { campId },
+        });
+        return camp;
+    };
+
+    // 캠핑장 예약하기
     updateCamps = async (
         campId,
         hostId,
@@ -21,7 +76,7 @@ class CampsRepository {
         checkIn,
         checkOut
     ) => {
-        return await Camps.update(
+        return await this.#CampsModel.update(
             {
                 campId,
                 hostId,
@@ -44,7 +99,7 @@ class CampsRepository {
     };
 
     deletecamps = async (campId, hostId) => {
-        await Camps.destroy({
+        await this.#CampsModel.destroy({
             where: {
                 [Op.and]: [{ campId, hostId }],
             },
@@ -60,7 +115,7 @@ class CampsRepository {
         adults,
         children
     ) => {
-        await Books.create({
+        await this.#BooksModel.create({
             campId,
             userId,
             hostId,

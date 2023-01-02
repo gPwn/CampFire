@@ -121,6 +121,10 @@ class CampsService {
         checkOut
     ) => {
         const findHostId = await this.campsRepository.findCampById(campId);
+        if (!findHostId) {
+            throw new InvalidParamsError();
+        }
+
         if (findHostId.hostId !== hostId) {
             throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
         }

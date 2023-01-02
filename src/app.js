@@ -7,6 +7,9 @@ require('dotenv').config();
 app.use(express.json());
 app.use('/api', routes);
 
+const ErrorHandler = require('./middlewares/error.handler.middleware.js');
+app.use(ErrorHandler);
+
 app.listen(process.env.PORT, () => {
     console.log(process.env.PORT, '포트로 서버가 열렸습니다.');
 });

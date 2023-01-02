@@ -1,6 +1,7 @@
 const CampsRepository = require('../repositories/camps.repository.js');
 const {
     ValidationError,
+    InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class.js');
 
 class CampsService {
@@ -43,6 +44,10 @@ class CampsService {
 
     deletecamps = async (campId, hostId) => {
         const findHostId = await this.campsRepository.getHostIdCamps(campId);
+        if (!findHostId) {
+            throw new InvalidParamsError();
+        }
+
         if (findHostId.hostId !== hostId) {
             throw new ValidationError('캠핑장 삭제 권한이 없습니다.', 400);
         }

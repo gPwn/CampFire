@@ -62,7 +62,7 @@ class CampsRepository {
         return camp;
     };
 
-    // 캠핑장 상세 조회
+    // 캠핑장 중복값 조회
     getIsExistValue = async (campName, campAddress) => {
         const camp = await this.#CampsModel.findOne({
             where: { [Op.or]: [{ campName }, { campAddress }] },

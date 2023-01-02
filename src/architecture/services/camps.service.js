@@ -2,6 +2,7 @@ const CampsRepository = require('../repositories/camps.repository.js');
 const {
     ValidationError,
     InvalidParamsError,
+    ExistError,
 } = require('../../middlewares/exceptions/error.class.js');
 
 class CampsService {
@@ -23,8 +24,20 @@ class CampsService {
         checkOut
     ) => {
         const findHostId = await this.campsRepository.getHostIdCamps(campId);
+        if (!findHostId) {
+            throw new InvalidParamsError();
+        }
+
         if (findHostId.hostId !== hostId) {
             throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
+        }
+
+        const isExistValue = await this.campsRepository.getIsExistValue(
+            campName,
+            campAddress
+        );
+        if (isExistValue) {
+            throw new ExistError();
         }
 
         return await this.campsRepository.updateCamps(

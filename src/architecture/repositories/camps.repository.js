@@ -8,6 +8,12 @@ class CampsRepository {
         });
     };
 
+    getIsExistValue = async (campName, campAddress) => {
+        return await Camps.findOne({
+            where: { [Op.or]: [{ campName }, { campAddress }] },
+        });
+    };
+
     updateCamps = async (
         campId,
         hostId,

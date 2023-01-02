@@ -44,7 +44,7 @@ module.exports = {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false,
             },
-            campAmenity: {
+            campAmenities: {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false,
             },

@@ -12,13 +12,14 @@ class CampsController {
                 campAddress,
                 campPrice,
                 campDesc,
-                campAmenity,
+                campAmenities,
                 checkIn,
                 checkOut,
             } = req.body;
 
             const { campId } = req.params;
-            const hostId = 2;
+            const { hostId } = res.locals;
+
             const campMainImage = req.files.campMainImage[0].location;
             const campSubImagesObjects = req.files.campSubImages;
 
@@ -39,7 +40,7 @@ class CampsController {
                 campMainImage,
                 campSubImages,
                 campDesc,
-                campAmenity,
+                campAmenities,
                 checkIn,
                 checkOut
             );
@@ -55,7 +56,7 @@ class CampsController {
     deletecamps = async (req, res, next) => {
         try {
             const { campId } = req.params;
-            const hostId = 2;
+            const { hostId } = res.locals;
 
             await this.campsService.deletecamps(campId, hostId);
 
@@ -70,7 +71,7 @@ class CampsController {
     addBookscamps = async (req, res, next) => {
         try {
             const { campId } = req.params;
-            const userId = 1;
+            const { userId } = res.locals;
 
             const { checkInDate, checkOutDate, adults, children } = req.body;
 

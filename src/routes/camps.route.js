@@ -13,13 +13,13 @@ router.put(
         { name: 'campMainImage', maxCount: 1 },
         { name: 'campSubImages', maxCount: 10 },
     ]),
-    /*authHostMiddleware,*/
+    authHostMiddleware,
     campsController.updateCamps
 );
-router.delete('/:campId', /*authHostMiddleware,*/ campsController.deletecamps);
+router.delete('/:campId', authHostMiddleware, campsController.deletecamps);
 router.post(
     '/:campId/books',
-    /*authUserMiddleware,*/
+    authUserMiddleware,
     campsController.addBookscamps
 );
 

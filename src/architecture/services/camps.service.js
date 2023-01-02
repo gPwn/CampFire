@@ -18,7 +18,7 @@ class CampsService {
         campMainImage,
         campSubImages,
         campDesc,
-        campAmenity,
+        campAmenities,
         checkIn,
         checkOut
     ) => {
@@ -36,7 +36,7 @@ class CampsService {
             campMainImage,
             campSubImages,
             campDesc,
-            campAmenity,
+            campAmenities,
             checkIn,
             checkOut
         );

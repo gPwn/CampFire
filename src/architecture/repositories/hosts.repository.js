@@ -46,6 +46,13 @@ class HostsRepository {
             where: { hostId },
         });
     };
+
+    updateHost = async (hostId, hostName, phoneNumber, profileImg) => {
+        return this.#hostModel.update(
+            { hostName, phoneNumber, profileImg },
+            { where: { hostId } }
+        );
+    };
 }
 
 module.exports = HostsRepository;

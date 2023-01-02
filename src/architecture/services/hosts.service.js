@@ -77,6 +77,24 @@ class HostsService {
             updatedAt: host.updatedAt,
         };
     };
+
+    updateHost = async (
+        hostId,
+        hostName,
+        phoneNumber,
+        tokenHostId,
+        profileImg
+    ) => {
+        const host = await this.hostsRepository.findOneHost(hostId);
+        if (!host) throw new Error('존재하지않는 사용자입니다.');
+        if (host.hostId !== tokenHostId) throw new Error('권한이 없습니다.');
+        await this.hostsRepository.updateHost(
+            hostId,
+            hostName,
+            phoneNumber,
+            profileImg
+        );
+    };
 }
 
 module.exports = HostsService;

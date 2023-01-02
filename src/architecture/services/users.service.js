@@ -77,6 +77,24 @@ class UsersService {
             updatedAt: user.updatedAt,
         };
     };
+
+    updateUser = async (
+        userId,
+        userName,
+        phoneNumber,
+        tokenUserId,
+        profileImg
+    ) => {
+        const user = await this.usersRepository.findOneUser(userId);
+        if (!user) throw new Error('존재하지않는 사용자입니다.');
+        if (user.userId !== tokenUserId) throw new Error('권한이 없습니다.');
+        await this.usersRepository.updateUser(
+            userId,
+            userName,
+            phoneNumber,
+            profileImg
+        );
+    };
 }
 
 module.exports = UsersService;

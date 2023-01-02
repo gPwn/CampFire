@@ -46,6 +46,13 @@ class UsersRepository {
             where: { userId },
         });
     };
+
+    updateUser = async (userId, userName, phoneNumber, profileImg) => {
+        return this.#userModel.update(
+            { userName, phoneNumber, profileImg },
+            { where: { userId } }
+        );
+    };
 }
 
 module.exports = UsersRepository;

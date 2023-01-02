@@ -24,15 +24,6 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 type: DataTypes.INTEGER,
             },
-            userId: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'Users',
-                    key: 'userId',
-                },
-                onDelete: 'cascade',
-            },
             hostId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
@@ -56,7 +47,11 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            campImg: {
+            campMainImage: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            campSubImages: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
@@ -64,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            campAmenity: {
+            campAmenities: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },

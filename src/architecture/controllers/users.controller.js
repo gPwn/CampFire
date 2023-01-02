@@ -57,6 +57,40 @@ class UsersController {
             });
         }
     };
+
+    logIn = async (req, res) => {
+        try {
+            const { email, password } = req.body;
+
+            const { accessToken, refreshToken } = await this.usersService.logIn(
+                email,
+                password
+            );
+            const { userId } = jwt.verify(
+                accessToken,
+                process.env.TOKEN_SECRET_KEY
+            );
+            console.log(`accessToken = ${accessToken}`);
+
+            res.header({
+                accesstoken: `Bearer ${accessToken}`,
+                refreshtoken: `Bearer ${refreshToken}`,
+            });
+            res.status(200).json({
+                userId: userId,
+            });
+        } catch (error) {
+            console.log(error);
+            if (error === '아이디 또는 패스워드가 일치하지 않습니다.') {
+                return res.status(412).json({
+                    errorMessage: '아이디 또는 패스워드가 일치하지 않습니다.',
+                });
+            }
+            res.status(400).json({
+                errorMessage: '로그인에 실패하였습니다.',
+            });
+        }
+    };
 }
 
 module.exports = UsersController;

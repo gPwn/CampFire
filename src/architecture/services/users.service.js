@@ -44,6 +44,24 @@ class UsersService {
             throw 'Service findDup Error';
         }
     };
+
+    logIn = async (email, password) => {
+        const hashValue = hash(password);
+        const user = await this.usersRepository.findUserByAuth(
+            email,
+            hashValue
+        );
+
+        if (!user) {
+            throw '아이디 또는 패스워드가 일치하지 않습니다.';
+        }
+
+        const accessToken = createToken(user.userId, '1h');
+        const refreshToken = createToken('refreshToken', '1d');
+        await this.usersRepository.updateRefreshToken(refreshToken, email);
+
+        return { accessToken, refreshToken };
+    };
 }
 
 module.exports = UsersService;

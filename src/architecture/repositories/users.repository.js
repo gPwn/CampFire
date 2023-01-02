@@ -29,6 +29,17 @@ class UsersRepository {
             attributes: { exclude: ['password'] },
         });
     };
+    findUserByAuth = async (email, password) => {
+        const findUser = await this.#userModel.findOne({
+            where: { [Op.and]: [{ email }, { password }] },
+            attributes: { exclude: ['password'] },
+        });
+        return findUser;
+    };
+
+    updateRefreshToken = async (token, email) => {
+        await this.#userModel.update({ token }, { where: { email: email } });
+    };
 }
 
 module.exports = UsersRepository;

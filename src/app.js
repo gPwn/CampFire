@@ -19,8 +19,10 @@ app.use('/api', routes);
 const ErrorHandler = require('./middlewares/error.handler.middleware');
 app.use(ErrorHandler);
 
-app.listen(process.env.PORT, () => {
-    console.log(process.env.PORT, '포트로 서버가 열렸습니다.');
+const port = 3000;
+
+app.listen(port, () => {
+    console.log(port, '포트로 서버가 열렸습니다.');
 });
 
 app.get('/', (req, res) => {

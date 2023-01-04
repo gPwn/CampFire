@@ -26,5 +26,5 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send(`test ${process.env.PORT}`);
+    res.send(`test ${port}`);
 });

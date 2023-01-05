@@ -4,9 +4,8 @@ WORKDIR /app
 COPY package.json /app
 RUN rm package-lock.json || true
 RUN npm install
+RUN npx sequelize init
 COPY . /app
-# COPY .env ./
-# RUN export $(cat .env | xargs)
 
 ENV HOST 0.0.0.0
 EXPOSE 3000

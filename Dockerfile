@@ -6,6 +6,6 @@ RUN rm package-lock.json || true
 RUN npm install
 COPY . /app
 
-ENV HOST 0.0.0.0
+ENV HOST 1.1.1.1
 EXPOSE 3000
 CMD ["npm","run","dev"]

@@ -104,8 +104,10 @@ class CampsController {
 
             const { hostId } = res.locals;
             const { campId } = req.params;
+
             let campMainImage;
             const campSubImagesArray = [];
+
             if (req.files) {
                 campMainImage = req.files.campMainImage[0].location;
                 for (const img of req.files.campSubImages) {

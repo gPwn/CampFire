@@ -129,14 +129,6 @@ class CampsService {
             throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
         }
 
-        const isExistValue = await this.campsRepository.getIsExistValue(
-            campName,
-            campAddress
-        );
-        if (isExistValue) {
-            throw new ExistError();
-        }
-
         return await this.campsRepository.updateCamps(
             campId,
             hostId,

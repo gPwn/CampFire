@@ -25,6 +25,6 @@ app.listen(3000, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send(`test 3000`);
     console.log(process.env.PORT);
+    res.send(`test 3000`);
 });

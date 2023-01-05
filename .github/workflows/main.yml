@@ -61,4 +61,4 @@ jobs:
             - name: Docker run
               run: |
                   docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-                  docker run -d -p 80:3000 -e ${{ env.cicd_test }}--name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+                  docker run -d -p 80:3000 -e ${{ secrets.cicd_test }}--name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest

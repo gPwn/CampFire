@@ -11,7 +11,7 @@ const corsOption = {
 };
 
 require('dotenv').config();
-const env = process.env;
+// const env = process.env;
 
 app.use(express.json());
 app.use(cors(corsOption));
@@ -25,5 +25,5 @@ app.listen(3000, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send(`test ${env.PORT}`);
+    res.send(`test 3000`);
 });

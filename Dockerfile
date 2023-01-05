@@ -4,7 +4,6 @@ WORKDIR /app
 COPY package.json /app
 RUN rm package-lock.json || true
 RUN npm install
-RUN npx sequelize init
 COPY . /app
 
 ENV HOST 0.0.0.0

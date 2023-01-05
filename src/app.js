@@ -25,6 +25,5 @@ app.listen(env.PORT, () => {
 });
 
 app.get('/', (req, res) => {
-    console.log(env.PORT);
-    res.send(`test 3000`);
+    res.send(`test ${env.PORT}`);
 });

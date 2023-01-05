@@ -10,6 +10,7 @@ env:
     DOCKER_IMAGE: ghcr.io/${{ github.actor }}/campfire-cicd
     VERSION: ${{ github.sha }}
     NAME: go_cicd
+    DB_HOST: 1.1.1.1
 
 jobs:
     # 빌드 Job

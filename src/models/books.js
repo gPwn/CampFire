@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            totalpeople: {
+            totalPeople: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },

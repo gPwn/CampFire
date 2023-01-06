@@ -52,16 +52,15 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             campSubImages: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(2000),
                 allowNull: false,
             },
             campDesc: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(2000),
                 allowNull: false,
             },
             campAmenities: {
                 type: DataTypes.STRING,
-                allowNull: false,
             },
             checkIn: {
                 type: DataTypes.TIME,

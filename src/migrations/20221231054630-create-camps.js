@@ -37,16 +37,15 @@ module.exports = {
                 allowNull: false,
             },
             campSubImages: {
-                type: Sequelize.DataTypes.STRING,
+                type: Sequelize.DataTypes.STRING(2000),
                 allowNull: false,
             },
             campDesc: {
-                type: Sequelize.DataTypes.STRING,
+                type: Sequelize.DataTypes.STRING(2000),
                 allowNull: false,
             },
             campAmenities: {
                 type: Sequelize.DataTypes.STRING,
-                allowNull: false,
             },
             checkIn: {
                 type: Sequelize.DataTypes.TIME,

@@ -44,7 +44,7 @@ class CampsRepository {
     getCampsByPage = async (pageNo) => {
         const camps = await this.#CampsModel.findAll({
             offset: pageNo,
-            limit: 8,
+            limit: 16,
             order: [['createdAt', 'DESC']],
         });
         if (camps.length === 0) {

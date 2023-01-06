@@ -6,6 +6,11 @@ const {
 } = require('../../middlewares/exceptions/error.class.js');
 
 const { Books, Camps, Hosts, Users } = require('../../models');
+const { deleteImage } = require('../../modules/campImg');
+const {
+    getMainImageName,
+    getSubImagesNames,
+} = require('../../modules/modules.js');
 
 class CampsService {
     constructor() {
@@ -129,6 +134,16 @@ class CampsService {
             throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
         }
 
+        const campMainImageName = getMainImageName(findHostId['campMainImage']);
+        const campSubImageNames = getSubImagesNames(
+            findHostId['campSubImages']
+        );
+
+        await deleteImage(campMainImageName);
+        for (let campSubImageName of campSubImageNames) {
+            await deleteImage(campSubImageName);
+        }
+
         return await this.campsRepository.updateCamps(
             campId,
             hostId,
@@ -153,6 +168,16 @@ class CampsService {
 
         if (findHostId.hostId !== hostId) {
             throw new ValidationError('캠핑장 삭제 권한이 없습니다.', 400);
+        }
+
+        const campMainImageName = getMainImageName(findHostId['campMainImage']);
+        const campSubImageNames = getSubImagesNames(
+            findHostId['campSubImages']
+        );
+
+        await deleteImage(campMainImageName);
+        for (let campSubImageName of campSubImageNames) {
+            await deleteImage(campSubImageName);
         }
 
         await this.campsRepository.deletecamps(campId, hostId);

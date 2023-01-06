@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../modules/campImg.js');
+const { upload } = require('../modules/campImg.js');
 const authHostMiddleware = require('../middlewares/authHost.middleware');
 const authUserMiddleware = require('../middlewares/authUser.middleware');
 
@@ -22,7 +22,7 @@ router.get('/page', campsController.getCampsByPage);
 // 캠핑장 상세 조회
 router.get('/:campId', campsController.getCampById);
 // 캠핑장 수정
-router.put(
+router.patch(
     '/:campId',
     upload.fields([
         { name: 'campMainImage', maxCount: 1 },

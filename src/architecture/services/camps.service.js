@@ -57,7 +57,7 @@ class CampsService {
         if (pageNo <= 0) {
             pageNo = 1;
         } else {
-            start = (pageNo - 1) * 8;
+            start = (pageNo - 1) * 16;
         }
 
         const camps = await this.campsRepository.getCampsByPage(start);

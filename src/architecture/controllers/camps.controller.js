@@ -133,8 +133,6 @@ class CampsController {
                 checkIn,
                 checkOut
             );
-
-            console.log(campSubImages);
             res.status(201).json({
                 message: '캠핑장이 수정되었습니다.',
                 campId: campId,

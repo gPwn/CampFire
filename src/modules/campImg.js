@@ -16,7 +16,7 @@ const deleteImage = async function (imageName) {
         console.log(',');
         await s3.deleteObject(
             {
-                Bucket: process.env.PROFILEIMG_BUCKETNAME,
+                Bucket: process.env.POSTIMG_BUCKETNAME,
                 Key: imageName,
             },
             (err, data) => {}
@@ -33,7 +33,7 @@ const deleteImage = async function (imageName) {
 const upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: process.env.PROFILEIMG_BUCKETNAME,
+        bucket: process.env.POSTIMG_BUCKETNAME,
         acl: 'public-read',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, cb) {

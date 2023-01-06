@@ -52,7 +52,7 @@ module.exports = {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },
-            totalpeople: {
+            totalPeople: {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },

@@ -57,7 +57,7 @@ class CampsService {
         if (pageNo <= 0) {
             pageNo = 1;
         } else {
-            start = (pageNo - 1) * 8;
+            start = (pageNo - 1) * 16;
         }
 
         const camps = await this.campsRepository.getCampsByPage(start);
@@ -127,14 +127,6 @@ class CampsService {
 
         if (findHostId.hostId !== hostId) {
             throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
-        }
-
-        const isExistValue = await this.campsRepository.getIsExistValue(
-            campName,
-            campAddress
-        );
-        if (isExistValue) {
-            throw new ExistError();
         }
 
         return await this.campsRepository.updateCamps(

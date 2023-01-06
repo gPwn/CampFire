@@ -98,24 +98,27 @@ class CampsController {
                 campAddress,
                 campPrice,
                 campDesc,
-                campAmenities,
                 checkIn,
                 checkOut,
             } = req.body;
 
-            const { campId } = req.params;
             const { hostId } = res.locals;
+            const { campId } = req.params;
 
-            const campMainImage = req.files.campMainImage[0].location;
-            const campSubImagesObjects = req.files.campSubImages;
+            let campMainImage;
+            const campSubImagesArray = [];
 
-            let campSubImages = '';
-            if (campSubImagesObjects) {
-                for (let i = 0; i < campSubImagesObjects.length; i++) {
-                    campSubImages += campSubImagesObjects[i].location;
-                    campSubImages += ',';
+            if (req.files) {
+                campMainImage = req.files.campMainImage[0].location;
+                for (const img of req.files.campSubImages) {
+                    campSubImagesArray.push(img.location);
                 }
+            } else {
+                throw new InvalidParamsError();
             }
+            const campAmenitiesArray = req.body.campAmenities;
+            const campAmenities = campAmenitiesArray.toString();
+            const campSubImages = campSubImagesArray.toString();
 
             await this.campsService.updateCamps(
                 campId,
@@ -133,6 +136,7 @@ class CampsController {
 
             res.status(201).json({
                 message: '캠핑장이 수정되었습니다.',
+                campId: campId,
             });
         } catch (error) {
             next(error);

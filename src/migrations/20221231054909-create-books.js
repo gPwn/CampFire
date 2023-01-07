@@ -52,10 +52,6 @@ module.exports = {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },
-            totalPeople: {
-                type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
-            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DataTypes.DATE,

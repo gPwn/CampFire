@@ -18,6 +18,16 @@ module.exports = {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false,
             },
+            brandName: {
+                type: Sequelize.DataTypes.STRING,
+                unique: true,
+                allowNull: false,
+            },
+            companyNumber: {
+                type: Sequelize.DataTypes.STRING,
+                unique: true,
+                allowNull: false,
+            },
             password: {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false,

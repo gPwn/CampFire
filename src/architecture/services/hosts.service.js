@@ -1,11 +1,13 @@
 const HostsRepository = require('../repositories/hosts.repository');
-const { Hosts } = require('../../models');
+const CampsRepository = require('../repositories/camps.repository');
+const { Hosts, Camps } = require('../../models');
 require('dotenv').config();
 const hash = require('../../util/auth-encryption.util');
 const { createHostToken } = require('../../util/auth-jwtToken.util.js');
 
 class HostsService {
     hostsRepository = new HostsRepository(Hosts);
+    campsRepository = new CampsRepository(Camps);
 
     //회원가입 API
     signUp = async (email, hostName, password, phoneNumber, profileImg) => {
@@ -67,12 +69,19 @@ class HostsService {
         const host = await this.hostsRepository.findOneHost(hostId);
         if (!host) throw '존재하지 않는 사용자입니다.';
 
+        const CampList = await this.campsRepository.findCampsListByHost(hostId);
+        const campIdList = [];
+        CampList.map((v) => {
+            campIdList.push(v.campId);
+        });
+
         return {
             hostId: host.hostId,
             email: host.email,
             userName: host.hostName,
             phoneNumber: host.phoneNumber,
             profileImg: host.profileImg,
+            campIdList,
             createdAt: host.createdAt,
             updatedAt: host.updatedAt,
         };

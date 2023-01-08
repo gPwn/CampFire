@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../../models');
 
 class CampsRepository {
     #BooksModel;
@@ -131,7 +132,21 @@ class CampsRepository {
             checkOutDate,
             adults,
             children,
+            totalPeople: adults + children,
         });
+    };
+
+    findCampsListByHost = async (hostId) => {
+        const query = `SELECT * FROM Camps WHERE hostId=$hostId`;
+        const campList = await sequelize.query(query, {
+            bind: { hostId: hostId },
+            type: sequelize.QueryTypes.SELECT,
+        });
+        /* const campList = await this.#CampsModel.findAll({
+            where: { hostId },
+        }); */
+
+        return campList;
     };
 }
 

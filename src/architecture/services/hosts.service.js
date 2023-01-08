@@ -8,12 +8,22 @@ class HostsService {
     hostsRepository = new HostsRepository(Hosts);
 
     //회원가입 API
-    signUp = async (email, hostName, password, phoneNumber, profileImg) => {
+    signUp = async (
+        email,
+        hostName,
+        password,
+        brandName,
+        companyNumber,
+        phoneNumber,
+        profileImg
+    ) => {
         const hashValue = hash(password);
         const host = await this.hostsRepository.createHost(
             email,
             hostName,
             hashValue,
+            brandName,
+            companyNumber,
             phoneNumber,
             profileImg
         );
@@ -76,7 +86,9 @@ class HostsService {
         return {
             hostId: host.hostId,
             email: host.email,
-            userName: host.hostName,
+            hostName: host.hostName,
+            brandName: host.brandName,
+            companyNumber: host.companyNumber,
             phoneNumber: host.phoneNumber,
             profileImg: host.profileImg,
             campIdList,
@@ -101,6 +113,15 @@ class HostsService {
             phoneNumber,
             profileImg
         );
+    };
+
+    deleteHost = async (hostId, password) => {
+        const hashValue = hash(password);
+        const host = await this.hostsRepository.findOneHost(hostId);
+        if (host.password !== hashValue)
+            throw new Error('비밀번호가 일치하지 않습니다.');
+
+        await this.hostsRepository.deleteHost(hostId);
     };
 }
 

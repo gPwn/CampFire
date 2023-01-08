@@ -7,11 +7,21 @@ class HostsRepository {
         this.#hostModel = HostModel;
     }
 
-    createHost = async (email, hostName, password, phoneNumber, profileImg) => {
+    createHost = async (
+        email,
+        hostName,
+        password,
+        brandName,
+        companyNumber,
+        phoneNumber,
+        profileImg
+    ) => {
         const createHost = await this.#hostModel.create({
             email,
             hostName,
             password,
+            brandName,
+            companyNumber,
             phoneNumber,
             profileImg,
         });
@@ -53,6 +63,18 @@ class HostsRepository {
             { hostName, phoneNumber, profileImg },
             { where: { hostId } }
         );
+    };
+
+    deleteHost = async (hostId) => {
+        /* await this.#userModel.delete({
+            where: { hostId },
+        }); */
+
+        const query = `DELETE FROM Hosts WHERE hostId=$hostId`;
+        await sequelize.query(query, {
+            bind: { hostId },
+            type: sequelize.QueryTypes.DELETE,
+        });
     };
 
     findCampsListByHost = async (hostId) => {

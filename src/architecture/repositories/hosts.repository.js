@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../../models');
 
 class HostsRepository {
     #hostModel;
@@ -52,6 +53,20 @@ class HostsRepository {
             { hostName, phoneNumber, profileImg },
             { where: { hostId } }
         );
+    };
+
+    findCampsListByHost = async (hostId) => {
+        const query = `SELECT * FROM Camps WHERE hostId= :hostId`;
+        console.log(typeof hostId);
+        const campList = await sequelize.query(query, {
+            replacements: { hostId: hostId },
+            type: sequelize.QueryTypes.SELECT,
+        });
+        /* const campList = await this.#CampsModel.findAll({
+            where: { hostId },
+        }); */
+
+        return campList;
     };
 }
 

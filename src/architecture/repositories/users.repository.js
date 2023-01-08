@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../../models');
 
 class UsersRepository {
     #userModel;
@@ -42,16 +43,42 @@ class UsersRepository {
     };
 
     findOneUser = async (userId) => {
-        return this.#userModel.findOne({
+        return await this.#userModel.findOne({
             where: { userId },
         });
     };
 
     updateUser = async (userId, userName, phoneNumber, profileImg) => {
-        return this.#userModel.update(
+        return await this.#userModel.update(
             { userName, phoneNumber, profileImg },
             { where: { userId } }
         );
+    };
+
+    deleteUser = async (userId) => {
+        /* await this.#userModel.delete({
+            where: { userId },
+        }); */
+
+        const query = `DELETE FROM Users WHERE userId=$userId`;
+        await sequelize.query(query, {
+            bind: { userId },
+            type: sequelize.QueryTypes.DELETE,
+        });
+    };
+
+    findBooksListByUser = async (userId) => {
+        const query = `SELECT * FROM Books WHERE userId = :userId`;
+        console.log(typeof userId);
+        const bookList = await sequelize.query(query, {
+            replacements: { userId: userId },
+            type: sequelize.QueryTypes.SELECT,
+        });
+        /* const campList = await this.#CampsModel.findAll({
+            where: { hostId },
+        }); */
+
+        return bookList;
     };
 }
 

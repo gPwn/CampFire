@@ -45,7 +45,6 @@ class CampsService {
         campAddress,
         campPrice,
         campDesc,
-        campAmenities,
         checkIn,
         checkOut
     ) => {
@@ -65,7 +64,6 @@ class CampsService {
             campAddress,
             campPrice,
             campDesc,
-            campAmenities,
             checkIn,
             checkOut
         );

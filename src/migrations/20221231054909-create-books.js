@@ -36,6 +36,15 @@ module.exports = {
                 },
                 onDelete: 'cascade',
             },
+            siteId: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Sites',
+                    key: 'siteId',
+                },
+                onDelete: 'cascade',
+            },
             checkInDate: {
                 type: Sequelize.DataTypes.DATE,
                 allowNull: false,

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.Users, { foreignKey: 'userId' });
             this.belongsTo(models.Hosts, { foreignKey: 'hostId' });
             this.belongsTo(models.Camps, { foreignKey: 'campId' });
+            this.belongsTo(models.Sites, { foreignKey: 'siteId' });
         }
     }
     Books.init(
@@ -46,6 +47,15 @@ module.exports = (sequelize, DataTypes) => {
                 references: {
                     model: 'Camps',
                     key: 'campId',
+                },
+                onDelete: 'cascade',
+            },
+            siteId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Sites',
+                    key: 'siteId',
                 },
                 onDelete: 'cascade',
             },

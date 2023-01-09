@@ -2,12 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Camps', {
-            campId: {
+        await queryInterface.createTable('Sites', {
+            siteId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.DataTypes.INTEGER,
+            },
+            campId: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Camps',
+                    key: 'campId',
+                },
+                onDelete: 'cascade',
             },
             hostId: {
                 type: Sequelize.DataTypes.INTEGER,
@@ -18,38 +27,33 @@ module.exports = {
                 },
                 onDelete: 'cascade',
             },
-            campName: {
+            siteName: {
                 type: Sequelize.DataTypes.STRING,
                 unique: true,
                 allowNull: false,
             },
-            campAddress: {
-                type: Sequelize.DataTypes.STRING,
-                unique: true,
-                allowNull: false,
-            },
-            campPrice: {
-                type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
-            },
-            campMainImage: {
-                type: Sequelize.DataTypes.STRING,
-                allowNull: false,
-            },
-            campSubImages: {
-                type: Sequelize.DataTypes.STRING(2000),
-                allowNull: false,
-            },
-            campDesc: {
+            siteInfo: {
                 type: Sequelize.DataTypes.TEXT,
                 allowNull: false,
             },
-            checkIn: {
-                type: Sequelize.DataTypes.TIME,
+            siteDesc: {
+                type: Sequelize.DataTypes.TEXT,
                 allowNull: false,
             },
-            checkOut: {
-                type: Sequelize.DataTypes.TIME,
+            siteMainImage: {
+                type: Sequelize.DataTypes.STRING,
+                allowNull: false,
+            },
+            siteSubImages: {
+                type: Sequelize.DataTypes.STRING(2000),
+                allowNull: false,
+            },
+            minPeople: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+            },
+            maxPeople: {
+                type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },
             createdAt: {
@@ -63,6 +67,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Camps');
+        await queryInterface.dropTable('Sites');
     },
 };

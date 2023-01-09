@@ -9,11 +9,31 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            this.belongsTo(models.Hosts, { foreignKey: 'hostId' });
             this.hasMany(models.Books, {
                 as: 'Books',
                 foreignKey: 'campId',
             });
-            this.belongsTo(models.Hosts, { foreignKey: 'hostId' });
+            this.hasMany(models.Sites, {
+                as: 'Sites',
+                foreignKey: 'campId',
+            });
+            this.hasMany(models.CampAmenities, {
+                as: 'CampAmenities',
+                foreignKey: 'campId',
+            });
+            this.hasMany(models.Envs, {
+                as: 'Envs',
+                foreignKey: 'campId',
+            });
+            this.hasMany(models.Types, {
+                as: 'Types',
+                foreignKey: 'campId',
+            });
+            this.hasMany(models.Themes, {
+                as: 'Themes',
+                foreignKey: 'campId',
+            });
         }
     }
     Camps.init(
@@ -56,11 +76,8 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             campDesc: {
-                type: DataTypes.STRING(2000),
+                type: DataTypes.TEXT,
                 allowNull: false,
-            },
-            campAmenities: {
-                type: DataTypes.STRING,
             },
             checkIn: {
                 type: DataTypes.TIME,

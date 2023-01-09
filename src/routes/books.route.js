@@ -13,18 +13,32 @@ router.post(
     booksController.addBookscamps
 );
 
-// 호스트 예약 내역 확인
+// 호스트 예약 목록 조회
 router.get(
     '/hosts/checkbooks',
     authHostMiddleware,
-    booksController.getBooksByHost
+    booksController.getBookListByHost
 );
 
-// 유저 예약 내역 확인
+// 호스트 예약 상세 조회
+router.get(
+    '/hosts/checkbooks/:bookId',
+    authHostMiddleware,
+    booksController.getBookByHost
+);
+
+// 유저 예약 목록 조회
 router.get(
     '/users/checkbooks',
     authUserMiddleware,
-    booksController.getBooksByHUser
+    booksController.getBookListByUser
+);
+
+// 유저 예약 상세 조회
+router.get(
+    '/users/checkbooks/:bookId',
+    authUserMiddleware,
+    booksController.getBookByUser
 );
 
 module.exports = router;

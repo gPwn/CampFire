@@ -43,7 +43,6 @@ class CampsService {
         campSubImages,
         campName,
         campAddress,
-        campPrice,
         campDesc,
         checkIn,
         checkOut
@@ -62,7 +61,6 @@ class CampsService {
             campSubImages,
             campName,
             campAddress,
-            campPrice,
             campDesc,
             checkIn,
             checkOut
@@ -78,11 +76,9 @@ class CampsService {
         hostId,
         campName,
         campAddress,
-        campPrice,
         campMainImage,
         campSubImages,
         campDesc,
-        campAmenities,
         checkIn,
         checkOut
     ) => {
@@ -110,11 +106,9 @@ class CampsService {
             hostId,
             campName,
             campAddress,
-            campPrice,
             campMainImage,
             campSubImages,
             campDesc,
-            campAmenities,
             checkIn,
             checkOut
         );

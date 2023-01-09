@@ -73,7 +73,6 @@ class CampsRepository {
         campMainImage,
         campSubImages,
         campDesc,
-        campAmenities,
         checkIn,
         checkOut
     ) => {
@@ -86,7 +85,6 @@ class CampsRepository {
                 campMainImage,
                 campSubImages,
                 campDesc,
-                campAmenities,
                 checkIn,
                 checkOut,
             },

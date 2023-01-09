@@ -1,5 +1,12 @@
 const { Op } = require('sequelize');
-const { sequelize } = require('../../models');
+const {
+    sequelize,
+    CampAmenities,
+    Envs,
+    Themes,
+    Types,
+    Sites,
+} = require('../../models');
 
 class CampsRepository {
     #BooksModel;
@@ -13,39 +20,23 @@ class CampsRepository {
         this.#UsersModel = UsersModel;
     }
 
-    // 캠핑장 업로드
-    createCamp = async (
-        hostId,
-        campMainImage,
-        campSubImages,
-        campName,
-        campAddress,
-        campPrice,
-        campDesc,
-        campAmenities,
-        checkIn,
-        checkOut
-    ) => {
-        const createdCamp = await this.#CampsModel.create({
-            hostId,
-            campMainImage,
-            campSubImages,
-            campName,
-            campAddress,
-            campPrice,
-            campDesc,
-            campAmenities,
-            checkIn,
-            checkOut,
-        });
-        return createdCamp;
-    };
-
     // 캠핑장 페이지 조회
     getCampsByPage = async (pageNo) => {
         const camps = await this.#CampsModel.findAll({
             offset: pageNo,
             limit: 16,
+            attributes: [
+                'campId',
+                'hostId',
+                'campName',
+                'campAddress',
+                'campMainImage',
+                'campDesc',
+                'checkIn',
+                'checkOut',
+                'createdAt',
+                'updatedAt',
+            ],
             order: [['createdAt', 'DESC']],
         });
         if (camps.length === 0) {
@@ -57,82 +48,58 @@ class CampsRepository {
 
     // 캠핑장 상세 조회
     findCampById = async (campId) => {
-        const camp = await this.#CampsModel.findOne({
+        return await this.#CampsModel.findOne({
             where: { campId },
         });
-        return camp;
     };
 
-    // 캠핑장 중복값 조회
-    getIsExistValue = async (campName, campAddress) => {
-        const camp = await this.#CampsModel.findOne({
-            where: { [Op.or]: [{ campName }, { campAddress }] },
+    findAmenities = async (campId) => {
+        return await CampAmenities.findOne({
+            where: { campId },
         });
-        return camp;
     };
 
-    // 캠핑장 예약하기
-    updateCamps = async (
-        campId,
-        hostId,
-        campName,
-        campAddress,
-        campPrice,
-        campMainImage,
-        campSubImages,
-        campDesc,
-        campAmenities,
-        checkIn,
-        checkOut
-    ) => {
-        return await this.#CampsModel.update(
-            {
-                campId,
-                hostId,
-                campName,
-                campAddress,
-                campPrice,
-                campMainImage,
-                campSubImages,
-                campDesc,
-                campAmenities,
-                checkIn,
-                checkOut,
-            },
-            {
-                where: {
-                    [Op.and]: [{ campId, hostId }],
-                },
-            }
-        );
+    findEnvLists = async (campId) => {
+        return await Envs.findOne({
+            where: { campId },
+        });
     };
 
-    deletecamps = async (campId, hostId) => {
-        await this.#CampsModel.destroy({
+    findtypeList = async (campId) => {
+        return await Types.findOne({
+            where: { campId },
+        });
+    };
+
+    findThemeLists = async (campId) => {
+        return await Themes.findOne({
+            where: { campId },
+        });
+    };
+
+    getSiteLists = async (campId) => {
+        return await Sites.findAll({
+            where: { campId },
+            attributes: [
+                'siteId',
+                'campId',
+                'siteName',
+                'sitePrice',
+                'siteMainImage',
+                'minPeople',
+                'maxPeople',
+                'createdAt',
+                'updatedAt',
+            ],
+            order: [['sitePrice', 'ASC']],
+        });
+    };
+
+    getsiteById = async (campId, siteId) => {
+        return await Sites.findOne({
             where: {
-                [Op.and]: [{ campId, hostId }],
+                [Op.and]: [{ campId, siteId }],
             },
-        });
-    };
-
-    addBookscamps = async (
-        campId,
-        userId,
-        hostId,
-        checkInDate,
-        checkOutDate,
-        adults,
-        children
-    ) => {
-        await this.#BooksModel.create({
-            campId,
-            userId,
-            hostId,
-            checkInDate,
-            checkOutDate,
-            adults,
-            children,
-            totalPeople: adults + children,
         });
     };
 }

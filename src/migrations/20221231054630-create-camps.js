@@ -28,10 +28,6 @@ module.exports = {
                 unique: true,
                 allowNull: false,
             },
-            campPrice: {
-                type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
-            },
             campMainImage: {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false,

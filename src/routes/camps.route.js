@@ -34,10 +34,10 @@ router.patch(
 // 캠핑장 삭제
 router.delete('/:campId', authHostMiddleware, campsController.deletecamps);
 // 캠핑장 예약하기
-router.post(
-    '/:campId/books',
-    authUserMiddleware,
-    campsController.addBookscamps
-);
+// router.post(
+//     '/:campId/books',
+//     authUserMiddleware,
+//     campsController.addBookscamps
+// );
 
 module.exports = router;

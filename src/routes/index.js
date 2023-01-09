@@ -5,7 +5,7 @@ router.use('/users', require('./users.route.js'));
 router.use('/hosts', require('./hosts.route.js'));
 router.use('/camps', require('./camps.route.js'));
 router.use('/books', require('./books.route.js'));
-// router.use('/likes', require('./likes.route.js'));
+router.use('/likes', require('./likes.route.js'));
 router.use('/camps', require('./sites.route.js'));
 
 router.get('/', (req, res) => {

@@ -30,15 +30,13 @@ class CampsController {
             } else {
                 throw new InvalidParamsError();
             }
-            const campAmenitiesArray = req.body.campAmenities;
-            const campAmenities = campAmenitiesArray.toString();
+
             const campSubImages = campSubImagesArray.toString();
             if (
                 !campName ||
                 !campAddress ||
                 !campPrice ||
                 !campDesc ||
-                !campAmenities ||
                 !checkIn ||
                 !checkOut
             ) {
@@ -52,7 +50,6 @@ class CampsController {
                 campAddress,
                 campPrice,
                 campDesc,
-                campAmenities,
                 checkIn,
                 checkOut
             );

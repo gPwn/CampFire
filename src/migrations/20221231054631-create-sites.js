@@ -2,19 +2,19 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Books', {
-            bookId: {
+        await queryInterface.createTable('Sites', {
+            siteId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.DataTypes.INTEGER,
             },
-            userId: {
+            campId: {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: 'Users',
-                    key: 'userId',
+                    model: 'Camps',
+                    key: 'campId',
                 },
                 onDelete: 'cascade',
             },
@@ -27,37 +27,36 @@ module.exports = {
                 },
                 onDelete: 'cascade',
             },
-            campId: {
-                type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'Camps',
-                    key: 'campId',
-                },
-                onDelete: 'cascade',
-            },
-            siteId: {
-                type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'Sites',
-                    key: 'siteId',
-                },
-                onDelete: 'cascade',
-            },
-            checkInDate: {
-                type: Sequelize.DataTypes.DATE,
+            siteName: {
+                type: Sequelize.DataTypes.STRING,
+                unique: true,
                 allowNull: false,
             },
-            checkOutDate: {
-                type: Sequelize.DataTypes.DATE,
+            siteInfo: {
+                type: Sequelize.DataTypes.TEXT,
                 allowNull: false,
             },
-            adults: {
+            siteDesc: {
+                type: Sequelize.DataTypes.TEXT,
+                allowNull: false,
+            },
+            sitePrice: {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },
-            children: {
+            siteMainImage: {
+                type: Sequelize.DataTypes.STRING,
+                allowNull: false,
+            },
+            siteSubImages: {
+                type: Sequelize.DataTypes.STRING(2000),
+                allowNull: false,
+            },
+            minPeople: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+            },
+            maxPeople: {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },
@@ -72,6 +71,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Books');
+        await queryInterface.dropTable('Sites');
     },
 };

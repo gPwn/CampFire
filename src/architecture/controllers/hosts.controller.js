@@ -1,5 +1,7 @@
 const HostsService = require('../services/hosts.service');
 const jwt = require('jsonwebtoken');
+const request = require('request');
+const companyServiceKey = 'a3NuMDMwMTJAbmF2ZXIuY29t';
 
 class HostsController {
     hostsService = new HostsService();
@@ -7,7 +9,14 @@ class HostsController {
     //회원가입 API
     signUp = async (req, res) => {
         try {
-            const { email, hostName, password, phoneNumber } = req.body;
+            const {
+                email,
+                hostName,
+                password,
+                brandName,
+                companyNumber,
+                phoneNumber,
+            } = req.body;
 
             let profileImg = undefined;
             if (req.file) {
@@ -21,6 +30,8 @@ class HostsController {
                 email,
                 hostName,
                 password,
+                brandName,
+                companyNumber,
                 phoneNumber,
                 profileImg
             );
@@ -54,6 +65,32 @@ class HostsController {
             }
             res.status(400).json({
                 errorMessage: '중복확인에 실패하였습니다.',
+            });
+        }
+    };
+
+    //사업자 번호 체크!
+    checkCompany = async (req, res) => {
+        try {
+            const { brandName, companyNumber } = req.body;
+            companyData(companyNumber, ({ company } = {}) => {
+                const obj = JSON.parse(company);
+                if (
+                    obj.items.length !== 0 &&
+                    obj.items[0].company === brandName
+                )
+                    res.status(200).json({
+                        message: '사업자등록 확인이 성공하였습니다.',
+                    });
+                else
+                    res.status(400).json({
+                        errorMessage: '사업자등록 확인이 실패하였습니다.',
+                    });
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                errorMessage: '사업자등록 확인이 실패하였습니다.',
             });
         }
     };
@@ -100,7 +137,7 @@ class HostsController {
         } catch (error) {
             console.log(error);
             if (error === '존재하지 않는 사용자입니다.') {
-                res.status(404).json({
+                return res.status(404).json({
                     errorMessage: '존재하지 않는 사용자입니다.',
                 });
             }
@@ -153,6 +190,48 @@ class HostsController {
             });
         }
     };
+
+    deleteHost = async (req, res) => {
+        const { password } = req.body;
+        const hostId = res.locals.hostId;
+        try {
+            await this.hostsService.deleteHost(hostId, password);
+            return res.status(200).json({
+                message: '회원탈퇴에 성공하였습니다.',
+            });
+        } catch (error) {
+            console.log(error);
+
+            if (error.message === '비밀번호가 일치하지 않습니다.')
+                return res
+                    .status(412)
+                    .json({ errorMessage: '비밀번호가 일치하지 않습니다.' });
+
+            res.status(400).json({
+                errorMessage: '회원탈퇴에 실패하였습니다',
+            });
+        }
+    };
 }
+
+const companyData = (companyNumber, callback) => {
+    const url = 'https://bizno.net/api/fapi?';
+    let queryParams = encodeURIComponent('key') + '=' + companyServiceKey;
+    queryParams += '&' + encodeURIComponent('gb') + '=' + 1;
+    queryParams += '&' + encodeURIComponent('q') + '=' + companyNumber;
+    queryParams += '&' + encodeURIComponent('type') + '=' + 'json';
+
+    request(
+        {
+            url: url + queryParams,
+            method: 'GET',
+        },
+        function (error, response, body) {
+            callback({
+                company: body,
+            });
+        }
+    );
+};
 
 module.exports = HostsController;

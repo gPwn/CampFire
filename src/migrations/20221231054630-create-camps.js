@@ -28,10 +28,6 @@ module.exports = {
                 unique: true,
                 allowNull: false,
             },
-            campPrice: {
-                type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
-            },
             campMainImage: {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false,
@@ -41,11 +37,8 @@ module.exports = {
                 allowNull: false,
             },
             campDesc: {
-                type: Sequelize.DataTypes.STRING(2000),
+                type: Sequelize.DataTypes.TEXT,
                 allowNull: false,
-            },
-            campAmenities: {
-                type: Sequelize.DataTypes.STRING,
             },
             checkIn: {
                 type: Sequelize.DataTypes.TIME,

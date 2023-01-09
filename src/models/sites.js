@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Hosts extends Model {
+    class Sites extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -9,64 +9,72 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            this.belongsTo(models.Hosts, { foreignKey: 'hostId' });
+            this.belongsTo(models.Camps, { foreignKey: 'campId' });
             this.hasMany(models.Books, {
                 as: 'Books',
-                foreignKey: 'hostId',
-            });
-            this.hasMany(models.Camps, {
-                as: 'Camps',
-                foreignKey: 'hostId',
-            });
-            this.hasMany(models.Sites, {
-                as: 'Sites',
-                foreignKey: 'hostId',
+                foreignKey: 'siteId',
             });
         }
     }
-    Hosts.init(
+    Sites.init(
         {
-            hostId: {
+            siteId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: DataTypes.INTEGER,
             },
-            email: {
+            campId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Camps',
+                    key: 'campId',
+                },
+                onDelete: 'cascade',
+            },
+            hostId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Hosts',
+                    key: 'hostId',
+                },
+                onDelete: 'cascade',
+            },
+            siteName: {
                 type: DataTypes.STRING,
                 unique: true,
                 allowNull: false,
             },
-            hostName: {
+            siteInfo: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            },
+            siteDesc: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            },
+            sitePrice: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+            siteMainImage: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            password: {
-                type: DataTypes.STRING,
+            siteSubImages: {
+                type: DataTypes.STRING(2000),
                 allowNull: false,
             },
-            brandName: {
-                type: DataTypes.STRING,
-                unique: true,
+            minPeople: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            companyNumber: {
-                type: DataTypes.STRING,
-                unique: true,
+            maxPeople: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
-            },
-            phoneNumber: {
-                type: DataTypes.STRING,
-                unique: true,
-                allowNull: false,
-            },
-            profileImg: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            token: {
-                type: DataTypes.STRING,
-                allowNull: true,
-                unique: true,
             },
             createdAt: {
                 allowNull: false,
@@ -79,8 +87,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: 'Hosts',
+            modelName: 'Sites',
         }
     );
-    return Hosts;
+    return Sites;
 };

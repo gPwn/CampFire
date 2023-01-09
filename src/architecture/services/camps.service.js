@@ -5,7 +5,17 @@ const {
     ExistError,
 } = require('../../middlewares/exceptions/error.class.js');
 
-const { Books, Camps, Hosts, Users } = require('../../models');
+const {
+    Books,
+    Camps,
+    Hosts,
+    Users,
+    Sites,
+    CampAmenities,
+    Envs,
+    Types,
+    Themes,
+} = require('../../models');
 const { deleteImage } = require('../../modules/campImg');
 const {
     getMainImageName,
@@ -14,8 +24,127 @@ const {
 
 class CampsService {
     constructor() {
-        this.campsRepository = new CampsRepository(Books, Camps, Hosts, Users);
+        this.campsRepository = new CampsRepository(
+            Books,
+            Camps,
+            Hosts,
+            Users,
+            Sites,
+            CampAmenities,
+            Envs,
+            Types,
+            Themes
+        );
     }
+    // 캠핑장 업로드
+    createCamp = async (
+        hostId,
+        campMainImage,
+        campSubImages,
+        campName,
+        campAddress,
+        campPrice,
+        campDesc,
+        campAmenities,
+        checkIn,
+        checkOut
+    ) => {
+        const isExistValue = await this.campsRepository.getIsExistValue(
+            campName,
+            campAddress
+        );
+        if (isExistValue) {
+            throw new ExistError();
+        }
+
+        const createdCamp = await this.campsRepository.createCamp(
+            hostId,
+            campMainImage,
+            campSubImages,
+            campName,
+            campAddress,
+            campPrice,
+            campDesc,
+            campAmenities,
+            checkIn,
+            checkOut
+        );
+        if (!createdCamp) {
+            throw new ValidationError('캠핑장 등록에 실패하였습니다.', 400);
+        }
+        return createdCamp;
+    };
+    // 캠핑장 수정
+    updateCamps = async (
+        campId,
+        hostId,
+        campName,
+        campAddress,
+        campPrice,
+        campMainImage,
+        campSubImages,
+        campDesc,
+        campAmenities,
+        checkIn,
+        checkOut
+    ) => {
+        const findHostId = await this.campsRepository.findCampById(campId);
+        if (!findHostId) {
+            throw new InvalidParamsError();
+        }
+
+        if (findHostId.hostId !== hostId) {
+            throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
+        }
+
+        const campMainImageName = getMainImageName(findHostId['campMainImage']);
+        const campSubImageNames = getSubImagesNames(
+            findHostId['campSubImages']
+        );
+
+        await deleteImage(campMainImageName);
+        for (let campSubImageName of campSubImageNames) {
+            await deleteImage(campSubImageName);
+        }
+
+        return await this.campsRepository.updateCamps(
+            campId,
+            hostId,
+            campName,
+            campAddress,
+            campPrice,
+            campMainImage,
+            campSubImages,
+            campDesc,
+            campAmenities,
+            checkIn,
+            checkOut
+        );
+    };
+
+    // 캠핑장 삭제
+    deletecamps = async (campId, hostId) => {
+        const findHostId = await this.campsRepository.findCampById(campId);
+        if (!findHostId) {
+            throw new InvalidParamsError();
+        }
+
+        if (findHostId.hostId !== hostId) {
+            throw new ValidationError('캠핑장 삭제 권한이 없습니다.', 400);
+        }
+
+        const campMainImageName = getMainImageName(findHostId['campMainImage']);
+        const campSubImageNames = getSubImagesNames(
+            findHostId['campSubImages']
+        );
+
+        await deleteImage(campMainImageName);
+        for (let campSubImageName of campSubImageNames) {
+            await deleteImage(campSubImageName);
+        }
+
+        await this.campsRepository.deletecamps(campId, hostId);
+    };
 
     // 캠핑장 페이지 조회
     getCampsByPage = async (pageNo) => {
@@ -95,6 +224,38 @@ class CampsService {
         }
 
         return site;
+    };
+    // 캠핑장 키워드 체크박스 등록
+    createKeyword = async (
+        campId,
+        campAmenities,
+        envLists,
+        typeLists,
+        themeLists
+    ) => {
+        await this.campsRepository.createKeyword(
+            campId,
+            campAmenities,
+            envLists,
+            typeLists,
+            themeLists
+        );
+    };
+    // 캠핑장 키워드 체크박스 수정
+    updateKeyword = async (
+        campId,
+        campAmenities,
+        envLists,
+        typeLists,
+        themeLists
+    ) => {
+        await this.campsRepository.updateKeyword(
+            campId,
+            campAmenities,
+            envLists,
+            typeLists,
+            themeLists
+        );
     };
 }
 

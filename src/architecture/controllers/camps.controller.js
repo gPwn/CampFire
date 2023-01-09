@@ -165,34 +165,6 @@ class CampsController {
             next(error);
         }
     };
-    // 캠핑장 키워드 체크박스 등록
-    createKeyword = async (req, res, next) => {
-        try {
-            const { campId } = req.params;
-            const campAmenitiesArray = req.body.campAmenities;
-            const envListsArray = req.body.envLists;
-            const typeListsArray = req.body.typeLists;
-            const themeListsArray = req.body.themeLists;
-
-            const campAmenities = campAmenitiesArray.toString();
-            const envLists = envListsArray.toString();
-            const typeLists = typeListsArray.toString();
-            const themeLists = themeListsArray.toString();
-
-            await this.campsService.createKeyword(
-                campId,
-                campAmenities,
-                envLists,
-                typeLists,
-                themeLists
-            );
-            res.status(201).json({
-                message: '캠핑장 키워드가 등록되었습니다.',
-            });
-        } catch (error) {
-            next(error);
-        }
-    };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (req, res, next) => {
         try {

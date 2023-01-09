@@ -170,7 +170,6 @@ class CampsService {
         const { themeLists } = await this.campsRepository.findThemeLists(
             campId
         );
-
         return {
             campId: camp.campId,
             hostId: camp.hostId,
@@ -179,10 +178,11 @@ class CampsService {
             campMainImage: camp.campMainImage,
             campSubImages: camp.campSubImages.split(','),
             campDesc: camp.campDesc,
-            campAmenities,
-            envLists,
-            typeLists,
-            themeLists,
+            campAmenities:
+                campAmenities === null ? null : campAmenities.split(','),
+            envLists: envLists === null ? null : envLists.split(','),
+            typeLists: typeLists === null ? null : typeLists.split(','),
+            themeLists: themeLists === null ? null : themeLists.split(','),
             checkIn: camp.checkIn,
             checkOut: camp.checkOut,
             createdAt: camp.createdAt,
@@ -216,22 +216,6 @@ class CampsService {
         }
 
         return site;
-    };
-    // 캠핑장 키워드 체크박스 등록
-    createKeyword = async (
-        campId,
-        campAmenities,
-        envLists,
-        typeLists,
-        themeLists
-    ) => {
-        await this.campsRepository.createKeyword(
-            campId,
-            campAmenities,
-            envLists,
-            typeLists,
-            themeLists
-        );
     };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (

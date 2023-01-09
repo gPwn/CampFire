@@ -6,7 +6,16 @@ const authUserMiddleware = require('../middlewares/authUser.middleware');
 
 const CampsController = require('../architecture/controllers/camps.controller.js');
 const campsController = new CampsController();
-
+// 캠핑장 등록
+router.post(
+    '/',
+    upload.fields([
+        { name: 'campMainImage', maxCount: 1 },
+        { name: 'campSubImages', maxCount: 10 },
+    ]),
+    authHostMiddleware,
+    campsController.createCamp
+);
 // 캠핑장 페이지 조회
 router.get('/page', campsController.getCampsByPage);
 // 캠핑장 상세 조회

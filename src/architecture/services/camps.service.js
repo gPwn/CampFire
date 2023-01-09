@@ -17,45 +17,6 @@ class CampsService {
         this.campsRepository = new CampsRepository(Books, Camps, Hosts, Users);
     }
 
-    // 캠핑장 업로드
-    createCamp = async (
-        hostId,
-        campMainImage,
-        campSubImages,
-        campName,
-        campAddress,
-        campPrice,
-        campDesc,
-        campAmenities,
-        checkIn,
-        checkOut
-    ) => {
-        const isExistValue = await this.campsRepository.getIsExistValue(
-            campName,
-            campAddress
-        );
-        if (isExistValue) {
-            throw new ExistError();
-        }
-
-        const createdCamp = await this.campsRepository.createCamp(
-            hostId,
-            campMainImage,
-            campSubImages,
-            campName,
-            campAddress,
-            campPrice,
-            campDesc,
-            campAmenities,
-            checkIn,
-            checkOut
-        );
-        if (!createdCamp) {
-            throw new ValidationError('캠핑장 등록에 실패하였습니다.', 400);
-        }
-        return createdCamp;
-    };
-
     // 캠핑장 페이지 조회
     getCampsByPage = async (pageNo) => {
         let start = 0;
@@ -67,43 +28,40 @@ class CampsService {
 
         const camps = await this.campsRepository.getCampsByPage(start);
         if (!camps) {
-            throw new ValidationError('존재하지 않는 페이지입니다.', 404);
+            throw new InvalidParamsError('존재하지 않는 페이지입니다.', 404);
         }
-        return camps.map((camp) => {
-            return {
-                campId: camp.campId,
-                hostId: camp.hostId,
-                campName: camp.campName,
-                campAddress: camp.campAddress,
-                campPrice: camp.campPrice,
-                campMainImage: camp.campMainImage,
-                campSubImages: camp.campSubImages.split(','),
-                campDesc: camp.campDesc,
-                campAmenities: camp.campAmenities.split(','),
-                checkIn: camp.checkIn,
-                checkOut: camp.checkOut,
-                createdAt: camp.createdAt,
-                updatedAt: camp.updatedAt,
-            };
-        });
+
+        return camps;
     };
 
     // 캠핑장 상세 조회
     findCampById = async (campId) => {
         const camp = await this.campsRepository.findCampById(campId);
         if (!camp) {
-            throw new ValidationError('존재하지 않는 캠핑장입니다.', 404);
+            throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
         }
+
+        const { campAmenities } = await this.campsRepository.findAmenities(
+            campId
+        );
+        const { envLists } = await this.campsRepository.findEnvLists(campId);
+        const { typeLists } = await this.campsRepository.findtypeList(campId);
+        const { themeLists } = await this.campsRepository.findThemeLists(
+            campId
+        );
+
         return {
             campId: camp.campId,
             hostId: camp.hostId,
             campName: camp.campName,
             campAddress: camp.campAddress,
-            campPrice: camp.campPrice,
             campMainImage: camp.campMainImage,
             campSubImages: camp.campSubImages.split(','),
             campDesc: camp.campDesc,
-            campAmenities: camp.campAmenities.split(','),
+            campAmenities,
+            envLists,
+            typeLists,
+            themeLists,
             checkIn: camp.checkIn,
             checkOut: camp.checkOut,
             createdAt: camp.createdAt,
@@ -111,103 +69,32 @@ class CampsService {
         };
     };
 
-    // 캠핑장 수정
-    updateCamps = async (
-        campId,
-        hostId,
-        campName,
-        campAddress,
-        campPrice,
-        campMainImage,
-        campSubImages,
-        campDesc,
-        campAmenities,
-        checkIn,
-        checkOut
-    ) => {
-        const findHostId = await this.campsRepository.findCampById(campId);
-        if (!findHostId) {
-            throw new InvalidParamsError();
+    //캠핑장 사이트 목록 조회
+    getSiteLists = async (campId) => {
+        const camp = await this.campsRepository.findCampById(campId);
+        if (!camp) {
+            throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
         }
 
-        if (findHostId.hostId !== hostId) {
-            throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
-        }
-
-        const campMainImageName = getMainImageName(findHostId['campMainImage']);
-        const campSubImageNames = getSubImagesNames(
-            findHostId['campSubImages']
-        );
-
-        await deleteImage(campMainImageName);
-        for (let campSubImageName of campSubImageNames) {
-            await deleteImage(campSubImageName);
-        }
-
-        return await this.campsRepository.updateCamps(
-            campId,
-            hostId,
-            campName,
-            campAddress,
-            campPrice,
-            campMainImage,
-            campSubImages,
-            campDesc,
-            campAmenities,
-            checkIn,
-            checkOut
-        );
+        return await this.campsRepository.getSiteLists(campId);
     };
 
-    // 캠핑장 삭제
-    deletecamps = async (campId, hostId) => {
-        const findHostId = await this.campsRepository.findCampById(campId);
-        if (!findHostId) {
-            throw new InvalidParamsError();
+    //캠핑장 사이트 상세 조회
+    getsiteById = async (campId, siteId) => {
+        const camp = await this.campsRepository.findCampById(campId);
+        if (!camp) {
+            throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
         }
 
-        if (findHostId.hostId !== hostId) {
-            throw new ValidationError('캠핑장 삭제 권한이 없습니다.', 400);
+        const site = await this.campsRepository.getsiteById(campId, siteId);
+        if (!site) {
+            throw new InvalidParamsError(
+                '존재하지 않는 캠핑장 사이트입니다.',
+                404
+            );
         }
 
-        const campMainImageName = getMainImageName(findHostId['campMainImage']);
-        const campSubImageNames = getSubImagesNames(
-            findHostId['campSubImages']
-        );
-
-        await deleteImage(campMainImageName);
-        for (let campSubImageName of campSubImageNames) {
-            await deleteImage(campSubImageName);
-        }
-
-        await this.campsRepository.deletecamps(campId, hostId);
-    };
-
-    // 캠핑장 예약
-    addBookscamps = async (
-        campId,
-        userId,
-        checkInDate,
-        checkOutDate,
-        adults,
-        children
-    ) => {
-        const findHostId = await this.campsRepository.findCampById(campId);
-        if (!findHostId) {
-            throw new ValidationError('예약할 수 없는 캠핑장입니다.', 400);
-        }
-
-        const hostId = findHostId.hostId;
-
-        await this.campsRepository.addBookscamps(
-            campId,
-            userId,
-            hostId,
-            checkInDate,
-            checkOutDate,
-            adults,
-            children
-        );
+        return site;
     };
 }
 

@@ -7,6 +7,7 @@ class BooksRepository {
         this.#BooksModel = BooksModel;
     }
 
+    // 캠핑장 예약하기
     addBookscamps = async (
         campId,
         userId,
@@ -31,15 +32,17 @@ class BooksRepository {
         });
     };
 
-    findBooksByHostId = async (hostId) => {
+    //PK값과 일치하는 모든 데이터 찾기
+    findBookListByPk = async ({ where }) => {
         return await this.#BooksModel.findAll({
-            where: { hostId },
+            where,
         });
     };
 
-    findBooksByUserId = async (userId) => {
-        return await this.#BooksModel.findAll({
-            where: { userId },
+    //PK값과 일치하는 하나의 데이터 찾기
+    findBookByPk = async ({ where }) => {
+        return await this.#BooksModel.findOne({
+            where,
         });
     };
 }

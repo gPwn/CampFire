@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.Users, { foreignKey: 'userId' });
             this.belongsTo(models.Hosts, { foreignKey: 'hostId' });
             this.belongsTo(models.Camps, { foreignKey: 'campId' });
+            this.belongsTo(models.Sites, { foreignKey: 'siteId' });
         }
     }
     Books.init(
@@ -49,6 +50,15 @@ module.exports = (sequelize, DataTypes) => {
                 },
                 onDelete: 'cascade',
             },
+            siteId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Sites',
+                    key: 'siteId',
+                },
+                onDelete: 'cascade',
+            },
             checkInDate: {
                 type: DataTypes.DATE,
                 allowNull: false,
@@ -62,6 +72,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             children: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+            totalPeople: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },

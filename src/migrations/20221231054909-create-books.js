@@ -36,6 +36,15 @@ module.exports = {
                 },
                 onDelete: 'cascade',
             },
+            siteId: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Sites',
+                    key: 'siteId',
+                },
+                onDelete: 'cascade',
+            },
             checkInDate: {
                 type: Sequelize.DataTypes.DATE,
                 allowNull: false,
@@ -49,6 +58,10 @@ module.exports = {
                 allowNull: false,
             },
             children: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+            },
+            totalPeople: {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },

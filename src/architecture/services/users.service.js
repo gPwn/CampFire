@@ -67,12 +67,19 @@ class UsersService {
         const user = await this.usersRepository.findOneUser(userId);
         if (!user) throw '존재하지 않는 사용자입니다.';
 
+        const bookList = await this.usersRepository.findBooksListByUser(userId);
+        const bookIdList = [];
+        bookList.map((v) => {
+            bookIdList.push(v.bookId);
+        });
+
         return {
             userId: user.userId,
             email: user.email,
             userName: user.userName,
             phoneNumber: user.phoneNumber,
             profileImg: user.profileImg,
+            bookIdList,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
         };
@@ -94,6 +101,15 @@ class UsersService {
             phoneNumber,
             profileImg
         );
+    };
+
+    deleteUser = async (userId, password) => {
+        const hashValue = hash(password);
+        const user = await this.usersRepository.findOneUser(userId);
+        if (user.password !== hashValue)
+            throw new Error('비밀번호가 일치하지 않습니다.');
+
+        await this.usersRepository.deleteUser(userId);
     };
 }
 

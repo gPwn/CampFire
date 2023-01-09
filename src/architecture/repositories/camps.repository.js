@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../../models');
 
 class CampsRepository {
     #BooksModel;
@@ -131,6 +132,7 @@ class CampsRepository {
             checkOutDate,
             adults,
             children,
+            totalPeople: adults + children,
         });
     };
 }

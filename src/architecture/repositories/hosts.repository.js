@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../../models');
 
 class HostsRepository {
     #hostModel;
@@ -6,11 +7,21 @@ class HostsRepository {
         this.#hostModel = HostModel;
     }
 
-    createHost = async (email, hostName, password, phoneNumber, profileImg) => {
+    createHost = async (
+        email,
+        hostName,
+        password,
+        brandName,
+        companyNumber,
+        phoneNumber,
+        profileImg
+    ) => {
         const createHost = await this.#hostModel.create({
             email,
             hostName,
             password,
+            brandName,
+            companyNumber,
             phoneNumber,
             profileImg,
         });
@@ -52,6 +63,32 @@ class HostsRepository {
             { hostName, phoneNumber, profileImg },
             { where: { hostId } }
         );
+    };
+
+    deleteHost = async (hostId) => {
+        /* await this.#userModel.delete({
+            where: { hostId },
+        }); */
+
+        const query = `DELETE FROM Hosts WHERE hostId=$hostId`;
+        await sequelize.query(query, {
+            bind: { hostId },
+            type: sequelize.QueryTypes.DELETE,
+        });
+    };
+
+    findCampsListByHost = async (hostId) => {
+        const query = `SELECT * FROM Camps WHERE hostId= :hostId`;
+        console.log(typeof hostId);
+        const campList = await sequelize.query(query, {
+            replacements: { hostId: hostId },
+            type: sequelize.QueryTypes.SELECT,
+        });
+        /* const campList = await this.#CampsModel.findAll({
+            where: { hostId },
+        }); */
+
+        return campList;
     };
 }
 

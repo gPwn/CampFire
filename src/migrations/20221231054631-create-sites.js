@@ -40,6 +40,10 @@ module.exports = {
                 type: Sequelize.DataTypes.TEXT,
                 allowNull: false,
             },
+            sitePrice: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+            },
             siteMainImage: {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false,

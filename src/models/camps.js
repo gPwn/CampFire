@@ -63,10 +63,6 @@ module.exports = (sequelize, DataTypes) => {
                 unique: true,
                 allowNull: false,
             },
-            campPrice: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
             campMainImage: {
                 type: DataTypes.STRING,
                 allowNull: false,

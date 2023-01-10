@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../../models');
 
 class CampsRepository {
     #BooksModel;
@@ -159,19 +160,15 @@ class CampsRepository {
     // 캠핑장 페이지 조회
     getCampsByPage = async (pageNo) => {
         const camps = await this.#CampsModel.findAll({
+            raw: true,
             offset: pageNo,
             limit: 16,
-            attributes: [
-                'campId',
-                'hostId',
-                'campName',
-                'campAddress',
-                'campMainImage',
-                'campDesc',
-                'checkIn',
-                'checkOut',
-                'createdAt',
-                'updatedAt',
+            include: [
+                {
+                    model: this.#TypesModel,
+                    as: 'Types',
+                    attributes: ['typeLists'],
+                },
             ],
             order: [['createdAt', 'DESC']],
         });

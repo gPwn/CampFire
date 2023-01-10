@@ -146,13 +146,29 @@ class CampsService {
         } else {
             start = (pageNo - 1) * 16;
         }
-
         const camps = await this.campsRepository.getCampsByPage(start);
         if (!camps) {
             throw new InvalidParamsError('존재하지 않는 페이지입니다.', 404);
         }
-
-        return camps;
+        return camps.map((camp) => {
+            return {
+                campId: camp.campId,
+                hostId: camp.hostId,
+                campName: camp.campName,
+                campAddress: camp.campAddress,
+                campMainImage: camp.campMainImage,
+                campSubImages: camp.campSubImages.split(','),
+                campDesc: camp.campDesc,
+                typeLists:
+                    camp['Types.typeLists'] === null
+                        ? null
+                        : camp['Types.typeLists'].split(','),
+                checkIn: camp.checkIn,
+                checkOut: camp.checkOut,
+                createdAt: camp.createdAt,
+                updatedAt: camp.updatedAt,
+            };
+        });
     };
 
     // 캠핑장 상세 조회
@@ -215,7 +231,21 @@ class CampsService {
             );
         }
 
-        return site;
+        return {
+            siteId: site.siteId,
+            campId: site.campId,
+            hostId: site.hostId,
+            siteName: site.siteName,
+            siteInfo: site.siteInfo,
+            siteDesc: site.siteDesc,
+            sitePrice: site.sitePrice,
+            siteMainImage: site.siteMainImage,
+            siteSubImages: site.siteSubImages.split(','),
+            minPeople: site.minPeople,
+            maxPeople: site.maxPeople,
+            createdAt: site.createdAt,
+            updatedAt: site.updatedAt,
+        };
     };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (

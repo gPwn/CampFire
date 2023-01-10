@@ -20,12 +20,11 @@ module.exports = {
             },
             password: {
                 type: Sequelize.DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             phoneNumber: {
                 type: Sequelize.DataTypes.STRING,
-                unique: true,
-                allowNull: false,
+                allowNull: true,
             },
             profileImg: {
                 type: Sequelize.DataTypes.STRING,

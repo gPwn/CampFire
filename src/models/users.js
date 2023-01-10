@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'Books',
                 foreignKey: 'userId',
             });
+            this.hasMany(models.Likes, {
+                as: 'Likes',
+                foreignKey: 'userId',
+            });
         }
     }
     Users.init(
@@ -48,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
                 unique: true,
+            },
+            likes: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0,
             },
             createdAt: {
                 allowNull: false,

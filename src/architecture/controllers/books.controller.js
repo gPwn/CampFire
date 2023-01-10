@@ -32,25 +32,55 @@ class BooksController {
         }
     };
 
-    getBooksByHost = async (req, res, next) => {
+    //호스트 예약 리스트 조회
+    getBookListByHost = async (req, res, next) => {
         try {
             const { hostId } = res.locals;
 
-            const books = await this.booksService.getBooksByHost(hostId);
+            const books = await this.booksService.getBookListByHost(hostId);
 
-            res.status(200).json({ books: books });
+            res.status(200).json({ books });
         } catch (error) {
             next(error);
         }
     };
 
-    getBooksByHUser = async (req, res, next) => {
+    //호스트 예약 상세 내역 조회
+    getBookByHost = async (req, res, next) => {
+        try {
+            const { hostId } = res.locals;
+            const { bookId } = req.params;
+
+            const book = await this.booksService.getBookByHost(hostId, bookId);
+
+            res.status(200).json({ book });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    //유저 예약 리스트 조회
+    getBookListByUser = async (req, res, next) => {
         try {
             const { userId } = res.locals;
 
-            const books = await this.booksService.getBooksByUser(userId);
+            const books = await this.booksService.getBookListByUser(userId);
 
-            res.status(200).json({ books: books });
+            res.status(200).json({ books });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    //유저 예약 상세 내역 조회
+    getBookByUser = async (req, res, next) => {
+        try {
+            const { userId } = res.locals;
+            const { bookId } = req.params;
+
+            const book = await this.booksService.getBookByUser(userId, bookId);
+
+            res.status(200).json({ book });
         } catch (error) {
             next(error);
         }

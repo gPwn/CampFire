@@ -23,6 +23,7 @@
     "homepage": "https://github.com/gPwn/CampFire#readme",
     "dependencies": {
         "aws-sdk": "^2.1286.0",
+        "axios": "^1.2.2",
         "cors": "^2.8.5",
         "crypto": "^1.0.1",
         "dotenv": "^16.0.3",

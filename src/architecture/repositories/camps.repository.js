@@ -131,30 +131,38 @@ class CampsRepository {
         typeLists,
         themeLists
     ) => {
-        await this.#CampAmenitiesModel.update(
-            {
-                campAmenities,
-            },
-            { where: { campId } }
-        );
-        await this.#EnvsModel.update(
-            {
-                envLists,
-            },
-            { where: { campId } }
-        );
-        await this.#TypesModel.update(
-            {
-                typeLists,
-            },
-            { where: { campId } }
-        );
-        await this.#ThemesModel.update(
-            {
-                themeLists,
-            },
-            { where: { campId } }
-        );
+        if (campAmenities !== null) {
+            await this.#CampAmenitiesModel.update(
+                {
+                    campAmenities,
+                },
+                { where: { campId } }
+            );
+        }
+        if (envLists !== null) {
+            await this.#EnvsModel.update(
+                {
+                    envLists,
+                },
+                { where: { campId } }
+            );
+        }
+        if (typeLists !== null) {
+            await this.#TypesModel.update(
+                {
+                    typeLists,
+                },
+                { where: { campId } }
+            );
+        }
+        if (themeLists !== null) {
+            await this.#ThemesModel.update(
+                {
+                    themeLists,
+                },
+                { where: { campId } }
+            );
+        }
     };
 
     // 캠핑장 페이지 조회

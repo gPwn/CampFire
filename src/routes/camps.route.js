@@ -37,7 +37,7 @@ router.patch(
 // 캠핑장 삭제
 router.delete('/:campId', authHostMiddleware, campsController.deletecamps);
 // 캠핑장 키워드 체크박스 수정
-router.put(
+router.patch(
     '/:campId/keyword',
     authHostMiddleware,
     campsController.updateKeyword

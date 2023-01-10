@@ -226,38 +226,33 @@ class CampsService {
                 404
             );
         }
-
-        return {
-            siteId: site.siteId,
-            campId: site.campId,
-            hostId: site.hostId,
-            siteName: site.siteName,
-            siteInfo: site.siteInfo,
-            siteDesc: site.siteDesc,
-            sitePrice: site.sitePrice,
-            campMainImage: site.campMainImage,
-            campSubImages: site.campSubImages.split(','),
-            minPeople: site.minPeople,
-            maxPeople: site.maxPeople,
-            createdAt: site.createdAt,
-            updatedAt: site.updatedAt,
-        };
-    };
-    // 캠핑장 키워드 체크박스 등록
-    createKeyword = async (
-        campId,
-        campAmenities,
-        envLists,
-        typeLists,
-        themeLists
-    ) => {
-        await this.campsRepository.createKeyword(
-            campId,
-            campAmenities,
-            envLists,
-            typeLists,
-            themeLists
+        
+        const { campAmenities } = await this.campsRepository.findAmenities(
+            campId
         );
+        const { envLists } = await this.campsRepository.findEnvLists(campId);
+        const { typeLists } = await this.campsRepository.findtypeList(campId);
+        const { themeLists } = await this.campsRepository.findThemeLists(
+            campId
+        );
+        return {
+            campId: camp.campId,
+            hostId: camp.hostId,
+            campName: camp.campName,
+            campAddress: camp.campAddress,
+            campMainImage: camp.campMainImage,
+            campSubImages: camp.campSubImages.split(','),
+            campDesc: camp.campDesc,
+            campAmenities:
+                campAmenities === null ? null : campAmenities.split(','),
+            envLists: envLists === null ? null : envLists.split(','),
+            typeLists: typeLists === null ? null : typeLists.split(','),
+            themeLists: themeLists === null ? null : themeLists.split(','),
+            checkIn: camp.checkIn,
+            checkOut: camp.checkOut,
+            createdAt: camp.createdAt,
+            updatedAt: camp.updatedAt,
+        };
     };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (

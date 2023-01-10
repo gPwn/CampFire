@@ -36,12 +36,6 @@ router.patch(
 );
 // 캠핑장 삭제
 router.delete('/:campId', authHostMiddleware, campsController.deletecamps);
-// 캠핑장 키워드 체크박스 등록
-router.post(
-    '/:campId/keyword',
-    authHostMiddleware,
-    campsController.createKeyword
-);
 // 캠핑장 키워드 체크박스 수정
 router.put(
     '/:campId/keyword',

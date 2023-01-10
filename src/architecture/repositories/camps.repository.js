@@ -54,6 +54,23 @@ class CampsRepository {
             checkIn,
             checkOut,
         });
+        const { campId } = createdCamp;
+        await this.#CampAmenitiesModel.create({
+            campId,
+            campAmenities: null,
+        });
+        await this.#EnvsModel.create({
+            campId,
+            envLists: null,
+        });
+        await this.#TypesModel.create({
+            campId,
+            typeLists: null,
+        });
+        await this.#ThemesModel.create({
+            campId,
+            themeLists: null,
+        });
         return createdCamp;
     };
 
@@ -106,31 +123,6 @@ class CampsRepository {
         });
     };
 
-    // 캠핑장 키워드 체크박스 등록
-    createKeyword = async (
-        campId,
-        campAmenities,
-        envLists,
-        typeLists,
-        themeLists
-    ) => {
-        await this.#CampAmenitiesModel.create({
-            campId,
-            campAmenities,
-        });
-        await this.#EnvsModel.create({
-            campId,
-            envLists,
-        });
-        await this.#TypesModel.create({
-            campId,
-            typeLists,
-        });
-        await this.#ThemesModel.create({
-            campId,
-            themeLists,
-        });
-    };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (
         campId,

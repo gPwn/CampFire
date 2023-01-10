@@ -10,14 +10,8 @@ class CampsController {
     // 캠핑장 업로드
     createCamp = async (req, res, next) => {
         try {
-            const {
-                campName,
-                campAddress,
-                campPrice,
-                campDesc,
-                checkIn,
-                checkOut,
-            } = req.body;
+            const { campName, campAddress, campDesc, checkIn, checkOut } =
+                req.body;
 
             const { hostId } = res.locals;
             let campMainImage;
@@ -35,7 +29,6 @@ class CampsController {
             if (
                 !campName ||
                 !campAddress ||
-                !campPrice ||
                 !campDesc ||
                 !checkIn ||
                 !checkOut
@@ -48,7 +41,6 @@ class CampsController {
                 campSubImages,
                 campName,
                 campAddress,
-                campPrice,
                 campDesc,
                 checkIn,
                 checkOut
@@ -64,14 +56,8 @@ class CampsController {
     // 캠핑장 수정
     updateCamps = async (req, res, next) => {
         try {
-            const {
-                campName,
-                campAddress,
-                campPrice,
-                campDesc,
-                checkIn,
-                checkOut,
-            } = req.body;
+            const { campName, campAddress, campDesc, checkIn, checkOut } =
+                req.body;
 
             const { hostId } = res.locals;
             const { campId } = req.params;
@@ -87,8 +73,6 @@ class CampsController {
             } else {
                 throw new InvalidParamsError();
             }
-            const campAmenitiesArray = req.body.campAmenities;
-            const campAmenities = campAmenitiesArray.toString();
             const campSubImages = campSubImagesArray.toString();
 
             await this.campsService.updateCamps(
@@ -96,11 +80,9 @@ class CampsController {
                 hostId,
                 campName,
                 campAddress,
-                campPrice,
                 campMainImage,
                 campSubImages,
                 campDesc,
-                campAmenities,
                 checkIn,
                 checkOut
             );
@@ -179,34 +161,6 @@ class CampsController {
             const site = await this.campsService.getsiteById(campId, siteId);
 
             res.status(200).json({ site });
-        } catch (error) {
-            next(error);
-        }
-    };
-    // 캠핑장 키워드 체크박스 등록
-    createKeyword = async (req, res, next) => {
-        try {
-            const { campId } = req.params;
-            const campAmenitiesArray = req.body.campAmenities;
-            const envListsArray = req.body.envLists;
-            const typeListsArray = req.body.typeLists;
-            const themeListsArray = req.body.themeLists;
-
-            const campAmenities = campAmenitiesArray.toString();
-            const envLists = envListsArray.toString();
-            const typeLists = typeListsArray.toString();
-            const themeLists = themeListsArray.toString();
-
-            await this.campsService.createKeyword(
-                campId,
-                campAmenities,
-                envLists,
-                typeLists,
-                themeLists
-            );
-            res.status(201).json({
-                message: '캠핑장 키워드가 등록되었습니다.',
-            });
         } catch (error) {
             next(error);
         }

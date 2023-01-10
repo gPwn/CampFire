@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { sequelize } = require('../../models');
 
 class CampsRepository {
     #BooksModel;
@@ -53,6 +54,23 @@ class CampsRepository {
             checkIn,
             checkOut,
         });
+        const { campId } = createdCamp;
+        await this.#CampAmenitiesModel.create({
+            campId,
+            campAmenities: null,
+        });
+        await this.#EnvsModel.create({
+            campId,
+            envLists: null,
+        });
+        await this.#TypesModel.create({
+            campId,
+            typeLists: null,
+        });
+        await this.#ThemesModel.create({
+            campId,
+            themeLists: null,
+        });
         return createdCamp;
     };
 
@@ -73,7 +91,6 @@ class CampsRepository {
         campMainImage,
         campSubImages,
         campDesc,
-        campAmenities,
         checkIn,
         checkOut
     ) => {
@@ -86,7 +103,6 @@ class CampsRepository {
                 campMainImage,
                 campSubImages,
                 campDesc,
-                campAmenities,
                 checkIn,
                 checkOut,
             },
@@ -107,31 +123,6 @@ class CampsRepository {
         });
     };
 
-    // 캠핑장 키워드 체크박스 등록
-    createKeyword = async (
-        campId,
-        campAmenities,
-        envLists,
-        typeLists,
-        themeLists
-    ) => {
-        await this.#CampAmenitiesModel.create({
-            campId,
-            campAmenities,
-        });
-        await this.#EnvsModel.create({
-            campId,
-            envLists,
-        });
-        await this.#TypesModel.create({
-            campId,
-            typeLists,
-        });
-        await this.#ThemesModel.create({
-            campId,
-            themeLists,
-        });
-    };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (
         campId,
@@ -169,19 +160,15 @@ class CampsRepository {
     // 캠핑장 페이지 조회
     getCampsByPage = async (pageNo) => {
         const camps = await this.#CampsModel.findAll({
+            raw: true,
             offset: pageNo,
             limit: 16,
-            attributes: [
-                'campId',
-                'hostId',
-                'campName',
-                'campAddress',
-                'campMainImage',
-                'campDesc',
-                'checkIn',
-                'checkOut',
-                'createdAt',
-                'updatedAt',
+            include: [
+                {
+                    model: this.#TypesModel,
+                    as: 'Types',
+                    attributes: ['typeLists'],
+                },
             ],
             order: [['createdAt', 'DESC']],
         });

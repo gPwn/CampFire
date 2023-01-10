@@ -59,8 +59,30 @@ class BooksService {
 
     //호스트 예약 리스트 조회
     getBookListByHost = async (hostId) => {
-        return await this.booksRepository.findBookListByPk({
+        const bookLists = await this.booksRepository.findBookListByPk({
             where: { hostId },
+        });
+
+        return bookLists.map((bookList) => {
+            return {
+                bookId: bookList.bookId,
+                userId: bookList.userId,
+                hostId: bookList.hostId,
+                campId: bookList.campId,
+                siteId: bookList.siteId,
+                siteName: bookList['Site.siteName'],
+                siteDesc: bookList['Site.siteDesc'],
+                siteInfo: bookList['Site.siteInfo'],
+                sitePrice: bookList['Site.sitePrice'],
+                siteMainImage: bookList['Site.siteMainImage'],
+                checkInDate: bookList.checkInDate,
+                checkOutDate: bookList.checkOutDate,
+                adults: bookList.adults,
+                children: bookList.children,
+                totalPeople: bookList.totalPeople,
+                createdAt: bookList.createdAt,
+                updatedAt: bookList.updatedAt,
+            };
         });
     };
 
@@ -74,13 +96,53 @@ class BooksService {
             throw new InvalidParamsError();
         }
 
-        return book;
+        return {
+            bookId: book.bookId,
+            userId: book.userId,
+            hostId: book.hostId,
+            campId: book.campId,
+            siteId: book.siteId,
+            siteName: book.Site.siteName,
+            siteDesc: book.Site.siteDesc,
+            siteInfo: book.Site.siteInfo,
+            sitePrice: book.Site.sitePrice,
+            siteMainImage: book.Site.siteMainImage,
+            checkInDate: book.checkInDate,
+            checkOutDate: book.checkOutDate,
+            adults: book.adults,
+            children: book.children,
+            totalPeople: book.totalPeople,
+            createdAt: book.createdAt,
+            updatedAt: book.updatedAt,
+        };
     };
 
     //유저 예약 리스트 조회
     getBookListByUser = async (userId) => {
-        return await this.booksRepository.findBookListByPk({
+        const bookLists = await this.booksRepository.findBookListByPk({
             where: { userId },
+        });
+
+        return bookLists.map((bookList) => {
+            return {
+                bookId: bookList.bookId,
+                userId: bookList.userId,
+                hostId: bookList.hostId,
+                campId: bookList.campId,
+                siteId: bookList.siteId,
+                siteName: bookList['Site.siteName'],
+                siteDesc: bookList['Site.siteDesc'],
+                siteInfo: bookList['Site.siteInfo'],
+                sitePrice: bookList['Site.sitePrice'],
+                siteMainImage: bookList['Site.siteMainImage'],
+                checkInDate: bookList.checkInDate,
+                checkOutDate: bookList.checkOutDate,
+                adults: bookList.adults,
+                children: bookList.children,
+                totalPeople: bookList.totalPeople,
+                createdAt: bookList.createdAt,
+                updatedAt: bookList.updatedAt,
+            };
         });
     };
 
@@ -94,7 +156,25 @@ class BooksService {
             throw new InvalidParamsError();
         }
 
-        return book;
+        return {
+            bookId: book.bookId,
+            userId: book.userId,
+            hostId: book.hostId,
+            campId: book.campId,
+            siteId: book.siteId,
+            siteName: book.Site.siteName,
+            siteDesc: book.Site.siteDesc,
+            siteInfo: book.Site.siteInfo,
+            sitePrice: book.Site.sitePrice,
+            siteMainImage: book.Site.siteMainImage,
+            checkInDate: book.checkInDate,
+            checkOutDate: book.checkOutDate,
+            adults: book.adults,
+            children: book.children,
+            totalPeople: book.totalPeople,
+            createdAt: book.createdAt,
+            updatedAt: book.updatedAt,
+        };
     };
 }
 

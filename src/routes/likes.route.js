@@ -6,8 +6,8 @@ const LikesController = require('../architecture/controllers/likes.controller.js
 const likesController = new LikesController();
 
 // 유저 찜하기 기능
-router.post('/:campId', authUserMiddleware, likesController.addLike);
+router.put('/:campId', authUserMiddleware, likesController.addLike);
 // 유저 찜하기 취소 기능
-router.delete('/:campId', authUserMiddleware, likesController.deleteLike);
+router.put('/:campId', authUserMiddleware, likesController.deleteLike);
 
 module.exports = router;

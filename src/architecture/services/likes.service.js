@@ -34,13 +34,17 @@ class LikesService {
             throw new InvalidParamsError('찜할 수 없는 캠핑장입니다.', 400);
         }
 
+        const findLike = await this.liksRepository.findLike(campId, userId);
+
+        if (!findLike) {
+            await this.liksRepository.addLike(campId, userId);
+        }
+
         const userlike = Number(findUser.likes) + Number(1);
         const camplike = Number(findCamps.likes) + Number(1);
 
         await this.liksRepository.userLikeupdate(userId, userlike);
         await this.liksRepository.campLikeupdate(campId, camplike);
-
-        return await this.liksRepository.addLike(campId, userId);
     };
 
     deleteLike = async (campId, userId) => {

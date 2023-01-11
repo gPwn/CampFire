@@ -137,9 +137,10 @@ class BooksService {
                 siteMainImage: bookList['Site.siteMainImage'],
                 checkInDate: bookList.checkInDate,
                 checkOutDate: bookList.checkOutDate,
+                Camp_checkIn: bookList['Camp.checkIn'],
+                Camp_checkOut: bookList['Camp.checkOut'],
                 adults: bookList.adults,
                 children: bookList.children,
-                totalPeople: bookList.totalPeople,
                 createdAt: bookList.createdAt,
                 updatedAt: bookList.updatedAt,
             };

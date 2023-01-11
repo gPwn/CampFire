@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { sequelize, Sites } = require('../../models');
+const { sequelize, Sites, Camps } = require('../../models');
 
 class BooksRepository {
     #BooksModel;
@@ -42,6 +42,10 @@ class BooksRepository {
             include: [
                 {
                     model: Sites,
+                    attribute: [],
+                },
+                {
+                    model: Camps,
                     attribute: [],
                 },
             ],

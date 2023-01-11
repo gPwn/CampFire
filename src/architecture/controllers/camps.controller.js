@@ -2,6 +2,7 @@ const CampsService = require('../services/camps.service.js');
 const {
     InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class');
+const { urlencoded } = require('express');
 
 class CampsController {
     constructor() {
@@ -132,6 +133,20 @@ class CampsController {
             const { campId } = req.params;
 
             const camp = await this.campsService.findCampById(campId);
+
+            res.status(200).json({ camp: camp });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    // 유저 라이트 캠핑장 조회
+    getLikeById = async (req, res, next) => {
+        try {
+            const { campId } = req.params;
+            const { userId } = res.locals;
+
+            const camp = await this.campsService.findCampById(campId, userId);
 
             res.status(200).json({ camp: camp });
         } catch (error) {

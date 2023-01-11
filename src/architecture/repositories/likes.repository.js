@@ -2,10 +2,17 @@ const { Likes, Users, Camps } = require('../../models');
 const { Op } = require('sequelize');
 
 class LikesRepository {
-    constructor() {}
+    #CampModel;
+    #UserModel;
+    #LikeModel;
+    constructor(CampModel, UserModel, LikeModel) {
+        this.#CampModel = CampModel;
+        this.#UserModel = UserModel;
+        this.#LikeModel = LikeModel;
+    }
 
     findLike = async (campId, userId) => {
-        return await Likes.findOne({
+        return await this.#LikeModel.findOne({
             where: {
                 [Op.and]: [{ campId, userId }],
             },
@@ -13,14 +20,14 @@ class LikesRepository {
     };
 
     addLike = async (campId, userId) => {
-        return await Likes.create({
+        return await this.#LikeModel.create({
             campId,
             userId,
         });
     };
 
     deleteLike = async (campId, userId) => {
-        return await Likes.destroy({
+        return await this.#LikeModel.destroy({
             where: {
                 [Op.and]: [{ campId, userId }],
             },
@@ -28,7 +35,7 @@ class LikesRepository {
     };
 
     userLikeupdate = async (userId, userlike) => {
-        await Users.update(
+        await this.#UserModel.update(
             {
                 likes: userlike,
             },
@@ -37,7 +44,7 @@ class LikesRepository {
     };
 
     campLikeupdate = async (campId, camplike) => {
-        await Camps.update(
+        await this.#CampModel.update(
             {
                 likes: camplike,
             },

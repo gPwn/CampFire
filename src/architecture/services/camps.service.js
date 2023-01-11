@@ -1,4 +1,5 @@
 const CampsRepository = require('../repositories/camps.repository.js');
+const LikesRepository = require('../repositories/likes.repository.js');
 const {
     ValidationError,
     InvalidParamsError,
@@ -15,6 +16,7 @@ const {
     Envs,
     Types,
     Themes,
+    Likes,
 } = require('../../models');
 const { deleteImage } = require('../../modules/campImg');
 const {
@@ -33,9 +35,12 @@ class CampsService {
             CampAmenities,
             Envs,
             Types,
-            Themes
+            Themes,
+            Likes
         );
     }
+    likesRepository = new LikesRepository(Camps, Users, Likes);
+
     // 캠핑장 업로드
     createCamp = async (
         hostId,
@@ -165,6 +170,7 @@ class CampsService {
                         : camp['Types.typeLists'].split(','),
                 checkIn: camp.checkIn,
                 checkOut: camp.checkOut,
+                likes: camp.likes,
                 createdAt: camp.createdAt,
                 updatedAt: camp.updatedAt,
             };
@@ -172,7 +178,7 @@ class CampsService {
     };
 
     // 캠핑장 상세 조회
-    findCampById = async (campId) => {
+    findCampById = async (campId, userId) => {
         const camp = await this.campsRepository.findCampById(campId);
         if (!camp) {
             throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
@@ -186,6 +192,17 @@ class CampsService {
         const { themeLists } = await this.campsRepository.findThemeLists(
             campId
         );
+
+        console.log(campId, userId);
+        let likeStatus = false;
+        const findLike = await this.likesRepository.findLike(campId, userId);
+        if (findLike) {
+            likeStatus = true;
+        } else {
+            likeStatus = false;
+        }
+        console.log(likeStatus);
+
         return {
             campId: camp.campId,
             hostId: camp.hostId,
@@ -201,6 +218,8 @@ class CampsService {
             themeLists: themeLists === null ? null : themeLists.split(','),
             checkIn: camp.checkIn,
             checkOut: camp.checkOut,
+            likes: camp.likes,
+            likeStatus: likeStatus,
             createdAt: camp.createdAt,
             updatedAt: camp.updatedAt,
         };

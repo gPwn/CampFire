@@ -6,22 +6,11 @@ const {
     InvalidParamsError,
     ExistError,
 } = require('../../middlewares/exceptions/error.class.js');
-const {
-    Books,
-    Camps,
-    Hosts,
-    Users,
-    Sites,
-    CampAmenities,
-    Envs,
-    Types,
-    Themes,
-    Likes,
-} = require('../../models');
+const { Books, Camps, Hosts, Users, Likes } = require('../../models');
 
 class LikesService {
     constructor() {
-        this.liksRepository = new LikesRepository();
+        this.likesRepository = new LikesRepository(Camps, Users, Likes);
     }
     usersRepository = new UsersRepository(Users);
     campsRepository = new CampsRepository(Books, Camps, Hosts, Users);
@@ -34,25 +23,25 @@ class LikesService {
             throw new InvalidParamsError('찜할 수 없는 캠핑장입니다.', 400);
         }
 
-        const findLike = await this.liksRepository.findLike(campId, userId);
+        const findLike = await this.likesRepository.findLike(campId, userId);
 
         let userlike = Number(findUser.likes);
         let camplike = Number(findCamps.likes);
         let message = '';
         if (!findLike) {
-            await this.liksRepository.addLike(campId, userId);
+            await this.likesRepository.addLike(campId, userId);
             userlike += Number(1);
             camplike += Number(1);
             message = '좋아요 성공!';
         } else {
-            await this.liksRepository.deleteLike(campId, userId);
+            await this.likesRepository.deleteLike(campId, userId);
             userlike -= Number(1);
             camplike -= Number(1);
             message = '좋아요 취소!';
         }
 
-        await this.liksRepository.userLikeupdate(userId, userlike);
-        await this.liksRepository.campLikeupdate(campId, camplike);
+        await this.likesRepository.userLikeupdate(userId, userlike);
+        await this.likesRepository.campLikeupdate(campId, camplike);
         return message;
     };
 }

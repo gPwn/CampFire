@@ -8,8 +8,7 @@ class LikesController {
     changeLike = async (req, res, next) => {
         try {
             const { campId } = req.params;
-            // const { userId } = res.locals;
-            const userId = 1;
+            const { userId } = res.locals;
 
             const message = await this.likesService.changeLike(campId, userId);
 

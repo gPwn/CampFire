@@ -18,6 +18,8 @@ router.post(
 );
 // 캠핑장 페이지 조회
 router.get('/page', campsController.getCampsByPage);
+// 유저 라이트 캠핑장 조회
+router.get('/:campId', authUserMiddleware, campsController.getLikeById);
 // 캠핑장 상세 조회
 router.get('/:campId', campsController.getCampById);
 //캠핑장 사이트 목록 조회

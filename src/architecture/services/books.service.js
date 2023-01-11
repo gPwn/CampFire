@@ -1,5 +1,6 @@
 const BooksRepository = require('../repositories/books.repository.js');
 const CampsRepository = require('../repositories/camps.repository.js');
+const SitesRepository = require('../repositories/sites.repository.js');
 const {
     ValidationError,
     InvalidParamsError,
@@ -23,6 +24,13 @@ class BooksService {
             Users,
             Sites
         );
+        this.sitesRepository = new SitesRepository(
+            Books,
+            Camps,
+            Hosts,
+            Users,
+            Sites
+        );
     }
 
     // 캠핑장 예약하기
@@ -39,8 +47,15 @@ class BooksService {
         if (!findHostId) {
             throw new ValidationError('예약할 수 없는 캠핑장입니다.', 400);
         }
-
         const hostId = findHostId.hostId;
+
+        const checkCampBySiteId = await this.sitesRepository.findSiteById(
+            campId,
+            siteId
+        );
+        if (!checkCampBySiteId) {
+            throw new ValidationError('예약할 수 없는 사이트입니다.', 400);
+        }
 
         const totalPeople = Number(adults) + Number(children);
 
@@ -77,9 +92,10 @@ class BooksService {
                 siteMainImage: bookList['Site.siteMainImage'],
                 checkInDate: bookList.checkInDate,
                 checkOutDate: bookList.checkOutDate,
+                Camp_checkIn: bookList['Camp.checkIn'],
+                Camp_checkOut: bookList['Camp.checkOut'],
                 adults: bookList.adults,
                 children: bookList.children,
-                totalPeople: bookList.totalPeople,
                 createdAt: bookList.createdAt,
                 updatedAt: bookList.updatedAt,
             };
@@ -137,9 +153,10 @@ class BooksService {
                 siteMainImage: bookList['Site.siteMainImage'],
                 checkInDate: bookList.checkInDate,
                 checkOutDate: bookList.checkOutDate,
+                Camp_checkIn: bookList['Camp.checkIn'],
+                Camp_checkOut: bookList['Camp.checkOut'],
                 adults: bookList.adults,
                 children: bookList.children,
-                totalPeople: bookList.totalPeople,
                 createdAt: bookList.createdAt,
                 updatedAt: bookList.updatedAt,
             };

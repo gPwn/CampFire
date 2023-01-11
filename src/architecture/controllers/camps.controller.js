@@ -191,15 +191,27 @@ class CampsController {
     updateKeyword = async (req, res, next) => {
         try {
             const { campId } = req.params;
-            const campAmenitiesArray = req.body.campAmenities;
-            const envListsArray = req.body.envLists;
-            const typeListsArray = req.body.typeLists;
-            const themeListsArray = req.body.themeLists;
+            const campAmenitiesArray =
+                req.body.campAmenities === undefined
+                    ? null
+                    : req.body.campAmenities;
+            const envListsArray =
+                req.body.envLists === undefined ? null : req.body.envLists;
+            const typeListsArray =
+                req.body.typeLists === undefined ? null : req.body.typeLists;
+            const themeListsArray =
+                req.body.themeLists === undefined ? null : req.body.themeLists;
 
-            const campAmenities = campAmenitiesArray.toString();
-            const envLists = envListsArray.toString();
-            const typeLists = typeListsArray.toString();
-            const themeLists = themeListsArray.toString();
+            const campAmenities =
+                campAmenitiesArray === null
+                    ? null
+                    : campAmenitiesArray.toString();
+            const envLists =
+                envListsArray === null ? null : envListsArray.toString();
+            const typeLists =
+                typeListsArray === null ? null : typeListsArray.toString();
+            const themeLists =
+                themeListsArray === null ? null : themeListsArray.toString();
 
             await this.campsService.updateKeyword(
                 campId,

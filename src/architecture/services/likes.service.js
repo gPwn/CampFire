@@ -26,7 +26,7 @@ class LikesService {
     usersRepository = new UsersRepository(Users);
     campsRepository = new CampsRepository(Books, Camps, Hosts, Users);
 
-    addLike = async (campId, userId) => {
+    changeLike = async (campId, userId) => {
         const findUser = await this.usersRepository.findOneUser(userId);
         const findCamps = await this.campsRepository.findCampById(campId);
 
@@ -36,28 +36,24 @@ class LikesService {
 
         const findLike = await this.liksRepository.findLike(campId, userId);
 
+        let userlike = Number(findUser.likes);
+        let camplike = Number(findCamps.likes);
+        let message = '';
         if (!findLike) {
             await this.liksRepository.addLike(campId, userId);
+            userlike += Number(1);
+            camplike += Number(1);
+            message = '좋아요 성공!';
+        } else {
+            await this.liksRepository.deleteLike(campId, userId);
+            userlike -= Number(1);
+            camplike -= Number(1);
+            message = '좋아요 취소!';
         }
 
-        const userlike = Number(findUser.likes) + Number(1);
-        const camplike = Number(findCamps.likes) + Number(1);
-
         await this.liksRepository.userLikeupdate(userId, userlike);
         await this.liksRepository.campLikeupdate(campId, camplike);
-    };
-
-    deleteLike = async (campId, userId) => {
-        const findUser = await this.usersRepository.findOneUser(userId);
-        const findCamps = await this.campsRepository.findCampById(campId);
-
-        const userlike = Number(findUser.likes) - Number(1);
-        const camplike = Number(findCamps.likes) - Number(1);
-
-        await this.liksRepository.userLikeupdate(userId, userlike);
-        await this.liksRepository.campLikeupdate(campId, camplike);
-
-        return await this.liksRepository.addLike(campId, userId);
+        return message;
     };
 }
 

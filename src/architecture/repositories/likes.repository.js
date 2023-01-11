@@ -19,6 +19,14 @@ class LikesRepository {
         });
     };
 
+    deleteLike = async (campId, userId) => {
+        return await Likes.destroy({
+            where: {
+                [Op.and]: [{ campId, userId }],
+            },
+        });
+    };
+
     userLikeupdate = async (userId, userlike) => {
         await Users.update(
             {

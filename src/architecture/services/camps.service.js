@@ -193,7 +193,6 @@ class CampsService {
             campId
         );
 
-        console.log(campId, userId);
         let likeStatus = false;
         const findLike = await this.likesRepository.findLike(campId, userId);
         if (findLike) {
@@ -201,7 +200,6 @@ class CampsService {
         } else {
             likeStatus = false;
         }
-        console.log(likeStatus);
 
         return {
             campId: camp.campId,

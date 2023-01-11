@@ -132,7 +132,14 @@ class CampsController {
         try {
             const { campId } = req.params;
 
-            const camp = await this.campsService.findCampById(campId);
+            let userId = 0;
+            if (res.locals.userId === undefined) {
+                userId = 0;
+            } else {
+                userId = res.locals.userId;
+            }
+
+            const camp = await this.campsService.findCampById(campId, userId);
 
             res.status(200).json({ camp: camp });
         } catch (error) {

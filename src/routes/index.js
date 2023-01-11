@@ -9,7 +9,7 @@ router.use('/auths', require('./auths.routes.js'));
 router.use('/camps', require('./sites.route.js'));
 
 router.get('/', (req, res) => {
-    res.send('api routes 연결 cicd test!!0105');
+    res.send('api routes 연결 cicd test!!0111');
 });
 
 module.exports = router;

@@ -194,7 +194,7 @@ class CampsService {
         );
 
         let likeStatus = false;
-        const findLike = await this.likesRepository.findLike(campId, userId);
+        const findLike = await this.likesRepository.isExistLike(campId, userId);
         if (findLike) {
             likeStatus = true;
         } else {

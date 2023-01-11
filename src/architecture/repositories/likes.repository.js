@@ -11,11 +11,17 @@ class LikesRepository {
         this.#LikeModel = LikeModel;
     }
 
-    findLike = async (campId, userId) => {
+    isExistLike = async (campId, userId) => {
         return await this.#LikeModel.findOne({
             where: {
                 [Op.and]: [{ campId, userId }],
             },
+        });
+    };
+
+    findLikeByPk = async (userId) => {
+        return await this.#LikeModel.findAll({
+            where: { userId },
         });
     };
 

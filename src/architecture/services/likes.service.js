@@ -23,7 +23,7 @@ class LikesService {
             throw new InvalidParamsError('찜할 수 없는 캠핑장입니다.', 400);
         }
 
-        const findLike = await this.likesRepository.findLike(campId, userId);
+        const findLike = await this.likesRepository.isExistLike(campId, userId);
 
         let userlike = Number(findUser.likes);
         let camplike = Number(findCamps.likes);
@@ -43,6 +43,12 @@ class LikesService {
         await this.likesRepository.userLikeupdate(userId, userlike);
         await this.likesRepository.campLikeupdate(campId, camplike);
         return message;
+    };
+
+    getUserLikes = async (userId) => {
+        const findLikeByUser = await this.likesRepository.findLikeByPk(userId);
+
+        return findLikeByUser;
     };
 }
 

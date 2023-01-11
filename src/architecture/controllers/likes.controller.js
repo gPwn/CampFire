@@ -21,6 +21,20 @@ class LikesController {
             next(error);
         }
     };
+
+    getUserLikes = async (req, res, next) => {
+        try {
+            const { userId } = res.locals;
+
+            const Likes = await this.likesService.getUserLikes(userId);
+
+            res.status(200).json({
+                Likes,
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = LikesController;

@@ -7,5 +7,7 @@ const likesController = new LikesController();
 
 // 유저 찜하기 기능
 router.put('/:campId', authUserMiddleware, likesController.changeLike);
+// 유저 찜하기 조회
+router.get('/', authUserMiddleware, likesController.getUserLikes);
 
 module.exports = router;

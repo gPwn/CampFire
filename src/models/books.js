@@ -60,11 +60,11 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'cascade',
             },
             checkInDate: {
-                type: DataTypes.DATE,
+                type: DataTypes.DATEONLY,
                 allowNull: false,
             },
             checkOutDate: {
-                type: DataTypes.DATE,
+                type: DataTypes.DATEONLY,
                 allowNull: false,
             },
             adults: {

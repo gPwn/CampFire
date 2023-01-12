@@ -98,41 +98,11 @@ class BooksService {
                 Camp_checkOut: bookList['Camp.checkOut'],
                 adults: bookList.adults,
                 children: bookList.children,
+                confirmBook: bookList.confirmBook === 0 ? false : true,
                 createdAt: bookList.createdAt,
                 updatedAt: bookList.updatedAt,
             };
         });
-    };
-
-    //호스트 예약 상세 조회
-    getBookByHost = async (hostId, bookId) => {
-        const book = await this.booksRepository.findBookByPk({
-            where: { bookId },
-        });
-
-        if (book.hostId !== hostId) {
-            throw new InvalidParamsError();
-        }
-
-        return {
-            bookId: book.bookId,
-            userId: book.userId,
-            hostId: book.hostId,
-            campId: book.campId,
-            siteId: book.siteId,
-            siteName: book.Site.siteName,
-            siteDesc: book.Site.siteDesc,
-            siteInfo: book.Site.siteInfo,
-            sitePrice: book.Site.sitePrice,
-            siteMainImage: book.Site.siteMainImage,
-            checkInDate: book.checkInDate,
-            checkOutDate: book.checkOutDate,
-            adults: book.adults,
-            children: book.children,
-            totalPeople: book.totalPeople,
-            createdAt: book.createdAt,
-            updatedAt: book.updatedAt,
-        };
     };
 
     //유저 예약 리스트 조회
@@ -140,6 +110,7 @@ class BooksService {
         const bookLists = await this.booksRepository.findBookListByPk({
             where: { userId },
         });
+        // console.log(bookLists);
 
         return bookLists.map((bookList) => {
             return {
@@ -159,41 +130,11 @@ class BooksService {
                 Camp_checkOut: bookList['Camp.checkOut'],
                 adults: bookList.adults,
                 children: bookList.children,
+                confirmBook: bookList.confirmBook === 0 ? false : true,
                 createdAt: bookList.createdAt,
                 updatedAt: bookList.updatedAt,
             };
         });
-    };
-
-    //유저 예약 상세 조회
-    getBookByUser = async (userId, bookId) => {
-        const book = await this.booksRepository.findBookByPk({
-            where: { bookId },
-        });
-
-        if (book.userId !== userId) {
-            throw new InvalidParamsError();
-        }
-
-        return {
-            bookId: book.bookId,
-            userId: book.userId,
-            hostId: book.hostId,
-            campId: book.campId,
-            siteId: book.siteId,
-            siteName: book.Site.siteName,
-            siteDesc: book.Site.siteDesc,
-            siteInfo: book.Site.siteInfo,
-            sitePrice: book.Site.sitePrice,
-            siteMainImage: book.Site.siteMainImage,
-            checkInDate: book.checkInDate,
-            checkOutDate: book.checkOutDate,
-            adults: book.adults,
-            children: book.children,
-            totalPeople: book.totalPeople,
-            createdAt: book.createdAt,
-            updatedAt: book.updatedAt,
-        };
     };
 
     // 호스트 예약 확정/확정 취소
@@ -203,6 +144,11 @@ class BooksService {
                 [Op.and]: [{ hostId, bookId }],
             },
         });
+
+        console.log(book.cancelBooks);
+        if (book.cancelBooks === true) {
+            throw new InvalidParamsError('이미 유저가 취소한 예약내역입니다.');
+        }
 
         let confirmBook = book.confirmBook;
         let message = '';
@@ -242,6 +188,41 @@ class BooksService {
         await this.booksRepository.updateBookCancelBook(bookId, cancelBooks);
 
         return { message, hostPhoneNumber };
+    };
+
+    // 유저 예약 취소 캠핑장 리스트 조회
+    getCancelBooks = async (userId) => {
+        const cancelBooks = true;
+
+        const cancelBookLists = await this.booksRepository.findBookListByPk({
+            where: {
+                [Op.and]: [{ userId, cancelBooks }],
+            },
+        });
+
+        return cancelBookLists.map((cancelBookList) => {
+            return {
+                bookId: cancelBookList.bookId,
+                userId: cancelBookList.userId,
+                hostId: cancelBookList.hostId,
+                campId: cancelBookList.campId,
+                siteId: cancelBookList.siteId,
+                siteName: cancelBookList['Site.siteName'],
+                siteDesc: cancelBookList['Site.siteDesc'],
+                siteInfo: cancelBookList['Site.siteInfo'],
+                sitePrice: cancelBookList['Site.sitePrice'],
+                siteMainImage: cancelBookList['Site.siteMainImage'],
+                checkInDate: cancelBookList.checkInDate,
+                checkOutDate: cancelBookList.checkOutDate,
+                Camp_checkIn: cancelBookList['Camp.checkIn'],
+                Camp_checkOut: cancelBookList['Camp.checkOut'],
+                adults: cancelBookList.adults,
+                children: cancelBookList.children,
+                cancelBooks: cancelBookList.cancelBooks === 0 ? false : true,
+                createdAt: cancelBookList.createdAt,
+                updatedAt: cancelBookList.updatedAt,
+            };
+        });
     };
 }
 

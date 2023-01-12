@@ -20,25 +20,11 @@ router.get(
     booksController.getBookListByHost
 );
 
-// 호스트 예약 상세 조회
-router.get(
-    '/hosts/checkbooks/:bookId',
-    authHostMiddleware,
-    booksController.getBookByHost
-);
-
 // 유저 예약 목록 조회
 router.get(
     '/users/checkbooks',
     authUserMiddleware,
     booksController.getBookListByUser
-);
-
-// 유저 예약 상세 조회
-router.get(
-    '/users/checkbooks/:bookId',
-    authUserMiddleware,
-    booksController.getBookByUser
 );
 
 // 호스트 예약 확정/확정 취소
@@ -49,6 +35,13 @@ router.put(
     '/users/:bookId',
     authUserMiddleware,
     booksController.cancelBookByUser
+);
+
+// 유저 예약 취소 캠핑장 리스트 조회
+router.get(
+    '/users/cancelBooks',
+    authUserMiddleware,
+    booksController.getCancelBooks
 );
 
 module.exports = router;

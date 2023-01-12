@@ -45,20 +45,6 @@ class BooksController {
         }
     };
 
-    //호스트 예약 상세 내역 조회
-    getBookByHost = async (req, res, next) => {
-        try {
-            const { hostId } = res.locals;
-            const { bookId } = req.params;
-
-            const book = await this.booksService.getBookByHost(hostId, bookId);
-
-            res.status(200).json({ book });
-        } catch (error) {
-            next(error);
-        }
-    };
-
     //유저 예약 리스트 조회
     getBookListByUser = async (req, res, next) => {
         try {
@@ -67,20 +53,6 @@ class BooksController {
             const books = await this.booksService.getBookListByUser(userId);
 
             res.status(200).json({ books });
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    //유저 예약 상세 내역 조회
-    getBookByUser = async (req, res, next) => {
-        try {
-            const { userId } = res.locals;
-            const { bookId } = req.params;
-
-            const book = await this.booksService.getBookByUser(userId, bookId);
-
-            res.status(200).json({ book });
         } catch (error) {
             next(error);
         }
@@ -106,14 +78,26 @@ class BooksController {
     //유저 예약 취소시
     cancelBookByUser = async (req, res, next) => {
         try {
-            // const { userId } = res.locals;
-            const userId = 2;
+            const { userId } = res.locals;
             const { bookId } = req.params;
 
             const { message, hostPhoneNumber } =
                 await this.booksService.cancelBookByUser(userId, bookId);
 
             res.status(201).json({ message, userId, hostPhoneNumber });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    // 유저 예약 취소 캠핑장 리스트 조회
+    getCancelBooks = async (req, res, next) => {
+        try {
+            const { userId } = res.locals;
+
+            const cancelBooks = await this.booksService.getCancelBooks(userId);
+
+            res.status(200).json({ cancelBooks });
         } catch (error) {
             next(error);
         }

@@ -101,7 +101,7 @@ class BooksRepository {
             {
                 where: {
                     [Op.and]: [
-                        { userId, cancelBooks, confirmBook },
+                        { userId, confirmBook, cancelBooks },
                         { checkOutDate: { [Op.lt]: getToday() } },
                     ],
                 },

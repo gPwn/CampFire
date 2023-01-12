@@ -107,10 +107,13 @@ class BooksService {
 
     //유저 예약 리스트 조회
     getBookListByUser = async (userId) => {
+        const expiredBooks = false;
+        const cancelBooks = false;
         const bookLists = await this.booksRepository.findBookListByPk({
-            where: { userId },
+            where: {
+                [Op.and]: { userId, expiredBooks, cancelBooks },
+            },
         });
-        // console.log(bookLists);
 
         return bookLists.map((bookList) => {
             return {

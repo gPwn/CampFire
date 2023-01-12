@@ -21,7 +21,14 @@ class LikesRepository {
 
     findLikeByPk = async (userId) => {
         return await this.#LikeModel.findAll({
+            raw: true,
             where: { userId },
+            include: [
+                {
+                    model: this.#CampModel,
+                    attribute: ['campName'],
+                },
+            ],
         });
     };
 

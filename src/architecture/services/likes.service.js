@@ -46,9 +46,18 @@ class LikesService {
     };
 
     getUserLikes = async (userId) => {
-        const findLikeByUser = await this.likesRepository.findLikeByPk(userId);
+        const findLikesByUser = await this.likesRepository.findLikeByPk(userId);
 
-        return findLikeByUser;
+        return findLikesByUser.map((findLikeByUser) => {
+            return {
+                likeId: findLikeByUser.likeId,
+                userId: findLikeByUser.userId,
+                campId: findLikeByUser.campId,
+                campName: findLikeByUser['Camp.campName'],
+                createdAt: findLikeByUser.createdAt,
+                updatedAt: findLikeByUser.updatedAt,
+            };
+        });
     };
 }
 

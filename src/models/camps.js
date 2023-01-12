@@ -34,6 +34,14 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'Themes',
                 foreignKey: 'campId',
             });
+            this.hasMany(models.Likes, {
+                as: 'Likes',
+                foreignKey: 'campId',
+            });
+            this.hasMany(models.Reviews, {
+                as: 'Reviews',
+                foreignKey: 'campId',
+            });
         }
     }
     Camps.init(
@@ -82,6 +90,10 @@ module.exports = (sequelize, DataTypes) => {
             checkOut: {
                 type: DataTypes.TIME,
                 allowNull: false,
+            },
+            likes: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0,
             },
             createdAt: {
                 allowNull: false,

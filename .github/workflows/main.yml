@@ -74,4 +74,5 @@ jobs:
                         -e CRYPTO_SECRET_KEY=${{ secrets.CRYPTO_SECRET_KEY }} \
                         -e TOKEN_USER_SECRET_KEY=${{ secrets.TOKEN_USER_SECRET_KEY }} \
                         -e TOKEN_HOST_SECRET_KEY=${{ secrets.TOKEN_HOST_SECRET_KEY }} \
+                        -e CLIENT_ID=${{ secrets.CLIENT_ID }} \
                         --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest

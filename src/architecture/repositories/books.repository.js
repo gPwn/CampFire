@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { sequelize, Sites, Camps } = require('../../models');
+const { sequelize, Sites, Camps, Hosts } = require('../../models');
 
 class BooksRepository {
     #BooksModel;
@@ -21,7 +21,7 @@ class BooksRepository {
         children,
         totalPeople
     ) => {
-        await this.#BooksModel.create({
+        return await this.#BooksModel.create({
             campId,
             userId,
             hostId,
@@ -61,9 +61,62 @@ class BooksRepository {
                     model: Sites,
                     attribute: [],
                 },
+                {
+                    model: Hosts,
+                    attribute: [],
+                },
             ],
         });
     };
+
+    // 호스트 예약 확정/확정 취소
+    updateBookConfirmBook = async (bookId, confirmBook) => {
+        return await this.#BooksModel.update(
+            { confirmBook },
+            {
+                where: { bookId },
+            }
+        );
+    };
+
+    // 유저 예약 취소
+    updateBookCancelBook = async (bookId, cancelBooks) => {
+        return await this.#BooksModel.update(
+            { cancelBooks },
+            {
+                where: { bookId },
+            }
+        );
+    };
+
+    // 이용완료 상태 수정
+    updateExpiredStatus = async (
+        expiredBooks,
+        userId,
+        confirmBook,
+        cancelBooks
+    ) => {
+        await this.#BooksModel.update(
+            { expiredBooks },
+            {
+                where: {
+                    [Op.and]: [
+                        { userId, confirmBook, cancelBooks },
+                        { checkOutDate: { [Op.lt]: getToday() } },
+                    ],
+                },
+            }
+        );
+    };
+}
+
+function getToday() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ('0' + (1 + date.getMonth())).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
 }
 
 module.exports = BooksRepository;

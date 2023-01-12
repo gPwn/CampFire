@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { sequelize, Sites, Camps } = require('../../models');
+const { sequelize, Sites, Camps, Hosts } = require('../../models');
 
 class BooksRepository {
     #BooksModel;
@@ -21,7 +21,7 @@ class BooksRepository {
         children,
         totalPeople
     ) => {
-        await this.#BooksModel.create({
+        return await this.#BooksModel.create({
             campId,
             userId,
             hostId,
@@ -61,8 +61,32 @@ class BooksRepository {
                     model: Sites,
                     attribute: [],
                 },
+                {
+                    model: Hosts,
+                    attribute: [],
+                },
             ],
         });
+    };
+
+    // 호스트 예약 확정/확정 취소
+    updateBookConfirmBook = async (bookId, confirmBook) => {
+        return await this.#BooksModel.update(
+            { confirmBook },
+            {
+                where: { bookId },
+            }
+        );
+    };
+
+    // 유저 예약 취소
+    updateBookCancelBook = async (bookId, cancelBooks) => {
+        return await this.#BooksModel.update(
+            { cancelBooks },
+            {
+                where: { bookId },
+            }
+        );
     };
 }
 

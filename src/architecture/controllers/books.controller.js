@@ -85,6 +85,39 @@ class BooksController {
             next(error);
         }
     };
+
+    // 호스트 예약 확정/확정 취소
+    confirmByHost = async (req, res, next) => {
+        try {
+            const { hostId } = res.locals;
+            const { bookId } = req.params;
+
+            const message = await this.booksService.confirmByHost(
+                hostId,
+                bookId
+            );
+
+            res.status(201).json({ message, bookId });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    //유저 예약 취소시
+    cancelBookByUser = async (req, res, next) => {
+        try {
+            // const { userId } = res.locals;
+            const userId = 2;
+            const { bookId } = req.params;
+
+            const { message, hostPhoneNumber } =
+                await this.booksService.cancelBookByUser(userId, bookId);
+
+            res.status(201).json({ message, userId, hostPhoneNumber });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = BooksController;

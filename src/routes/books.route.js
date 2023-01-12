@@ -41,4 +41,14 @@ router.get(
     booksController.getBookByUser
 );
 
+// 호스트 예약 확정/확정 취소
+router.put('/hosts/:bookId', authHostMiddleware, booksController.confirmByHost);
+
+// 유저 예약 취소
+router.put(
+    '/users/:bookId',
+    authUserMiddleware,
+    booksController.cancelBookByUser
+);
+
 module.exports = router;

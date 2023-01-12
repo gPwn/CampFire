@@ -7,6 +7,8 @@ const {
 } = require('../../middlewares/exceptions/error.class.js');
 
 const { Books, Camps, Hosts, Users, Sites } = require('../../models');
+const { Op } = require('sequelize');
+const { check } = require('prettier');
 
 class BooksService {
     constructor() {
@@ -59,7 +61,7 @@ class BooksService {
 
         const totalPeople = Number(adults) + Number(children);
 
-        await this.booksRepository.addBookscamps(
+        return await this.booksRepository.addBookscamps(
             campId,
             userId,
             hostId,
@@ -192,6 +194,54 @@ class BooksService {
             createdAt: book.createdAt,
             updatedAt: book.updatedAt,
         };
+    };
+
+    // 호스트 예약 확정/확정 취소
+    confirmByHost = async (hostId, bookId) => {
+        const book = await this.booksRepository.findBookByPk({
+            where: {
+                [Op.and]: [{ hostId, bookId }],
+            },
+        });
+
+        let confirmBook = book.confirmBook;
+        let message = '';
+        if (book.confirmBook === false) {
+            confirmBook = true;
+            message = '예약확정 성공!';
+        } else {
+            confirmBook = false;
+            message = '예약확정 취소!';
+        }
+
+        await this.booksRepository.updateBookConfirmBook(bookId, confirmBook);
+
+        return message;
+    };
+
+    // 유저 예약 취소
+    cancelBookByUser = async (userId, bookId) => {
+        const book = await this.booksRepository.findBookByPk({
+            where: {
+                [Op.and]: [{ userId, bookId }],
+            },
+        });
+
+        const hostPhoneNumber = book.Host.phoneNumber;
+
+        let message = '';
+        let cancelBooks = book.cancelBooks;
+        if (book.confirmBook === true) {
+            cancelBooks = false;
+            message = '예약 취소 할 수 없습니다. 호스트에게 문의하세요.';
+        } else {
+            cancelBooks = true;
+            message = '예약을 취소하였습니다';
+        }
+
+        await this.booksRepository.updateBookCancelBook(bookId, cancelBooks);
+
+        return { message, hostPhoneNumber };
     };
 }
 

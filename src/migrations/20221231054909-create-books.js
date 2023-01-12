@@ -65,6 +65,18 @@ module.exports = {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },
+            confirmBook: {
+                type: Sequelize.DataTypes.BOOLEAN,
+                defaultValue: false,
+            },
+            expireBooks: {
+                type: Sequelize.DataTypes.BOOLEAN,
+                defaultValue: false,
+            },
+            cancelBooks: {
+                type: Sequelize.DataTypes.BOOLEAN,
+                defaultValue: false,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DataTypes.DATE,

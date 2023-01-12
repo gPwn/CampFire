@@ -11,7 +11,7 @@ router.use('/likes', require('./likes.route.js'));
 router.use('/camps', require('./reviews.route.js'));
 
 router.get('/', (req, res) => {
-    res.send('api routes 연결 cicd test!!0111');
+    res.send('api routes 연결 cicd test!!0112');
 });
 
 module.exports = router;

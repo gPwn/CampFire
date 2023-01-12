@@ -83,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false,
             },
-            expireBooks: {
+            expiredBooks: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false,
             },

@@ -88,6 +88,35 @@ class BooksRepository {
             }
         );
     };
+
+    // 이용완료 상태 수정
+    updateExpiredStatus = async (
+        expiredBooks,
+        userId,
+        confirmBook,
+        cancelBooks
+    ) => {
+        await this.#BooksModel.update(
+            { expiredBooks },
+            {
+                where: {
+                    [Op.and]: [
+                        { userId, cancelBooks, confirmBook },
+                        { checkOutDate: { [Op.lt]: getToday() } },
+                    ],
+                },
+            }
+        );
+    };
+}
+
+function getToday() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ('0' + (1 + date.getMonth())).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
 }
 
 module.exports = BooksRepository;

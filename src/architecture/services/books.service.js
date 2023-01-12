@@ -224,6 +224,48 @@ class BooksService {
             };
         });
     };
+
+    // 유저 이용 완료 캠핑장 리스트 조회
+    getExpiredBooks = async (userId) => {
+        const expiredBooks = true;
+        const confirmBook = true;
+        const cancelBooks = false;
+        await this.booksRepository.updateExpiredStatus(
+            expiredBooks,
+            userId,
+            confirmBook,
+            cancelBooks
+        );
+        const expiredBookLists = await this.booksRepository.findBookListByPk({
+            where: {
+                [Op.and]: [{ userId, expiredBooks }],
+            },
+        });
+
+        return expiredBookLists.map((expiredBookList) => {
+            return {
+                bookId: expiredBookList.bookId,
+                userId: expiredBookList.userId,
+                hostId: expiredBookList.hostId,
+                campId: expiredBookList.campId,
+                siteId: expiredBookList.siteId,
+                siteName: expiredBookList['Site.siteName'],
+                siteDesc: expiredBookList['Site.siteDesc'],
+                siteInfo: expiredBookList['Site.siteInfo'],
+                sitePrice: expiredBookList['Site.sitePrice'],
+                siteMainImage: expiredBookList['Site.siteMainImage'],
+                checkInDate: expiredBookList.checkInDate,
+                checkOutDate: expiredBookList.checkOutDate,
+                Camp_checkIn: expiredBookList['Camp.checkIn'],
+                Camp_checkOut: expiredBookList['Camp.checkOut'],
+                adults: expiredBookList.adults,
+                children: expiredBookList.children,
+                expiredBooks: expiredBookList.expiredBooks === 0 ? false : true,
+                createdAt: expiredBookList.createdAt,
+                updatedAt: expiredBookList.updatedAt,
+            };
+        });
+    };
 }
 
 module.exports = BooksService;

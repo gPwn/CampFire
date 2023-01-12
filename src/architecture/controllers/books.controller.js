@@ -102,6 +102,21 @@ class BooksController {
             next(error);
         }
     };
+
+    // 유저 이용 완료 캠핑장 리스트 조회
+    getExpiredBooks = async (req, res, next) => {
+        try {
+            const { userId } = res.locals;
+
+            const expiredBooks = await this.booksService.getExpiredBooks(
+                userId
+            );
+
+            res.status(200).json({ expiredBooks });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = BooksController;

@@ -44,4 +44,11 @@ router.get(
     booksController.getCancelBooks
 );
 
+// 유저 이용 완료 캠핑장 리스트 조회
+router.get(
+    '/users/expiredBooks',
+    authUserMiddleware,
+    booksController.getExpiredBooks
+);
+
 module.exports = router;

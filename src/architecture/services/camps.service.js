@@ -216,7 +216,6 @@ class CampsService {
             themeLists: themeLists === null ? null : themeLists.split(','),
             checkIn: camp.checkIn,
             checkOut: camp.checkOut,
-            likes: camp.likes,
             likeStatus: likeStatus,
             createdAt: camp.createdAt,
             updatedAt: camp.updatedAt,

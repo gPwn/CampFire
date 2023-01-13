@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             this.belongsTo(models.Users, { foreignKey: 'userId' });
             this.belongsTo(models.Camps, { foreignKey: 'campId' });
+            this.belongsTo(models.Types, { foreignKey: 'campId' });
         }
     }
     Likes.init(

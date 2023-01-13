@@ -1,12 +1,24 @@
-const { Users } = require('../models');
+const { Users, Hosts } = require('../models');
 const jwt = require('jsonwebtoken');
-const { createUserToken } = require('../util/auth-jwtToken.util');
+const {
+    createUserToken,
+    createHostToken,
+} = require('../util/auth-jwtToken.util');
 const env = process.env;
 
-const validateToken = function (tokenValue) {
+const validateUserToken = function (tokenValue) {
     try {
         const { userId } = jwt.verify(tokenValue, env.TOKEN_USER_SECRET_KEY);
         return userId;
+    } catch (error) {
+        return false;
+    }
+};
+
+const validateHostToken = function (tokenValue) {
+    try {
+        const { hostId } = jwt.verify(tokenValue, env.TOKEN_HOST_SECRET_KEY);
+        return hostId;
     } catch (error) {
         return false;
     }
@@ -26,32 +38,52 @@ module.exports = async (req, res, next) => {
     );
 
     try {
-        const userId = validateToken(accessTokenValue);
-        if (!userId) {
+        const userId = validateUserToken(accessTokenValue);
+        const hostId = validateHostToken(accessTokenValue);
+        if (!userId && !hostId) {
             console.log('일단 엑세스 토큰 만료!');
-            if (!validateToken(refreshTokenValue)) {
+            if (
+                !validateUserToken(refreshTokenValue) &&
+                !validateHostToken(refreshTokenValue)
+            ) {
                 console.log('리프레쉬토큰도 만료!');
                 throw 'Token이 만료되었습니다. 다시 로그인해주세요.';
             }
             const user = await Users.findOne({
                 where: { token: refreshTokenValue },
             });
-            if (!user) {
+            const host = await Hosts.findOne({
+                where: { token: refreshTokenValue },
+            });
+            if (!user && !host) {
                 throw 'RefreshToken이 조작되었습니다. 다시 로그인해주세요.';
             }
-            const newAccessToken = createUserToken(
-                user.dataValues.userId,
-                '1h'
-            );
-            console.log(`새로발급받은 액세스: ${newAccessToken}`);
-
-            res.header({ accesstoken: `Bearer ${newAccessToken}` });
-
-            res.locals.userId = user.dataValues.userId;
-            return next();
+            if (user && !host) {
+                const newUserAccessToken = createUserToken(
+                    user.dataValues.userId,
+                    '1h'
+                );
+                console.log(`새로발급받은 액세스: ${newUserAccessToken}`);
+                res.header({ accesstoken: `Bearer ${newUserAccessToken}` });
+                res.locals.userId = user.dataValues.userId;
+                return next();
+            } else if (!user && host) {
+                const newHostAccessToken = createHostToken(
+                    host.dataValues.userId,
+                    '1h'
+                );
+                console.log(`새로발급받은 액세스: ${newHostAccessToken}`);
+                res.header({ accesstoken: `Bearer ${newHostAccessToken}` });
+                res.locals.hostId = host.dataValues.hostId;
+                return next();
+            }
+        } else if (userId && !hostId) {
+            res.locals.userId = userId;
+            next();
+        } else if (!userId && hostId) {
+            res.locals.hostId = hostId;
+            next();
         }
-        res.locals.userId = userId;
-        next();
     } catch (error) {
         if (error === 'Token이 만료되었습니다. 다시 로그인해주세요.') {
             res.status(419).json({

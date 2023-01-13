@@ -11,6 +11,8 @@ class CampsRepository {
     #EnvsModel;
     #TypesModel;
     #ThemesModel;
+    #LikesModel;
+    #ReviewsModel;
     constructor(
         BooksModel,
         CampsModel,
@@ -20,7 +22,9 @@ class CampsRepository {
         CampAmenitiesModel,
         EnvsModel,
         TypesModel,
-        ThemesModel
+        ThemesModel,
+        LikesModel,
+        ReviewsModel
     ) {
         this.#BooksModel = BooksModel;
         this.#CampsModel = CampsModel;
@@ -31,6 +35,8 @@ class CampsRepository {
         this.#EnvsModel = EnvsModel;
         this.#TypesModel = TypesModel;
         this.#ThemesModel = ThemesModel;
+        this.#LikesModel = LikesModel;
+        this.#ReviewsModel = ReviewsModel;
     }
 
     // 캠핑장 업로드
@@ -168,7 +174,6 @@ class CampsRepository {
     // 캠핑장 페이지 조회
     getCampsByPage = async (pageNo) => {
         const camps = await this.#CampsModel.findAll({
-            raw: true,
             offset: pageNo,
             limit: 16,
             include: [
@@ -176,6 +181,11 @@ class CampsRepository {
                     model: this.#TypesModel,
                     as: 'Types',
                     attributes: ['typeLists'],
+                },
+                {
+                    model: this.#ReviewsModel,
+                    as: 'Reviews',
+                    attributes: ['reviewId'],
                 },
             ],
             order: [['createdAt', 'DESC']],

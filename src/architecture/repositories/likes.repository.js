@@ -1,4 +1,4 @@
-const { Likes, Users, Camps } = require('../../models');
+const { Types } = require('../../models');
 const { Op } = require('sequelize');
 
 class LikesRepository {
@@ -27,6 +27,10 @@ class LikesRepository {
                 {
                     model: this.#CampModel,
                     attribute: ['campName'],
+                },
+                {
+                    model: Types,
+                    attributes: ['typeLists'],
                 },
             ],
         });

@@ -17,6 +17,7 @@ const {
     Types,
     Themes,
     Likes,
+    Reviews,
 } = require('../../models');
 const { deleteImage } = require('../../modules/campImg');
 const {
@@ -36,7 +37,8 @@ class CampsService {
             Envs,
             Types,
             Themes,
-            Likes
+            Likes,
+            Reviews
         );
     }
     likesRepository = new LikesRepository(Camps, Users, Likes);
@@ -165,12 +167,13 @@ class CampsService {
                 campSubImages: camp.campSubImages.split(','),
                 campDesc: camp.campDesc,
                 typeLists:
-                    camp['Types.typeLists'] === null
+                    camp.Types[0].typeLists === null
                         ? null
-                        : camp['Types.typeLists'].split(','),
+                        : camp.Types[0].typeLists.split(','),
                 checkIn: camp.checkIn,
                 checkOut: camp.checkOut,
                 likes: camp.likes,
+                countReviews: camp.Reviews.length,
                 createdAt: camp.createdAt,
                 updatedAt: camp.updatedAt,
             };

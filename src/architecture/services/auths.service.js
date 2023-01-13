@@ -38,7 +38,7 @@ class AuthsService {
                 },
                 params: {
                     grant_type: 'authorization_code',
-                    client_id: process.env.CLIENT_id,
+                    client_id: process.env.CLIENT_ID,
                     code,
                     redirect_uri: REDIRECT_URL,
                 },

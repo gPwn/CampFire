@@ -7,6 +7,8 @@ const {
 } = require('../../middlewares/exceptions/error.class.js');
 
 const { Books, Camps, Hosts, Users, Sites } = require('../../models');
+const { Op } = require('sequelize');
+const { check } = require('prettier');
 
 class BooksService {
     constructor() {
@@ -59,7 +61,7 @@ class BooksService {
 
         const totalPeople = Number(adults) + Number(children);
 
-        await this.booksRepository.addBookscamps(
+        return await this.booksRepository.addBookscamps(
             campId,
             userId,
             hostId,
@@ -96,47 +98,21 @@ class BooksService {
                 Camp_checkOut: bookList['Camp.checkOut'],
                 adults: bookList.adults,
                 children: bookList.children,
+                confirmBook: bookList.confirmBook === 0 ? false : true,
                 createdAt: bookList.createdAt,
                 updatedAt: bookList.updatedAt,
             };
         });
     };
 
-    //호스트 예약 상세 조회
-    getBookByHost = async (hostId, bookId) => {
-        const book = await this.booksRepository.findBookByPk({
-            where: { bookId },
-        });
-
-        if (book.hostId !== hostId) {
-            throw new InvalidParamsError();
-        }
-
-        return {
-            bookId: book.bookId,
-            userId: book.userId,
-            hostId: book.hostId,
-            campId: book.campId,
-            siteId: book.siteId,
-            siteName: book.Site.siteName,
-            siteDesc: book.Site.siteDesc,
-            siteInfo: book.Site.siteInfo,
-            sitePrice: book.Site.sitePrice,
-            siteMainImage: book.Site.siteMainImage,
-            checkInDate: book.checkInDate,
-            checkOutDate: book.checkOutDate,
-            adults: book.adults,
-            children: book.children,
-            totalPeople: book.totalPeople,
-            createdAt: book.createdAt,
-            updatedAt: book.updatedAt,
-        };
-    };
-
     //유저 예약 리스트 조회
     getBookListByUser = async (userId) => {
+        const expiredBooks = false;
+        const cancelBooks = false;
         const bookLists = await this.booksRepository.findBookListByPk({
-            where: { userId },
+            where: {
+                [Op.and]: { userId, expiredBooks, cancelBooks },
+            },
         });
 
         return bookLists.map((bookList) => {
@@ -157,41 +133,141 @@ class BooksService {
                 Camp_checkOut: bookList['Camp.checkOut'],
                 adults: bookList.adults,
                 children: bookList.children,
+                confirmBook: bookList.confirmBook === 0 ? false : true,
                 createdAt: bookList.createdAt,
                 updatedAt: bookList.updatedAt,
             };
         });
     };
 
-    //유저 예약 상세 조회
-    getBookByUser = async (userId, bookId) => {
+    // 호스트 예약 확정/확정 취소
+    confirmByHost = async (hostId, bookId) => {
         const book = await this.booksRepository.findBookByPk({
-            where: { bookId },
+            where: {
+                [Op.and]: [{ hostId, bookId }],
+            },
         });
 
-        if (book.userId !== userId) {
-            throw new InvalidParamsError();
+        console.log(book.cancelBooks);
+        if (book.cancelBooks === true) {
+            throw new InvalidParamsError('이미 유저가 취소한 예약내역입니다.');
         }
 
-        return {
-            bookId: book.bookId,
-            userId: book.userId,
-            hostId: book.hostId,
-            campId: book.campId,
-            siteId: book.siteId,
-            siteName: book.Site.siteName,
-            siteDesc: book.Site.siteDesc,
-            siteInfo: book.Site.siteInfo,
-            sitePrice: book.Site.sitePrice,
-            siteMainImage: book.Site.siteMainImage,
-            checkInDate: book.checkInDate,
-            checkOutDate: book.checkOutDate,
-            adults: book.adults,
-            children: book.children,
-            totalPeople: book.totalPeople,
-            createdAt: book.createdAt,
-            updatedAt: book.updatedAt,
-        };
+        let confirmBook = book.confirmBook;
+        let message = '';
+        if (book.confirmBook === false) {
+            confirmBook = true;
+            message = '예약확정 성공!';
+        } else {
+            confirmBook = false;
+            message = '예약확정 취소!';
+        }
+
+        await this.booksRepository.updateBookConfirmBook(bookId, confirmBook);
+
+        return message;
+    };
+
+    // 유저 예약 취소
+    cancelBookByUser = async (userId, bookId) => {
+        const book = await this.booksRepository.findBookByPk({
+            where: {
+                [Op.and]: [{ userId, bookId }],
+            },
+        });
+
+        const hostPhoneNumber = book.Host.phoneNumber;
+
+        let message = '';
+        let cancelBooks = book.cancelBooks;
+        if (book.confirmBook === true) {
+            cancelBooks = false;
+            message = '예약 취소 할 수 없습니다. 호스트에게 문의하세요.';
+        } else {
+            cancelBooks = true;
+            message = '예약을 취소하였습니다';
+        }
+
+        await this.booksRepository.updateBookCancelBook(bookId, cancelBooks);
+
+        return { message, hostPhoneNumber };
+    };
+
+    // 유저 예약 취소 캠핑장 리스트 조회
+    getCancelBooks = async (userId) => {
+        const cancelBooks = true;
+
+        const cancelBookLists = await this.booksRepository.findBookListByPk({
+            where: {
+                [Op.and]: [{ userId, cancelBooks }],
+            },
+        });
+
+        return cancelBookLists.map((cancelBookList) => {
+            return {
+                bookId: cancelBookList.bookId,
+                userId: cancelBookList.userId,
+                hostId: cancelBookList.hostId,
+                campId: cancelBookList.campId,
+                siteId: cancelBookList.siteId,
+                siteName: cancelBookList['Site.siteName'],
+                siteDesc: cancelBookList['Site.siteDesc'],
+                siteInfo: cancelBookList['Site.siteInfo'],
+                sitePrice: cancelBookList['Site.sitePrice'],
+                siteMainImage: cancelBookList['Site.siteMainImage'],
+                checkInDate: cancelBookList.checkInDate,
+                checkOutDate: cancelBookList.checkOutDate,
+                Camp_checkIn: cancelBookList['Camp.checkIn'],
+                Camp_checkOut: cancelBookList['Camp.checkOut'],
+                adults: cancelBookList.adults,
+                children: cancelBookList.children,
+                cancelBooks: cancelBookList.cancelBooks === 0 ? false : true,
+                createdAt: cancelBookList.createdAt,
+                updatedAt: cancelBookList.updatedAt,
+            };
+        });
+    };
+
+    // 유저 이용 완료 캠핑장 리스트 조회
+    getExpiredBooks = async (userId) => {
+        const expiredBooks = true;
+        const confirmBook = true;
+        const cancelBooks = false;
+        await this.booksRepository.updateExpiredStatus(
+            expiredBooks,
+            userId,
+            confirmBook,
+            cancelBooks
+        );
+        const expiredBookLists = await this.booksRepository.findBookListByPk({
+            where: {
+                [Op.and]: [{ userId, expiredBooks }],
+            },
+        });
+
+        return expiredBookLists.map((expiredBookList) => {
+            return {
+                bookId: expiredBookList.bookId,
+                userId: expiredBookList.userId,
+                hostId: expiredBookList.hostId,
+                campId: expiredBookList.campId,
+                siteId: expiredBookList.siteId,
+                siteName: expiredBookList['Site.siteName'],
+                siteDesc: expiredBookList['Site.siteDesc'],
+                siteInfo: expiredBookList['Site.siteInfo'],
+                sitePrice: expiredBookList['Site.sitePrice'],
+                siteMainImage: expiredBookList['Site.siteMainImage'],
+                checkInDate: expiredBookList.checkInDate,
+                checkOutDate: expiredBookList.checkOutDate,
+                Camp_checkIn: expiredBookList['Camp.checkIn'],
+                Camp_checkOut: expiredBookList['Camp.checkOut'],
+                adults: expiredBookList.adults,
+                children: expiredBookList.children,
+                expiredBooks: expiredBookList.expiredBooks === 0 ? false : true,
+                createdAt: expiredBookList.createdAt,
+                updatedAt: expiredBookList.updatedAt,
+            };
+        });
     };
 }
 

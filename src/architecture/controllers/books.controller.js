@@ -45,20 +45,6 @@ class BooksController {
         }
     };
 
-    //호스트 예약 상세 내역 조회
-    getBookByHost = async (req, res, next) => {
-        try {
-            const { hostId } = res.locals;
-            const { bookId } = req.params;
-
-            const book = await this.booksService.getBookByHost(hostId, bookId);
-
-            res.status(200).json({ book });
-        } catch (error) {
-            next(error);
-        }
-    };
-
     //유저 예약 리스트 조회
     getBookListByUser = async (req, res, next) => {
         try {
@@ -72,15 +58,61 @@ class BooksController {
         }
     };
 
-    //유저 예약 상세 내역 조회
-    getBookByUser = async (req, res, next) => {
+    // 호스트 예약 확정/확정 취소
+    confirmByHost = async (req, res, next) => {
+        try {
+            const { hostId } = res.locals;
+            const { bookId } = req.params;
+
+            const message = await this.booksService.confirmByHost(
+                hostId,
+                bookId
+            );
+
+            res.status(201).json({ message, bookId });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    //유저 예약 취소시
+    cancelBookByUser = async (req, res, next) => {
         try {
             const { userId } = res.locals;
             const { bookId } = req.params;
 
-            const book = await this.booksService.getBookByUser(userId, bookId);
+            const { message, hostPhoneNumber } =
+                await this.booksService.cancelBookByUser(userId, bookId);
 
-            res.status(200).json({ book });
+            res.status(201).json({ message, userId, hostPhoneNumber });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    // 유저 예약 취소 캠핑장 리스트 조회
+    getCancelBooks = async (req, res, next) => {
+        try {
+            const { userId } = res.locals;
+
+            const cancelBooks = await this.booksService.getCancelBooks(userId);
+
+            res.status(200).json({ cancelBooks });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    // 유저 이용 완료 캠핑장 리스트 조회
+    getExpiredBooks = async (req, res, next) => {
+        try {
+            const { userId } = res.locals;
+
+            const expiredBooks = await this.booksService.getExpiredBooks(
+                userId
+            );
+
+            res.status(200).json({ expiredBooks });
         } catch (error) {
             next(error);
         }

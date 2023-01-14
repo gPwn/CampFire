@@ -120,7 +120,16 @@ class CampsController {
             if (!pageInfo) {
                 throw new InvalidParamsError();
             }
-            const camps = await this.campsService.getCampsByPage(pageNo);
+            let userId = 0;
+            if (res.locals.userId === undefined) {
+                userId = 0;
+            } else {
+                userId = res.locals.userId;
+            }
+            const camps = await this.campsService.getCampsByPage(
+                pageNo,
+                userId
+            );
             res.status(200).json({ camps: camps });
         } catch (error) {
             next(error);

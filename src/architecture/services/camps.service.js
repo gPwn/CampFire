@@ -217,7 +217,7 @@ class CampsService {
         } else {
             likeStatus = false;
         }
-
+        console.log(camp);
         return {
             campId: camp.campId,
             hostId: camp.hostId,
@@ -226,6 +226,7 @@ class CampsService {
             campMainImage: camp.campMainImage,
             campSubImages: camp.campSubImages.split(','),
             campDesc: camp.campDesc,
+            phoneNumber: camp.Host.phoneNumber,
             campAmenities:
                 campAmenities === null ? null : campAmenities.split(','),
             envLists: envLists === null ? null : envLists.split(','),

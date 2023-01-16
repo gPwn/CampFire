@@ -1,11 +1,11 @@
 const SearchRepository = require('../repositories/search.repository.js');
 const LikesRepository = require('../repositories/likes.repository.js');
 const { Op } = require('sequelize');
-const { Camps, Users, Likes } = require('../../models');
+const { Camps, Users, Likes, Reviews, Types } = require('../../models');
 
 class SearchService {
     constructor() {
-        this.searchRepository = new SearchRepository();
+        this.searchRepository = new SearchRepository(Camps, Types, Reviews);
         this.likesRepository = new LikesRepository(Camps, Users, Likes);
     }
 

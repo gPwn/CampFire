@@ -201,6 +201,7 @@ class CampsRepository {
     findCampById = async (campId) => {
         return await this.#CampsModel.findOne({
             where: { campId },
+            include: [{ model: this.#HostsModel, attributes: ['phoneNumber'] }],
         });
     };
 

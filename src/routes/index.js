@@ -9,6 +9,7 @@ router.use('/auths', require('./auths.routes.js'));
 router.use('/camps', require('./sites.route.js'));
 router.use('/likes', require('./likes.route.js'));
 router.use('/camps', require('./reviews.route.js'));
+router.use('/search', require('./search.route.js'));
 
 router.get('/', (req, res) => {
     res.send('api routes 연결 cicd test!!0112');

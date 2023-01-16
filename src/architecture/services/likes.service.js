@@ -57,7 +57,10 @@ class LikesService {
                 campName: findLikeByUser['Camp.campName'],
                 campMainImage: findLikeByUser['Camp.campMainImage'],
                 campAddress: findLikeByUser['Camp.campAddress'],
-                typeLists: findLikeByUser['Type.typeLists'],
+                typeLists:
+                    findLikeByUser['Type.typeLists'] === null
+                        ? null
+                        : findLikeByUser['Type.typeLists'].split(','),
                 createdAt: findLikeByUser.createdAt,
                 updatedAt: findLikeByUser.updatedAt,
             };

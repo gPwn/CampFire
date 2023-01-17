@@ -8,8 +8,10 @@ class SearchRepository {
         this.#ReviewsModel = ReviewsModel;
     }
 
-    getCampLists = async ({ where }) => {
-        return await this.#CampsModel.findAll({
+    getCampLists = async ({ offset, limit, where }) => {
+        const getCampLists = await this.#CampsModel.findAll({
+            offset,
+            limit,
             where,
             include: [
                 {
@@ -25,6 +27,11 @@ class SearchRepository {
             ],
             order: [['likes', 'DESC']],
         });
+        if (getCampLists.length === 0) {
+            return false;
+        } else {
+            return getCampLists;
+        }
     };
 }
 

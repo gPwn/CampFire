@@ -24,6 +24,7 @@ class SearchService {
             envs,
             amenities
         );
+        // return searchLists;
         return await Promise.all(
             searchLists.map(async (searchList) => {
                 const findLike = await this.likesRepository.isExistLike(

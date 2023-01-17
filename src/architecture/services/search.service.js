@@ -49,14 +49,11 @@ class SearchService {
                     campName: searchList.campName,
                     campAddress: searchList.campAddress,
                     campMainImage: searchList.campMainImage,
-                    campSubImages: searchList.campSubImages.split(','),
                     campDesc: searchList.campDesc,
                     typeLists:
                         searchList.Types[0].typeLists === null
                             ? null
                             : searchList.Types[0].typeLists.split(','),
-                    checkIn: searchList.checkIn,
-                    checkOut: searchList.checkOut,
                     likes: searchList.likes,
                     likeStatus: likeStatus,
                     countReviews: searchList.Reviews.length,

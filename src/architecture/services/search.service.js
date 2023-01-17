@@ -3,7 +3,6 @@ const LikesRepository = require('../repositories/likes.repository.js');
 const { Op } = require('sequelize');
 const { Camps, Users, Likes, Reviews, Types } = require('../../models');
 const { CampAmenities, Envs, Themes } = require('../../models');
-const types = require('../../models/types.js');
 
 class SearchService {
     constructor() {
@@ -18,7 +17,7 @@ class SearchService {
         this.likesRepository = new LikesRepository(Camps, Users, Likes);
     }
 
-    getCampLists = async (search, userId) => {
+    getCampLists = async (search, hashs, userId) => {
         const searchLists = await this.searchRepository.getCampLists({
             where: {
                 [Op.or]: [
@@ -63,26 +62,6 @@ class SearchService {
                 };
             })
         );
-    };
-
-    getCampListsByHash = async (search) => {
-        for (let a of search) {
-            const types = await this.searchRepository.getEnvs(a);
-            console.log(types);
-        }
-
-        // const getCampListsByHash = await this.searchRepository.getCampLists({
-        //     where: {
-        //         [Op.or]: [
-        //             {
-        //                 campName: { [Op.like]: '%' + search + '%' },
-        //             },
-        //             {
-        //                 campAddress: { [Op.like]: '%' + search + '%' },
-        //             },
-        //         ],
-        //     },
-        // });
     };
 }
 

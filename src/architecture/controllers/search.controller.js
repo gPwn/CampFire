@@ -9,6 +9,8 @@ class SearchController {
         try {
             const searchInfo = req.query;
             const search = searchInfo.search;
+            const hashs = searchInfo.hashs;
+            console.log(search);
             if (!searchInfo) {
                 throw new InvalidParamsError();
             }
@@ -22,6 +24,7 @@ class SearchController {
 
             const getCampLists = await this.searchService.getCampLists(
                 search,
+                hashs,
                 userId
             );
 

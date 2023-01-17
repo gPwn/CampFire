@@ -13,11 +13,4 @@ router.get(
     searchController.getCampLists
 );
 
-// 해시태그 검색 기능
-router.get(
-    '/hash',
-    /*likeConfirmUserHostMiddleware,*/
-    searchController.getCampListsByHash
-);
-
 module.exports = router;

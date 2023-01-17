@@ -107,11 +107,12 @@ class BooksService {
 
     //유저 예약 리스트 조회
     getBookListByUser = async (userId) => {
-        const expiredBooks = false;
-        const cancelBooks = false;
+        await this.booksRepository.updateCanselStatus(userId);
+        await this.booksRepository.updateExpiredStatus(userId);
+
         const bookLists = await this.booksRepository.findBookListByPk({
             where: {
-                [Op.and]: { userId, expiredBooks, cancelBooks },
+                [Op.and]: { userId, expiredBooks: false, cancelBooks: false },
             },
         });
 
@@ -195,11 +196,9 @@ class BooksService {
 
     // 유저 예약 취소 캠핑장 리스트 조회
     getCancelBooks = async (userId) => {
-        const cancelBooks = true;
-
         const cancelBookLists = await this.booksRepository.findBookListByPk({
             where: {
-                [Op.and]: [{ userId, cancelBooks }],
+                [Op.and]: [{ userId, cancelBooks: true }],
             },
         });
 
@@ -230,18 +229,9 @@ class BooksService {
 
     // 유저 이용 완료 캠핑장 리스트 조회
     getExpiredBooks = async (userId) => {
-        const expiredBooks = true;
-        const confirmBook = true;
-        const cancelBooks = false;
-        await this.booksRepository.updateExpiredStatus(
-            expiredBooks,
-            userId,
-            confirmBook,
-            cancelBooks
-        );
         const expiredBookLists = await this.booksRepository.findBookListByPk({
             where: {
-                [Op.and]: [{ userId, expiredBooks }],
+                [Op.and]: [{ userId, expiredBooks: true }],
             },
         });
 

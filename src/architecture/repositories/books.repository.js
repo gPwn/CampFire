@@ -90,18 +90,27 @@ class BooksRepository {
     };
 
     // 이용완료 상태 수정
-    updateExpiredStatus = async (
-        expiredBooks,
-        userId,
-        confirmBook,
-        cancelBooks
-    ) => {
+    updateExpiredStatus = async (userId) => {
         await this.#BooksModel.update(
-            { expiredBooks },
+            { expiredBooks: true },
             {
                 where: {
                     [Op.and]: [
-                        { userId, confirmBook, cancelBooks },
+                        { userId, confirmBook: true, cancelBooks: false },
+                        { checkOutDate: { [Op.lt]: getToday() } },
+                    ],
+                },
+            }
+        );
+    };
+
+    updateCanselStatus = async (userId) => {
+        await this.#BooksModel.update(
+            { cancelBooks: true },
+            {
+                where: {
+                    [Op.and]: [
+                        { userId, confirmBook: false },
                         { checkOutDate: { [Op.lt]: getToday() } },
                     ],
                 },

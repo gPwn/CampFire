@@ -17,19 +17,19 @@ class SearchService {
         this.likesRepository = new LikesRepository(Camps, Users, Likes);
     }
 
-    getCampLists = async (search, hashs, userId) => {
-        const searchLists = await this.searchRepository.getCampLists({
-            where: {
-                [Op.or]: [
-                    {
-                        campName: { [Op.like]: '%' + search + '%' },
-                    },
-                    {
-                        campAddress: { [Op.like]: '%' + search + '%' },
-                    },
-                ],
-            },
-        });
+    getCampLists = async (userId, search, types, themes, envs, amenities) => {
+        console.log(types, themes, envs, amenities);
+        for (let type of types) {
+            const searchLists = await this.searchRepository.getCampLists(
+                search,
+                type,
+                themes,
+                envs,
+                amenities
+            );
+            return searchLists;
+        }
+        console.log(searchLists);
 
         return await Promise.all(
             searchLists.map(async (searchList) => {
@@ -54,6 +54,8 @@ class SearchService {
                         searchList.Types[0].typeLists === null
                             ? null
                             : searchList.Types[0].typeLists.split(','),
+                    checkIn: searchList.checkIn,
+                    checkOut: searchList.checkOut,
                     likes: searchList.likes,
                     likeStatus: likeStatus,
                     countReviews: searchList.Reviews.length,

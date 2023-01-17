@@ -9,7 +9,6 @@ class SearchController {
         try {
             const searchInfo = req.query;
             const search = searchInfo.search;
-            const pageNo = searchInfo.pageno;
             if (!searchInfo) {
                 throw new InvalidParamsError();
             }
@@ -23,7 +22,6 @@ class SearchController {
 
             const getCampLists = await this.searchService.getCampLists(
                 search,
-                pageNo,
                 userId
             );
 

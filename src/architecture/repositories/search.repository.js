@@ -23,10 +23,8 @@ class SearchRepository {
         this.#ThemesModel = ThemesModel;
     }
 
-    getCampLists = async ({ offset, limit, where }) => {
-        const getCampLists = await this.#CampsModel.findAll({
-            offset,
-            limit,
+    getCampLists = async ({ where }) => {
+        return await this.#CampsModel.findAll({
             where,
             include: [
                 {
@@ -57,11 +55,6 @@ class SearchRepository {
             ],
             order: [['likes', 'DESC']],
         });
-        if (getCampLists.length === 0) {
-            return false;
-        } else {
-            return getCampLists;
-        }
     };
 
     getTypes = async (typeLists) => {

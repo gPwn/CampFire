@@ -10,7 +10,7 @@ const { ValidationError } = require('../../middlewares/exceptions/error.class');
 const KAKAO_OAUTH_TOKEN_API_URL = 'https://kauth.kakao.com/oauth/token';
 const GRANT_TYPE = 'authorization_code';
 const CLIENT_id = process.env.CLIENT_id;
-const REDIRECT_URL = 'http://localhost:3000/api/auths/kakao';
+const REDIRECT_URL = 'https://campfire-fe.vercel.app/api/auths/kakao';
 
 class AuthsService {
     authsRepository = new AuthsRepository(Users);

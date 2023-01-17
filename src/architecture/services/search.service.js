@@ -9,8 +9,16 @@ class SearchService {
         this.likesRepository = new LikesRepository(Camps, Users, Likes);
     }
 
-    getCampLists = async (search, userId) => {
+    getCampLists = async (search, pageNo, userId) => {
+        let start = 0;
+        if (pageNo <= 0) {
+            pageNo = 1;
+        } else {
+            start = (pageNo - 1) * 16;
+        }
         const searchLists = await this.searchRepository.getCampLists({
+            offset: start,
+            limit: 16,
             where: {
                 [Op.or]: [
                     {

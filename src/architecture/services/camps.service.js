@@ -146,7 +146,7 @@ class CampsService {
     };
 
     // 캠핑장 페이지 조회
-    getCampsByPage = async (pageNo) => {
+    getCampsByPage = async (pageNo, userId) => {
         let start = 0;
         if (pageNo <= 0) {
             pageNo = 1;
@@ -157,27 +157,41 @@ class CampsService {
         if (!camps) {
             throw new InvalidParamsError('존재하지 않는 페이지입니다.', 404);
         }
-        return camps.map((camp) => {
-            return {
-                campId: camp.campId,
-                hostId: camp.hostId,
-                campName: camp.campName,
-                campAddress: camp.campAddress,
-                campMainImage: camp.campMainImage,
-                campSubImages: camp.campSubImages.split(','),
-                campDesc: camp.campDesc,
-                typeLists:
-                    camp.Types[0].typeLists === null
-                        ? null
-                        : camp.Types[0].typeLists.split(','),
-                checkIn: camp.checkIn,
-                checkOut: camp.checkOut,
-                likes: camp.likes,
-                countReviews: camp.Reviews.length,
-                createdAt: camp.createdAt,
-                updatedAt: camp.updatedAt,
-            };
-        });
+
+        return await Promise.all(
+            camps.map(async (camp) => {
+                const findLike = await this.likesRepository.isExistLike(
+                    camp.campId,
+                    userId
+                );
+                let likeStatus = false;
+                if (findLike) {
+                    likeStatus = true;
+                } else {
+                    likeStatus = false;
+                }
+                return {
+                    campId: camp.campId,
+                    hostId: camp.hostId,
+                    campName: camp.campName,
+                    campAddress: camp.campAddress,
+                    campMainImage: camp.campMainImage,
+                    campSubImages: camp.campSubImages.split(','),
+                    campDesc: camp.campDesc,
+                    typeLists:
+                        camp.Types[0].typeLists === null
+                            ? null
+                            : camp.Types[0].typeLists.split(','),
+                    checkIn: camp.checkIn,
+                    checkOut: camp.checkOut,
+                    likes: camp.likes,
+                    likeStatus: likeStatus,
+                    countReviews: camp.Reviews.length,
+                    createdAt: camp.createdAt,
+                    updatedAt: camp.updatedAt,
+                };
+            })
+        );
     };
 
     // 캠핑장 상세 조회
@@ -203,7 +217,7 @@ class CampsService {
         } else {
             likeStatus = false;
         }
-
+        console.log(camp);
         return {
             campId: camp.campId,
             hostId: camp.hostId,
@@ -212,6 +226,7 @@ class CampsService {
             campMainImage: camp.campMainImage,
             campSubImages: camp.campSubImages.split(','),
             campDesc: camp.campDesc,
+            phoneNumber: camp.Host.phoneNumber,
             campAmenities:
                 campAmenities === null ? null : campAmenities.split(','),
             envLists: envLists === null ? null : envLists.split(','),

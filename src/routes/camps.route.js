@@ -18,7 +18,11 @@ router.post(
     campsController.createCamp
 );
 // 캠핑장 페이지 조회
-router.get('/page', campsController.getCampsByPage);
+router.get(
+    '/page',
+    likeConfirmUserHostMiddleware,
+    campsController.getCampsByPage
+);
 // 캠핑장 상세 조회
 router.get(
     '/:campId',

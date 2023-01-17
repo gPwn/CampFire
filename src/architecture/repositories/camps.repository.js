@@ -172,7 +172,7 @@ class CampsRepository {
     };
 
     // 캠핑장 페이지 조회
-    getCampsByPage = async (pageNo) => {
+    getCampsByPage = async (pageNo, userId) => {
         const camps = await this.#CampsModel.findAll({
             offset: pageNo,
             limit: 16,
@@ -201,6 +201,7 @@ class CampsRepository {
     findCampById = async (campId) => {
         return await this.#CampsModel.findOne({
             where: { campId },
+            include: [{ model: this.#HostsModel, attributes: ['phoneNumber'] }],
         });
     };
 

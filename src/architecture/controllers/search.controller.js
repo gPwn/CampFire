@@ -28,6 +28,14 @@ class SearchController {
             next(error);
         }
     };
+
+    getCampListsByHash = async (req, res, next) => {
+        const { search } = req.body;
+
+        const getCampListsByHash = await this.searchService.getCampListsByHash(
+            search
+        );
+    };
 }
 
 module.exports = SearchController;

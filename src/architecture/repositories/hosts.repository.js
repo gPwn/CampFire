@@ -3,8 +3,10 @@ const { sequelize } = require('../../models');
 
 class HostsRepository {
     #hostModel;
-    constructor(HostModel) {
+    #campModel;
+    constructor(HostModel, CampModel) {
         this.#hostModel = HostModel;
+        this.#campModel = CampModel;
     }
 
     createHost = async (
@@ -78,16 +80,10 @@ class HostsRepository {
     };
 
     findCampsListByHost = async (hostId) => {
-        const query = `SELECT * FROM Camps WHERE hostId= :hostId`;
-        console.log(typeof hostId);
-        const campList = await sequelize.query(query, {
-            replacements: { hostId: hostId },
-            type: sequelize.QueryTypes.SELECT,
-        });
-        /* const campList = await this.#CampsModel.findAll({
+        const campList = await this.#campModel.findAll({
             where: { hostId },
-        }); */
-
+            attributes: ['campId', 'campName'],
+        });
         return campList;
     };
 }

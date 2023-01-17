@@ -1,6 +1,5 @@
 const SearchRepository = require('../repositories/search.repository.js');
 const LikesRepository = require('../repositories/likes.repository.js');
-const { Op } = require('sequelize');
 const { Camps, Users, Likes, Reviews, Types } = require('../../models');
 const { CampAmenities, Envs, Themes } = require('../../models');
 
@@ -18,19 +17,13 @@ class SearchService {
     }
 
     getCampLists = async (userId, search, types, themes, envs, amenities) => {
-        console.log(types, themes, envs, amenities);
-        for (let type of types) {
-            const searchLists = await this.searchRepository.getCampLists(
-                search,
-                type,
-                themes,
-                envs,
-                amenities
-            );
-            return searchLists;
-        }
-        console.log(searchLists);
-
+        const searchLists = await this.searchRepository.getCampLists(
+            search,
+            types,
+            themes,
+            envs,
+            amenities
+        );
         return await Promise.all(
             searchLists.map(async (searchList) => {
                 const findLike = await this.likesRepository.isExistLike(

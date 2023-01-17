@@ -23,10 +23,8 @@ class SearchRepository {
         this.#ThemesModel = ThemesModel;
     }
 
-    getCampLists = async (search, types, themes, envs, amenities) => {
-        console.log(search, types, themes, envs, amenities);
+    getCampLists = async (search, types, themes, env, amenities) => {
         return await this.#CampsModel.findAll({
-            // raw: true,
             where: {
                 [Op.or]: [
                     {
@@ -53,7 +51,7 @@ class SearchRepository {
                     attributes: ['campAmenities'],
                 },
                 {
-                    where: { envLists: { [Op.like]: '%' + envs + '%' } },
+                    where: { envLists: { [Op.like]: '%' + env + '%' } },
                     model: this.#EnvsModel,
                     as: 'Envs',
                     attributes: ['envLists'],
@@ -73,38 +71,6 @@ class SearchRepository {
                 },
             ],
             order: [['likes', 'DESC']],
-        });
-    };
-
-    getTypes = async (hash) => {
-        return await this.#TypesModel.findAll({
-            where: {
-                campAmenities: { [Op.like]: '%' + hash + '%' },
-            },
-        });
-    };
-
-    getCampAmenities = async (hash) => {
-        return await this.#CampAmenitiesModel.findAll({
-            where: {
-                campAmenities: { [Op.like]: '%' + hash + '%' },
-            },
-        });
-    };
-
-    getEnvs = async (hash) => {
-        return await this.#EnvsModel.findAll({
-            where: {
-                envLists: { [Op.like]: '%' + hash + '%' },
-            },
-        });
-    };
-
-    getThemes = async (hash) => {
-        return await this.#ThemesModel.findAll({
-            where: {
-                themeLists: { [Op.like]: '%' + hash + '%' },
-            },
         });
     };
 }

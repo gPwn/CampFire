@@ -7,7 +7,12 @@ class SearchController {
 
     getCampLists = async (req, res, next) => {
         try {
-            const { search } = req.body;
+            const searchInfo = req.query;
+            const search = searchInfo.search;
+            const pageNo = searchInfo.pageno;
+            if (!searchInfo) {
+                throw new InvalidParamsError();
+            }
 
             let userId = 0;
             if (res.locals.userId === undefined) {
@@ -18,6 +23,7 @@ class SearchController {
 
             const getCampLists = await this.searchService.getCampLists(
                 search,
+                pageNo,
                 userId
             );
 

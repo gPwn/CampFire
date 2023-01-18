@@ -70,9 +70,10 @@ class SearchRepository {
         });
     };
 }
-
 function getTypesIncludecondition(Array) {
-    if (Array.length === 0 || Array.length === 1) {
+    if (Array.length === 0) {
+        return null;
+    } else if (Array.length === 1) {
         return { typeLists: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {
         return {
@@ -92,7 +93,9 @@ function getTypesIncludecondition(Array) {
     }
 }
 function getCampAmenitiesIncludecondition(Array) {
-    if (Array.length === 0 || Array.length === 1) {
+    if (Array.length === 0) {
+        return null;
+    } else if (Array.length === 1) {
         return { campAmenities: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {
         return {
@@ -112,7 +115,9 @@ function getCampAmenitiesIncludecondition(Array) {
     }
 }
 function getEnvsIncludecondition(Array) {
-    if (Array.length === 0 || Array.length === 1) {
+    if (Array.length === 0) {
+        return null;
+    } else if (Array.length === 1) {
         return { envLists: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {
         return {
@@ -132,7 +137,9 @@ function getEnvsIncludecondition(Array) {
     }
 }
 function getThemesIncludecondition(Array) {
-    if (Array.length === 0 || Array.length === 1) {
+    if (Array.length === 0) {
+        return null;
+    } else if (Array.length === 1) {
         return { themeLists: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {
         return {

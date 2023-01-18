@@ -57,6 +57,7 @@ module.exports = async (req, res, next) => {
         next();
     } catch (error) {
         if (error === 'Token이 만료되었습니다. 다시 로그인해주세요.') {
+            res.headers({ refreshtoken: '토큰만료' });
             res.status(419).json({
                 errorMessage: 'Token이 만료되었습니다. 다시 로그인해주세요.',
             });

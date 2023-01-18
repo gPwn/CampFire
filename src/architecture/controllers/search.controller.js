@@ -1,4 +1,7 @@
 const SearchService = require('../services/search.service.js');
+const {
+    InvalidParamsError,
+} = require('../../middlewares/exceptions/error.class.js');
 
 class SearchController {
     constructor() {
@@ -25,25 +28,25 @@ class SearchController {
                 throw new InvalidParamsError();
             }
 
-            if (types !== undefined) {
-                types = types.split(',');
-            } else {
+            if (types === '') {
                 types = [];
+            } else {
+                types = types.split(',');
             }
 
-            if (themes !== undefined) {
+            if (themes !== '') {
                 themes = themes.split(',');
             } else {
                 themes = [];
             }
 
-            if (envs !== undefined) {
+            if (envs !== '') {
                 envs = envs.split(',');
             } else {
                 envs = [];
             }
 
-            if (amenities !== undefined) {
+            if (amenities !== '') {
                 amenities = amenities.split(',');
             } else {
                 amenities = [];

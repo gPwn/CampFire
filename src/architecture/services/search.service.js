@@ -1,28 +1,44 @@
 const SearchRepository = require('../repositories/search.repository.js');
 const LikesRepository = require('../repositories/likes.repository.js');
-const { Op } = require('sequelize');
 const { Camps, Users, Likes, Reviews, Types } = require('../../models');
+const { CampAmenities, Envs, Themes } = require('../../models');
+const {
+    ValidationError,
+} = require('../../middlewares/exceptions/error.class.js');
 
 class SearchService {
     constructor() {
-        this.searchRepository = new SearchRepository(Camps, Types, Reviews);
+        this.searchRepository = new SearchRepository(
+            Camps,
+            Types,
+            Reviews,
+            CampAmenities,
+            Envs,
+            Themes
+        );
         this.likesRepository = new LikesRepository(Camps, Users, Likes);
     }
 
-    getCampLists = async (search, userId) => {
-        const searchLists = await this.searchRepository.getCampLists({
-            where: {
-                [Op.or]: [
-                    {
-                        campName: { [Op.like]: '%' + search + '%' },
-                    },
-                    {
-                        campAddress: { [Op.like]: '%' + search + '%' },
-                    },
-                ],
-            },
-        });
-
+    getCampLists = async (userId, search, types, themes, envs, amenities) => {
+        if (
+            types.length > 3 ||
+            themes.length > 3 ||
+            envs.length > 3 ||
+            amenities.length > 3
+        ) {
+            throw new ValidationError(
+                '카테고리는 3개까지만 선택할 수 있습니다.',
+                400
+            );
+        }
+        const searchLists = await this.searchRepository.getCampLists(
+            search,
+            types,
+            themes,
+            envs,
+            amenities
+        );
+        // return searchLists;
         return await Promise.all(
             searchLists.map(async (searchList) => {
                 const findLike = await this.likesRepository.isExistLike(

@@ -100,7 +100,7 @@ class UsersController {
         } catch (error) {
             console.log(error);
             if (error === '존재하지 않는 사용자입니다.') {
-                res.status(404).json({
+                return res.status(404).json({
                     errorMessage: '존재하지 않는 사용자입니다.',
                 });
             }

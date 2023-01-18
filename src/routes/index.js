@@ -12,7 +12,7 @@ router.use('/camps', require('./reviews.route.js'));
 router.use('/search', require('./search.route.js'));
 
 router.get('/', (req, res) => {
-    res.send('api routes 연결 cicd test!!0112');
+    res.send('api routes 연결 cicd test!!0118');
 });
 
 module.exports = router;

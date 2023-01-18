@@ -37,25 +37,25 @@ class SearchRepository {
             },
             include: [
                 {
-                    where: getTypesincludecondition(types),
+                    where: getTypesIncludecondition(types),
                     model: this.#TypesModel,
                     as: 'Types',
                     attributes: ['typeLists'],
                 },
                 {
-                    where: getCampAmenitiesincludecondition(amenities),
+                    where: getCampAmenitiesIncludecondition(amenities),
                     model: this.#CampAmenitiesModel,
                     as: 'CampAmenities',
                     attributes: ['campAmenities'],
                 },
                 {
-                    where: getEnvsincludecondition(envs),
+                    where: getEnvsIncludecondition(envs),
                     model: this.#EnvsModel,
                     as: 'Envs',
                     attributes: ['envLists'],
                 },
                 {
-                    where: getThemesincludecondition(themes),
+                    where: getThemesIncludecondition(themes),
                     model: this.#ThemesModel,
                     as: 'Themes',
                     attributes: ['themeLists'],
@@ -71,7 +71,7 @@ class SearchRepository {
     };
 }
 
-function getTypesincludecondition(Array) {
+function getTypesIncludecondition(Array) {
     if (Array.length === 0 || Array.length === 1) {
         return { typeLists: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {
@@ -91,7 +91,7 @@ function getTypesincludecondition(Array) {
         };
     }
 }
-function getCampAmenitiesincludecondition(Array) {
+function getCampAmenitiesIncludecondition(Array) {
     if (Array.length === 0 || Array.length === 1) {
         return { campAmenities: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {
@@ -111,7 +111,7 @@ function getCampAmenitiesincludecondition(Array) {
         };
     }
 }
-function getEnvsincludecondition(Array) {
+function getEnvsIncludecondition(Array) {
     if (Array.length === 0 || Array.length === 1) {
         return { envLists: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {
@@ -131,7 +131,7 @@ function getEnvsincludecondition(Array) {
         };
     }
 }
-function getThemesincludecondition(Array) {
+function getThemesIncludecondition(Array) {
     if (Array.length === 0 || Array.length === 1) {
         return { themeLists: { [Op.like]: '%' + Array + '%' } };
     } else if (Array.length === 2) {

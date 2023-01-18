@@ -2,6 +2,9 @@ const SearchRepository = require('../repositories/search.repository.js');
 const LikesRepository = require('../repositories/likes.repository.js');
 const { Camps, Users, Likes, Reviews, Types } = require('../../models');
 const { CampAmenities, Envs, Themes } = require('../../models');
+const {
+    ValidationError,
+} = require('../../middlewares/exceptions/error.class.js');
 
 class SearchService {
     constructor() {
@@ -17,6 +20,17 @@ class SearchService {
     }
 
     getCampLists = async (userId, search, types, themes, envs, amenities) => {
+        if (
+            types.length > 3 ||
+            themes.length > 3 ||
+            envs.length > 3 ||
+            amenities.length > 3
+        ) {
+            throw new ValidationError(
+                '카테고리는 3개까지만 선택할 수 있습니다.',
+                400
+            );
+        }
         const searchLists = await this.searchRepository.getCampLists(
             search,
             types,
@@ -48,8 +62,6 @@ class SearchService {
                         searchList.Types[0].typeLists === null
                             ? null
                             : searchList.Types[0].typeLists.split(','),
-                    checkIn: searchList.checkIn,
-                    checkOut: searchList.checkOut,
                     likes: searchList.likes,
                     likeStatus: likeStatus,
                     countReviews: searchList.Reviews.length,

@@ -7,12 +7,6 @@ class SearchController {
 
     getCampLists = async (req, res, next) => {
         try {
-            const searchInfo = req.query;
-            const search = searchInfo.search;
-            if (!searchInfo) {
-                throw new InvalidParamsError();
-            }
-
             let userId = 0;
             if (res.locals.userId === undefined) {
                 userId = 0;
@@ -20,9 +14,48 @@ class SearchController {
                 userId = res.locals.userId;
             }
 
+            const searchInfo = req.query;
+            const search = searchInfo.search;
+            let types = searchInfo.types;
+            let themes = searchInfo.themes;
+            let envs = searchInfo.envs;
+            let amenities = searchInfo.amenities;
+
+            if (!searchInfo) {
+                throw new InvalidParamsError();
+            }
+
+            if (types !== undefined) {
+                types = types.split(',');
+            } else {
+                types = [];
+            }
+
+            if (themes !== undefined) {
+                themes = themes.split(',');
+            } else {
+                themes = [];
+            }
+
+            if (envs !== undefined) {
+                envs = envs.split(',');
+            } else {
+                envs = [];
+            }
+
+            if (amenities !== undefined) {
+                amenities = amenities.split(',');
+            } else {
+                amenities = [];
+            }
+
             const getCampLists = await this.searchService.getCampLists(
+                userId,
                 search,
-                userId
+                types,
+                themes,
+                envs,
+                amenities
             );
 
             res.status(201).json({

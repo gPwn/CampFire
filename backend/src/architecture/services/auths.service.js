@@ -36,7 +36,7 @@ class AuthsService {
                     grant_type: 'authorization_code',
                     client_id: process.env.KAKAO_CLIENT_ID,
                     code,
-                    redirect_uri: procee.env.KAKAO_REDIRECT_URL,
+                    redirect_uri: process.env.KAKAO_REDIRECT_URL,
                 },
             }
         );

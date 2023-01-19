@@ -22,7 +22,7 @@ deploy:
     provider: elasticbeanstalk
     region: 'ap-northeast-2'
     app: 'campfire-app'
-    env: 'Campfireapp-env-1'
+    env: 'Campfireapp-env'
     bucket_name: elasticbeanstalk-ap-northeast-2-792971416589
     bucket_path: 'campfire-app'
     on:

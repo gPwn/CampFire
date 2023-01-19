@@ -58,6 +58,31 @@ class AuthsController {
             res.status(400).json({ errorMessage: '로그인 실패' });
         }
     };
-}
 
+    loginNaver = async (req, res) => {
+        try {
+            const code = req.query.code;
+            const state = req.query.state;
+
+            const { accessToken, refreshToken } =
+                await this.authsService.loginNaver(code, state);
+            const { userId } = jwt.verify(
+                accessToken,
+                process.env.TOKEN_USER_SECRET_KEY
+            );
+            console.log(`accessToken = ${accessToken}`);
+
+            res.header({
+                accesstoken: `Bearer ${accessToken}`,
+                refreshtoken: `Bearer ${refreshToken}`,
+            });
+            res.status(200).json({
+                userId: userId,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({ errorMessage: '네이버 로그인 실패' });
+        }
+    };
+}
 module.exports = AuthsController;

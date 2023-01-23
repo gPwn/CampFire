@@ -217,7 +217,6 @@ class CampsService {
         } else {
             likeStatus = false;
         }
-        console.log(camp);
         return {
             campId: camp.campId,
             hostId: camp.hostId,
@@ -264,7 +263,7 @@ class CampsService {
                 404
             );
         }
-
+        console.log(site);
         return {
             siteId: site.siteId,
             campId: site.campId,
@@ -277,6 +276,8 @@ class CampsService {
             siteSubImages: site.siteSubImages.split(','),
             minPeople: site.minPeople,
             maxPeople: site.maxPeople,
+            checkIn: site.Camp.checkIn,
+            checkOut: site.Camp.checkOut,
             createdAt: site.createdAt,
             updatedAt: site.updatedAt,
         };

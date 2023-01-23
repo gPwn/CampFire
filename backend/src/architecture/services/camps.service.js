@@ -263,7 +263,8 @@ class CampsService {
                 404
             );
         }
-        console.log(site);
+        const { typeLists } = await this.campsRepository.findtypeList(campId);
+
         return {
             siteId: site.siteId,
             campId: site.campId,
@@ -278,6 +279,7 @@ class CampsService {
             maxPeople: site.maxPeople,
             checkIn: site.Camp.checkIn,
             checkOut: site.Camp.checkOut,
+            typeLists: typeLists === null ? null : typeLists.split(','),
             createdAt: site.createdAt,
             updatedAt: site.updatedAt,
         };

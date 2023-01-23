@@ -252,6 +252,12 @@ class CampsRepository {
             where: {
                 [Op.and]: [{ campId, siteId }],
             },
+            include: [
+                {
+                    model: this.#CampsModel,
+                    attributes: ['checkIn', 'checkOut'],
+                },
+            ],
         });
     };
 }

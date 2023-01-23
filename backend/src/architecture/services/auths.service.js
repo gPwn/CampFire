@@ -49,10 +49,15 @@ class AuthsService {
             },
         });
 
+        console.log('resultGet = ', resultGet);
+
         const email = resultGet.data.kakao_account['email'];
         const userName = resultGet.data.properties['nickname'];
         const profileImg = resultGet.data.properties['profile_image'];
         const phoneNumber = '';
+
+        console.log('email = ', email);
+        console.log('userName = ', userName);
 
         if (!email || !userName)
             throw new ValidationError(

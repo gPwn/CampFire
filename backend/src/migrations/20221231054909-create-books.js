@@ -53,6 +53,10 @@ module.exports = {
                 type: Sequelize.DataTypes.DATEONLY,
                 allowNull: false,
             },
+            usingDays: {
+                type: Sequelize.DataTypes.STRING,
+                allowNull: true,
+            },
             adults: {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,

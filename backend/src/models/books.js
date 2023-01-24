@@ -67,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATEONLY,
                 allowNull: false,
             },
+            usingDays: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
             adults: {
                 type: DataTypes.INTEGER,
                 allowNull: false,

@@ -76,6 +76,11 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
+            roomCount: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 3,
+            },
             createdAt: {
                 allowNull: false,
                 type: DataTypes.DATE,

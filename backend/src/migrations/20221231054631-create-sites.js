@@ -60,6 +60,11 @@ module.exports = {
                 type: Sequelize.DataTypes.INTEGER,
                 allowNull: false,
             },
+            roomCount: {
+                type: Sequelize.DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 3,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DataTypes.DATE,

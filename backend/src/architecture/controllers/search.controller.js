@@ -80,16 +80,6 @@ class SearchController {
                 throw new InvalidParamsError();
             }
 
-            const campId = sitesInfo.campid;
-            const adults = sitesInfo.adults;
-            const children = sitesInfo.children;
-            const checkInDate = sitesInfo.checkindate;
-            const checkOutDate = sitesInfo.checkoutdate;
-            let usingDays = getDatesStartToLast(checkInDate, checkOutDate);
-            if (usingDays.length === 0) {
-                usingDays = checkInDate;
-            }
-
             const getSiteLists = await this.searchService.getSearchSiteLists(
                 campId,
                 adults,

@@ -240,6 +240,7 @@ class CampsRepository {
                 'siteMainImage',
                 'minPeople',
                 'maxPeople',
+                'roomCount',
                 'createdAt',
                 'updatedAt',
             ],

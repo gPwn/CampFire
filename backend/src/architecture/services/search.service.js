@@ -19,7 +19,6 @@ const {
     ValidationError,
     InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class.js');
-const { Op } = require('sequelize');
 
 class SearchService {
     constructor() {
@@ -34,26 +33,6 @@ class SearchService {
             Books
         );
         this.likesRepository = new LikesRepository(Camps, Users, Likes);
-        this.campsRepository = new CampsRepository(
-            Books,
-            Camps,
-            Hosts,
-            Users,
-            Sites,
-            CampAmenities,
-            Envs,
-            Types,
-            Themes,
-            Likes,
-            Reviews
-        );
-        this.booksRepository = new BooksRepository(
-            Books,
-            Camps,
-            Hosts,
-            Users,
-            Sites
-        );
     }
 
     getSearchCampLists = async (

@@ -19,6 +19,7 @@ class SitesController {
                 sitePrice,
                 minPeople,
                 maxPeople,
+                roomCount,
             } = req.body;
             let siteMainImage;
             const siteSubImagesArray = [];
@@ -37,7 +38,8 @@ class SitesController {
                 !siteDesc ||
                 !sitePrice ||
                 !minPeople ||
-                !maxPeople
+                !maxPeople ||
+                !roomCount
             ) {
                 throw new InvalidParamsError();
             }
@@ -51,7 +53,8 @@ class SitesController {
                 siteDesc,
                 sitePrice,
                 minPeople,
-                maxPeople
+                maxPeople,
+                roomCount
             );
             res.status(201).json({
                 message: '캠핑장 사이트가 등록되었습니다.',
@@ -74,6 +77,7 @@ class SitesController {
                 sitePrice,
                 minPeople,
                 maxPeople,
+                roomCount,
             } = req.body;
 
             let siteMainImage;
@@ -100,7 +104,8 @@ class SitesController {
                 siteDesc,
                 sitePrice,
                 minPeople,
-                maxPeople
+                maxPeople,
+                roomCount
             );
             res.status(201).json({
                 message: '캠핑장 사이트가 수정되었습니다.',

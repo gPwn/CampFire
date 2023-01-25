@@ -10,7 +10,10 @@ const likeConfirmUserHostMiddleware = require('../middlewares/likeConfirmUserHos
 router.get(
     '/camps',
     likeConfirmUserHostMiddleware,
-    searchController.getCampLists
+    searchController.getSearchCampLists
 );
+
+// 통합 검색 기능
+router.get('/sites', searchController.getSearchSiteLists);
 
 module.exports = router;

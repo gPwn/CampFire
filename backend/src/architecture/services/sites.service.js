@@ -47,7 +47,8 @@ class SitesService {
         siteDesc,
         sitePrice,
         minPeople,
-        maxPeople
+        maxPeople,
+        roomCount
     ) => {
         const isExistValue = await this.sitesRepository.getIsExistValue(
             siteName
@@ -65,7 +66,8 @@ class SitesService {
             siteDesc,
             sitePrice,
             minPeople,
-            maxPeople
+            maxPeople,
+            roomCount
         );
         if (!createdSite) {
             throw new ValidationError(
@@ -87,7 +89,8 @@ class SitesService {
         siteDesc,
         sitePrice,
         minPeople,
-        maxPeople
+        maxPeople,
+        roomCount
     ) => {
         const findSite = await this.sitesRepository.findSiteById(
             campId,
@@ -126,7 +129,8 @@ class SitesService {
             siteDesc,
             sitePrice,
             minPeople,
-            maxPeople
+            maxPeople,
+            roomCount
         );
     };
 

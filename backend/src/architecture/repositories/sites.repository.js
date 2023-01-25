@@ -43,7 +43,8 @@ class SitesRepository {
         siteDesc,
         sitePrice,
         minPeople,
-        maxPeople
+        maxPeople,
+        roomCount
     ) => {
         const createdSite = await this.#SitesModel.create({
             hostId,
@@ -56,6 +57,7 @@ class SitesRepository {
             sitePrice,
             minPeople,
             maxPeople,
+            roomCount,
         });
         return createdSite;
     };
@@ -71,7 +73,8 @@ class SitesRepository {
         siteDesc,
         sitePrice,
         minPeople,
-        maxPeople
+        maxPeople,
+        roomCount
     ) => {
         return await this.#SitesModel.update(
             {
@@ -86,6 +89,7 @@ class SitesRepository {
                 sitePrice,
                 minPeople,
                 maxPeople,
+                roomCount,
             },
             {
                 where: {

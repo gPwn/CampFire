@@ -75,9 +75,19 @@ class SearchController {
     getSearchSiteLists = async (req, res, next) => {
         try {
             const sitesInfo = req.query;
-
             if (!sitesInfo) {
                 throw new InvalidParamsError();
+            }
+
+            const campId = sitesInfo.campid;
+            const adults = sitesInfo.adults;
+            const children = sitesInfo.children;
+            const checkInDate = sitesInfo.checkindate;
+            const checkOutDate = sitesInfo.checkoutdate;
+            let usingDays = getDatesStartToLast(checkInDate, checkOutDate);
+
+            if (usingDays.length === 0) {
+                usingDays = checkInDate;
             }
 
             const getSiteLists = await this.searchService.getSearchSiteLists(

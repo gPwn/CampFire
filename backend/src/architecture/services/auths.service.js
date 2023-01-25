@@ -126,6 +126,67 @@ class AuthsService {
 
         return { accessToken, refreshToken };
     };
+
+    loginGoogle = async (code) => {
+        const url = `https://oauth2.googleapis.com/token?code=${code}&client_id=${process.env.GOOGLE_CLIENT_ID}&client_secret=${process.env.GOOGLE_SECRET}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&grant_type=authorization_code`;
+
+        const access_token = await axios
+            .post(url, {
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .then((el) => {
+                return el.data.access_token;
+            })
+            .catch((err) => {
+                console.log('err=', err);
+            });
+
+        console.log(access_token);
+
+        const googleAPI = `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${access_token}`;
+        const userInfo = await axios
+            .get(googleAPI, {
+                headers: {
+                    authorization: `Bearer ${access_token}`,
+                },
+            })
+            .then((el) => {
+                return el.data;
+            })
+            .catch((err) => {
+                console.log('err=', err);
+            });
+
+        const email = userInfo.email;
+        const userName = userInfo.name;
+        const profileImg = userInfo.picture;
+        const phoneNumber = '';
+
+        if (!email || !userName) {
+            throw new ValidationError(
+                '구글 인증 정보가 올바르지 않습니다.',
+                400
+            );
+        }
+
+        let user = await this.authsRepository.findOneUserByEmail(email);
+
+        if (!user) {
+            user = await this.authsRepository.createUser(
+                email,
+                userName,
+                profileImg,
+                phoneNumber
+            );
+        }
+        const accessToken = createUserToken(user.userId, '1h');
+        const refreshToken = createUserToken('refreshToken', '1d');
+        await this.authsRepository.updateRefreshToken(refreshToken, email);
+
+        return { accessToken, refreshToken };
+    };
 }
 
 module.exports = AuthsService;

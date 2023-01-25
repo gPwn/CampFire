@@ -128,20 +128,22 @@ class AuthsService {
     };
 
     loginGoogle = async (code) => {
-        const url = `https://oauth2.googleapis.com/token?code=${code}&client_id=${process.env.GOOGLE_CLIENT_ID}&client_secret=${process.env.GOOGLE_SECRET}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&grant_type=authorization_code`;
-
-        const access_token = await axios
-            .post(url, {
+        const access_token = await axios.post(
+            'https://oauth2.googleapis.com/token',
+            {},
+            {
                 headers: {
-                    'content-type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-            })
-            .then((el) => {
-                return el.data.access_token;
-            })
-            .catch((err) => {
-                console.log('err=', err);
-            });
+                params: {
+                    grant_type: 'authorization_code',
+                    client_id: process.env.GOOGLE_CLIENT_ID,
+                    code,
+                    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+                    client_secret: process.env.GOOGLE_SECRET,
+                },
+            }
+        );
 
         console.log(access_token);
 

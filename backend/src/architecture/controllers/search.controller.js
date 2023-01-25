@@ -85,7 +85,10 @@ class SearchController {
             const children = sitesInfo.children;
             const checkInDate = sitesInfo.checkindate;
             const checkOutDate = sitesInfo.checkoutdate;
-            const usingDays = getDatesStartToLast(checkInDate, checkOutDate);
+            let usingDays = getDatesStartToLast(checkInDate, checkOutDate);
+            if (usingDays.length === 0) {
+                usingDays = checkInDate;
+            }
 
             const getSiteLists = await this.searchService.getSearchSiteLists(
                 campId,

@@ -1,11 +1,8 @@
 const SearchRepository = require('../repositories/search.repository.js');
-const CampsRepository = require('../repositories/camps.repository.js');
 const LikesRepository = require('../repositories/likes.repository.js');
-const BooksRepository = require('../repositories/books.repository.js');
 const {
     Books,
     Camps,
-    Hosts,
     Users,
     Sites,
     CampAmenities,

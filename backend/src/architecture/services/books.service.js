@@ -61,14 +61,16 @@ class BooksService {
 
         const totalPeople = Number(adults) + Number(children);
 
-        const usingDays = getDatesStartToLast(checkInDate, checkOutDate);
+        let usingDays = getDatesStartToLast(checkInDate, checkOutDate);
         if (usingDays.length >= 7) {
             throw new InvalidParamsError(
                 '7일 이상 예약은 호스트에서 문의하세요.',
                 404
             );
         }
-
+        if (usingDays.length === 0) {
+            usingDays = checkInDate;
+        }
         return await this.booksRepository.addBookscamps(
             campId,
             userId,

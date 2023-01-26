@@ -11,19 +11,6 @@ const { ValidationError } = require('../../middlewares/exceptions/error.class');
 class AuthsService {
     authsRepository = new AuthsRepository(Users);
 
-    //회원가입 API
-    signUp = async (email, userName, password, phoneNumber, profileImg) => {
-        const hashValue = hash(password);
-        const user = await this.authsRepository.createUser(
-            email,
-            userName,
-            hashValue,
-            phoneNumber,
-            profileImg
-        );
-        return user;
-    };
-
     loginKakao = async (code) => {
         const resultPost = await axios.post(
             'https://kauth.kakao.com/oauth/token',
@@ -49,15 +36,11 @@ class AuthsService {
             },
         });
 
-        console.log('resultGet = ', resultGet);
-
         const email = resultGet.data.kakao_account['email'];
         const userName = resultGet.data.properties['nickname'];
         const profileImg = resultGet.data.properties['profile_image'];
         const phoneNumber = '';
-
-        console.log('email = ', email);
-        console.log('userName = ', userName);
+        const provider = 'kakao';
 
         if (!email || !userName)
             throw new ValidationError(
@@ -67,12 +50,20 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserByEmail(email);
 
+        if (user.provider !== provider) {
+            throw new ValidationError(
+                '다른 소셜사이트로 가입된 이메일이 존재합니다.',
+                400
+            );
+        }
+
         if (!user) {
             user = await this.authsRepository.createUser(
                 email,
                 userName,
                 profileImg,
-                phoneNumber
+                phoneNumber,
+                provider
             );
         }
         const accessToken = createUserToken(user.userId, '1h');
@@ -109,15 +100,24 @@ class AuthsService {
         const userName = info_result.data.response.name;
         const profileImg = info_result.data.response.profile_image;
         const phoneNumber = info_result.data.response.mobile;
+        const provider = 'naver';
 
         let user = await this.authsRepository.findOneUserByEmail(email);
+
+        if (user.provider !== provider) {
+            throw new ValidationError(
+                '다른 소셜사이트로 가입된 이메일이 존재합니다.',
+                400
+            );
+        }
 
         if (!user) {
             user = await this.authsRepository.createUser(
                 email,
                 userName,
                 profileImg,
-                phoneNumber
+                phoneNumber,
+                provider
             );
         }
         const accessToken = createUserToken(user.userId, '1h');
@@ -143,8 +143,6 @@ class AuthsService {
                 console.log('err=', err);
             });
 
-        console.log(access_token);
-
         const googleAPI = `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${access_token}`;
         const userInfo = await axios
             .get(googleAPI, {
@@ -163,6 +161,7 @@ class AuthsService {
         const userName = userInfo.name;
         const profileImg = userInfo.picture;
         const phoneNumber = '';
+        const provider = 'google';
 
         if (!email || !userName) {
             throw new ValidationError(
@@ -173,12 +172,20 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserByEmail(email);
 
+        if (user.provider !== provider) {
+            throw new ValidationError(
+                '다른 소셜사이트로 가입된 이메일이 존재합니다.',
+                400
+            );
+        }
+
         if (!user) {
             user = await this.authsRepository.createUser(
                 email,
                 userName,
                 profileImg,
-                phoneNumber
+                phoneNumber,
+                provider
             );
         }
         const accessToken = createUserToken(user.userId, '1h');

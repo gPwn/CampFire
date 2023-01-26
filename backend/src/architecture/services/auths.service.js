@@ -73,7 +73,7 @@ class AuthsService {
         return { accessToken, refreshToken };
     };
 
-    loginNaver = async (code, state, Naver) => {
+    loginNaver = async (code, state) => {
         const result = await axios.post(
             'https://nid.naver.com/oauth2.0/token',
             {},

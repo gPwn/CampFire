@@ -277,6 +277,7 @@ class CampsService {
             siteSubImages: site.siteSubImages.split(','),
             minPeople: site.minPeople,
             maxPeople: site.maxPeople,
+            roomCount: site.roomCount,
             checkIn: site.Camp.checkIn,
             checkOut: site.Camp.checkOut,
             typeLists: typeLists === null ? null : typeLists.split(','),

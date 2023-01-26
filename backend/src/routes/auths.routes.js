@@ -10,6 +10,4 @@ router.get('/kakao', authLoginUserMiddleware, authsController.loginKakao);
 router.get('/naver', authLoginUserMiddleware, authsController.loginNaver);
 router.get('/google', authLoginUserMiddleware, authsController.loginGoogle);
 
-router.post('/signup', upload.single('profileImg'), authsController.signup);
-
 module.exports = router;

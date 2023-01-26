@@ -50,7 +50,7 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserByEmail(email);
 
-        if (user.provider !== provider) {
+        if (user && user.provider !== provider) {
             throw new ValidationError(
                 '다른 소셜사이트로 가입된 이메일이 존재합니다.',
                 400
@@ -104,7 +104,7 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserByEmail(email);
 
-        if (user.provider !== provider) {
+        if (user && user.provider !== provider) {
             throw new ValidationError(
                 '다른 소셜사이트로 가입된 이메일이 존재합니다.',
                 400
@@ -172,7 +172,7 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserByEmail(email);
 
-        if (user.provider !== provider) {
+        if (user && user.provider !== provider) {
             throw new ValidationError(
                 '다른 소셜사이트로 가입된 이메일이 존재합니다.',
                 400

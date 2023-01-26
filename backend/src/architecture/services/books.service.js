@@ -80,13 +80,14 @@ class BooksService {
                         {
                             usingDays: { [Op.like]: '%' + usingDays[i] + '%' },
                         },
-                        { confirmBook: true },
+                        { cancelBooks: false },
                     ],
                 },
             });
+
             if (isExistBook) {
                 throw new InvalidParamsError(
-                    '해당 날짜에 이미 예약 확정 된 내역이 있습니다.',
+                    '해당 날짜에 이미 예약된 내역이 있습니다.',
                     400
                 );
             }

@@ -71,6 +71,27 @@ class BooksService {
         if (usingDays.length === 0) {
             usingDays = checkInDate;
         }
+
+        for (let i = 0; i < usingDays.length; i++) {
+            const isExistBook = await this.booksRepository.findBookByPk({
+                where: {
+                    [Op.and]: [
+                        { userId },
+                        {
+                            usingDays: { [Op.like]: '%' + usingDays[i] + '%' },
+                        },
+                        { confirmBook: true },
+                    ],
+                },
+            });
+            if (isExistBook) {
+                throw new InvalidParamsError(
+                    '해당 날짜에 이미 예약 확정 된 내역이 있습니다.',
+                    400
+                );
+            }
+        }
+
         return await this.booksRepository.addBookscamps(
             campId,
             userId,

@@ -3,6 +3,7 @@ const {
     InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class');
 const { urlencoded } = require('express');
+const request = require('request');
 
 class CampsController {
     constructor() {
@@ -210,6 +211,49 @@ class CampsController {
             next(error);
         }
     };
+
+    //공공 캠핑장 api
+    postpublicAPI = async (req, res) => {
+        let test = postpublicAPI(() => {
+            console.log('sucess');
+        });
+        // let obj = JSON.parse(facltNm);
+        console.log(test);
+    };
 }
+
+const postpublicAPI = (callback) => {
+    const url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
+    let queryParams =
+        encodeURIComponent('MobileOS') + '=' + encodeURIComponent('WIN');
+
+    queryParams +=
+        '&' +
+        encodeURIComponent('MobileApp') +
+        '=' +
+        encodeURIComponent('campfire');
+    queryParams +=
+        '&' +
+        encodeURIComponent('serviceKey') +
+        '=' +
+        encodeURIComponent(
+            '0wh630HIIRsQ4fi3oOWYj6BTI1EDXefre764kxH5gGEpyY%2BMNAeFCQNKK1n96VZH7YHMIUf8gfsIWeLYOm9sRA%3D%3D'
+        ); /*Service Key*/
+    queryParams +=
+        '&' + encodeURIComponent('_type') + '=' + encodeURIComponent('json');
+
+    request(
+        {
+            url: url + queryParams,
+            method: 'GET',
+        },
+        function (error, response, body) {
+            console.log(body);
+            callback({
+                company: body,
+            });
+        }
+    );
+};
 
 module.exports = CampsController;

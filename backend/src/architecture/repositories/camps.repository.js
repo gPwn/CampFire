@@ -241,7 +241,10 @@ class CampsRepository {
         checkOut,
         mapX,
         mapY,
-        typeLists
+        typeLists,
+        campAmenities,
+        envLists,
+        themeLists
     ) => {
         const createdCamp = await this.#CampsModel.create({
             hostId,
@@ -258,11 +261,11 @@ class CampsRepository {
         const { campId } = createdCamp;
         await this.#CampAmenitiesModel.create({
             campId,
-            campAmenities: null,
+            campAmenities: campAmenities,
         });
         await this.#EnvsModel.create({
             campId,
-            envLists: null,
+            envLists: envLists,
         });
         await this.#TypesModel.create({
             campId,
@@ -270,7 +273,7 @@ class CampsRepository {
         });
         await this.#ThemesModel.create({
             campId,
-            themeLists: null,
+            themeLists: themeLists,
         });
         return createdCamp;
     };

@@ -274,6 +274,9 @@ class CampsService {
             const mapX = camp.mapX;
             const mapY = camp.mapY;
             const typeLists = camp.induty;
+            const campAmenities = camp.sbrsCl;
+            const envLists = camp.posblFcltyCl;
+            const themeLists = camp.themaEnvrnCl;
             const checkIn = '15:00:00';
             const checkOut = '11:00:00';
 
@@ -288,9 +291,13 @@ class CampsService {
                 checkOut,
                 mapX,
                 mapY,
-                typeLists
+                typeLists,
+                campAmenities,
+                envLists,
+                themeLists
             );
         }
+        return;
     };
 }
 

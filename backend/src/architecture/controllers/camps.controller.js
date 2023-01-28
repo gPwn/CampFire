@@ -178,20 +178,6 @@ class CampsController {
         }
     };
 
-    // 유저 라이트 캠핑장 조회
-    getLikeById = async (req, res, next) => {
-        try {
-            const { campId } = req.params;
-            const { userId } = res.locals;
-
-            const camp = await this.campsService.findCampById(campId, userId);
-
-            res.status(200).json({ camp: camp });
-        } catch (error) {
-            next(error);
-        }
-    };
-
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (req, res, next) => {
         try {

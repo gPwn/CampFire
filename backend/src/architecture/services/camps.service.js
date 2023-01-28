@@ -197,6 +197,8 @@ class CampsService {
                     checkOut: camp.checkOut,
                     likes: camp.likes,
                     likeStatus: likeStatus,
+                    mapX: camp.mapX,
+                    mapY: camp.mapY,
                     countReviews: camp.Reviews.length,
                     createdAt: camp.createdAt,
                     updatedAt: camp.updatedAt,
@@ -249,6 +251,8 @@ class CampsService {
             checkIn: camp.checkIn,
             checkOut: camp.checkOut,
             likeStatus: likeStatus,
+            mapX: camp.mapX,
+            mapY: camp.mapY,
             createdAt: camp.createdAt,
             updatedAt: camp.updatedAt,
         };

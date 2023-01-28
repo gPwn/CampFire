@@ -176,7 +176,10 @@ class CampsService {
                     campName: camp.campName,
                     campAddress: camp.campAddress,
                     campMainImage: camp.campMainImage,
-                    campSubImages: camp.campSubImages.split(','),
+                    campSubImages:
+                        camp.campSubImages === null
+                            ? null
+                            : camp.campSubImages.split(','),
                     campDesc: camp.campDesc,
                     typeLists:
                         camp.Types[0].typeLists === null
@@ -223,9 +226,13 @@ class CampsService {
             campName: camp.campName,
             campAddress: camp.campAddress,
             campMainImage: camp.campMainImage,
-            campSubImages: camp.campSubImages.split(','),
+            campSubImages:
+                camp.campSubImages === null
+                    ? null
+                    : camp.campSubImages.split(','),
             campDesc: camp.campDesc,
-            phoneNumber: camp.Host.phoneNumber,
+            phoneNumber:
+                camp.Host.phoneNumber === null ? null : camp.Host.phoneNumber,
             campAmenities:
                 campAmenities === null ? null : campAmenities.split(','),
             envLists: envLists === null ? null : envLists.split(','),
@@ -254,6 +261,36 @@ class CampsService {
             typeLists,
             themeLists
         );
+    };
+
+    campListsUpdateBypublicApi = async (camps) => {
+        for (let camp of camps.item) {
+            const hostId = 0;
+            const campMainImage = camp.firstImageUrl;
+            const campSubImages = null;
+            const campName = camp.facltNm;
+            const campAddress = camp.addr1;
+            const campDesc = camp.intro;
+            const mapX = camp.mapX;
+            const mapY = camp.mapY;
+            const typeLists = camp.induty;
+            const checkIn = '15:00:00';
+            const checkOut = '11:00:00';
+
+            await this.campsRepository.createCampByPublicAPI(
+                hostId,
+                campMainImage,
+                campSubImages,
+                campName,
+                campAddress,
+                campDesc,
+                checkIn,
+                checkOut,
+                mapX,
+                mapY,
+                typeLists
+            );
+        }
     };
 }
 

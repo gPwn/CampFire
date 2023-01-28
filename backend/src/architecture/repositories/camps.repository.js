@@ -188,7 +188,7 @@ class CampsRepository {
                     attributes: ['reviewId'],
                 },
             ],
-            order: [['createdAt', 'DESC']],
+            order: [['createdAt', 'ASC']],
         });
         if (camps.length === 0) {
             return false;
@@ -227,6 +227,52 @@ class CampsRepository {
         return await this.#ThemesModel.findOne({
             where: { campId },
         });
+    };
+
+    // 공공 api로 campupdate
+    createCampByPublicAPI = async (
+        hostId,
+        campMainImage,
+        campSubImages,
+        campName,
+        campAddress,
+        campDesc,
+        checkIn,
+        checkOut,
+        mapX,
+        mapY,
+        typeLists
+    ) => {
+        const createdCamp = await this.#CampsModel.create({
+            hostId,
+            campMainImage,
+            campSubImages,
+            campName,
+            campAddress,
+            campDesc,
+            checkIn,
+            checkOut,
+            mapX,
+            mapY,
+        });
+        const { campId } = createdCamp;
+        await this.#CampAmenitiesModel.create({
+            campId,
+            campAmenities: null,
+        });
+        await this.#EnvsModel.create({
+            campId,
+            envLists: null,
+        });
+        await this.#TypesModel.create({
+            campId,
+            typeLists: typeLists,
+        });
+        await this.#ThemesModel.create({
+            campId,
+            themeLists: null,
+        });
+        return createdCamp;
     };
 }
 

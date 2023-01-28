@@ -2,8 +2,9 @@ const CampsService = require('../services/camps.service.js');
 const {
     InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class');
-const { urlencoded } = require('express');
 const request = require('request');
+const compServiceKey =
+    '0wh630HIIRsQ4fi3oOWYj6BTI1EDXefre764kxH5gGEpyY+MNAeFCQNKK1n96VZH7YHMIUf8gfsIWeLYOm9sRA==';
 
 class CampsController {
     constructor() {
@@ -214,16 +215,25 @@ class CampsController {
 
     //공공 캠핑장 api
     postpublicAPI = async (req, res) => {
-        let test = postpublicAPI(() => {
-            console.log('sucess');
-        });
-        // let obj = JSON.parse(facltNm);
-        console.log(test);
+        try {
+            postpublicAPI(async ({ camp } = {}) => {
+                const obj = JSON.parse(camp);
+                const camps = obj.response.body.items;
+
+                await this.campsService.campListsUpdateBypublicApi(camps);
+
+                res.status(201).json({
+                    message: '공공 API 캠핑장이 등록되었습니다.',
+                });
+            });
+        } catch (error) {
+            next(error);
+        }
     };
 }
 
 const postpublicAPI = (callback) => {
-    const url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
+    let url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
     let queryParams =
         encodeURIComponent('MobileOS') + '=' + encodeURIComponent('WIN');
 
@@ -236,9 +246,7 @@ const postpublicAPI = (callback) => {
         '&' +
         encodeURIComponent('serviceKey') +
         '=' +
-        encodeURIComponent(
-            '0wh630HIIRsQ4fi3oOWYj6BTI1EDXefre764kxH5gGEpyY%2BMNAeFCQNKK1n96VZH7YHMIUf8gfsIWeLYOm9sRA%3D%3D'
-        ); /*Service Key*/
+        encodeURIComponent(compServiceKey); /*Service Key*/
     queryParams +=
         '&' + encodeURIComponent('_type') + '=' + encodeURIComponent('json');
 
@@ -246,11 +254,11 @@ const postpublicAPI = (callback) => {
         {
             url: url + queryParams,
             method: 'GET',
+            rejectUnauthorized: false,
         },
         function (error, response, body) {
-            console.log(body);
             callback({
-                company: body,
+                camp: body,
             });
         }
     );

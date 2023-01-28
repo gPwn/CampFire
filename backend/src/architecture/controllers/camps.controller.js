@@ -13,8 +13,15 @@ class CampsController {
     // 캠핑장 업로드
     createCamp = async (req, res, next) => {
         try {
-            const { campName, campAddress, campDesc, checkIn, checkOut } =
-                req.body;
+            const {
+                campName,
+                campAddress,
+                campDesc,
+                checkIn,
+                checkOut,
+                mapX,
+                mapY,
+            } = req.body;
 
             const { hostId } = res.locals;
             let campMainImage;
@@ -34,7 +41,9 @@ class CampsController {
                 !campAddress ||
                 !campDesc ||
                 !checkIn ||
-                !checkOut
+                !checkOut ||
+                !mapX ||
+                !mapY
             ) {
                 throw new InvalidParamsError();
             }
@@ -46,7 +55,9 @@ class CampsController {
                 campAddress,
                 campDesc,
                 checkIn,
-                checkOut
+                checkOut,
+                mapX,
+                mapY
             );
             res.status(201).json({
                 message: '캠핑장이 등록되었습니다.',
@@ -59,8 +70,15 @@ class CampsController {
     // 캠핑장 수정
     updateCamps = async (req, res, next) => {
         try {
-            const { campName, campAddress, campDesc, checkIn, checkOut } =
-                req.body;
+            const {
+                campName,
+                campAddress,
+                campDesc,
+                checkIn,
+                checkOut,
+                mapX,
+                mapY,
+            } = req.body;
 
             const { hostId } = res.locals;
             const { campId } = req.params;
@@ -87,7 +105,9 @@ class CampsController {
                 campSubImages,
                 campDesc,
                 checkIn,
-                checkOut
+                checkOut,
+                mapX,
+                mapY
             );
 
             res.status(201).json({

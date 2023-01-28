@@ -52,7 +52,9 @@ class CampsService {
         campAddress,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         const isExistValue = await this.campsRepository.getIsExistValue(
             campName,
@@ -70,7 +72,9 @@ class CampsService {
             campAddress,
             campDesc,
             checkIn,
-            checkOut
+            checkOut,
+            mapX,
+            mapY
         );
         if (!createdCamp) {
             throw new ValidationError('캠핑장 등록에 실패하였습니다.', 400);
@@ -87,7 +91,9 @@ class CampsService {
         campSubImages,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         const findHostId = await this.campsRepository.findCampById(campId);
         if (!findHostId) {
@@ -117,7 +123,9 @@ class CampsService {
             campSubImages,
             campDesc,
             checkIn,
-            checkOut
+            checkOut,
+            mapX,
+            mapY
         );
     };
 

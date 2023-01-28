@@ -48,7 +48,9 @@ class CampsRepository {
         campAddress,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         const createdCamp = await this.#CampsModel.create({
             hostId,
@@ -59,6 +61,8 @@ class CampsRepository {
             campDesc,
             checkIn,
             checkOut,
+            mapX,
+            mapY,
         });
         const { campId } = createdCamp;
         await this.#CampAmenitiesModel.create({
@@ -98,7 +102,9 @@ class CampsRepository {
         campSubImages,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         return await this.#CampsModel.update(
             {
@@ -111,6 +117,8 @@ class CampsRepository {
                 campDesc,
                 checkIn,
                 checkOut,
+                mapX,
+                mapY,
             },
             {
                 where: {

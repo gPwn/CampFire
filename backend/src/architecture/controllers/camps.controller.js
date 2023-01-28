@@ -3,8 +3,8 @@ const {
     InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class');
 const request = require('request');
-const compServiceKey =
-    '0wh630HIIRsQ4fi3oOWYj6BTI1EDXefre764kxH5gGEpyY+MNAeFCQNKK1n96VZH7YHMIUf8gfsIWeLYOm9sRA==';
+const env = process.env;
+const compServiceKey = env.CAMPSERVISEKEY;
 
 class CampsController {
     constructor() {

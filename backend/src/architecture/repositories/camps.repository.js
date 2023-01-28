@@ -228,39 +228,6 @@ class CampsRepository {
             where: { campId },
         });
     };
-
-    getSiteLists = async (campId) => {
-        return await this.#SitesModel.findAll({
-            where: { campId },
-            attributes: [
-                'siteId',
-                'campId',
-                'siteName',
-                'sitePrice',
-                'siteMainImage',
-                'minPeople',
-                'maxPeople',
-                'roomCount',
-                'createdAt',
-                'updatedAt',
-            ],
-            order: [['sitePrice', 'ASC']],
-        });
-    };
-
-    getsiteById = async (campId, siteId) => {
-        return await this.#SitesModel.findOne({
-            where: {
-                [Op.and]: [{ campId, siteId }],
-            },
-            include: [
-                {
-                    model: this.#CampsModel,
-                    attributes: ['checkIn', 'checkOut'],
-                },
-            ],
-        });
-    };
 }
 
 module.exports = CampsRepository;

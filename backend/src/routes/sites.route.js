@@ -33,4 +33,11 @@ router.delete(
     authHostMiddleware,
     sitesController.deleteSite
 );
+
+//캠핑장 사이트 목록 조회
+router.get('/:campId/sites', sitesController.getSiteLists);
+
+//캠핑장 사이트 상세 조회
+router.get('/:campId/sites/:siteId', sitesController.getsiteById);
+
 module.exports = router;

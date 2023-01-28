@@ -29,10 +29,6 @@ router.get(
     likeConfirmUserHostMiddleware,
     campsController.getCampById
 );
-//캠핑장 사이트 목록 조회
-router.get('/:campId/sites', campsController.getSiteLists);
-//캠핑장 사이트 상세 조회
-router.get('/:campId/sites/:siteId', campsController.getsiteById);
 // 캠핑장 수정
 router.patch(
     '/:campId',

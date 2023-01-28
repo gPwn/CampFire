@@ -234,21 +234,15 @@ class CampsController {
 
 const postpublicAPI = (callback) => {
     let url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
-    let queryParams =
-        encodeURIComponent('MobileOS') + '=' + encodeURIComponent('WIN');
+    let queryParams = encodeURIComponent('MobileOS') + '=' + 'WIN';
 
+    queryParams += '&' + encodeURIComponent('MobileApp') + '=' + 'campfire';
     queryParams +=
         '&' +
-        encodeURIComponent('MobileApp') +
-        '=' +
-        encodeURIComponent('campfire');
-    queryParams +=
-        '&' +
-        encodeURIComponent('serviceKey') +
+        'serviceKey' +
         '=' +
         encodeURIComponent(compServiceKey); /*Service Key*/
-    queryParams +=
-        '&' + encodeURIComponent('_type') + '=' + encodeURIComponent('json');
+    queryParams += '&' + encodeURIComponent('_type') + '=' + 'json';
 
     request(
         {

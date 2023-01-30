@@ -68,7 +68,7 @@ class AuthsService {
                 phoneNumber,
                 provider
             ); */
-            return { email, profileImg, provider };
+            return { email, userName, profileImg, provider };
         }
         const accessToken = createUserToken(user.userId, '1h');
         const refreshToken = createUserToken('refreshToken', '1d');

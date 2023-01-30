@@ -7,12 +7,20 @@ class AuthsRepository {
         this.#userModel = UserModel;
     }
 
-    createUser = async (email, userName, profileImg, phoneNumber, provider) => {
+    createUser = async (
+        email,
+        userName,
+        password,
+        phoneNumber,
+        profileImg,
+        provider
+    ) => {
         const createUser = await this.#userModel.create({
             email,
             userName,
-            profileImg,
+            password,
             phoneNumber,
+            profileImg,
             provider,
         });
         return createUser;

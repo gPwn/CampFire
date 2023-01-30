@@ -196,6 +196,30 @@ class AuthsService {
 
         return { accessToken, refreshToken };
     };
+
+    signUp = async (
+        email,
+        userName,
+        password,
+        phoneNumber,
+        profileImg,
+        provider
+    ) => {
+        const user = await this.usersRepository.createUser(
+            email,
+            userName,
+            hashValue,
+            phoneNumber,
+            profileImg,
+            provider
+        );
+
+        const accessToken = createUserToken(user.userId, '1h');
+        const refreshToken = createUserToken('refreshToken', '1d');
+        await this.authsRepository.updateRefreshToken(refreshToken, email);
+
+        return { accessToken, refreshToken };
+    };
 }
 
 module.exports = AuthsService;

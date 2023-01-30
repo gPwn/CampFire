@@ -166,5 +166,47 @@ class AuthsController {
         Cache.del(phoneNumber);
         return res.status(201).json({ message: '인증성공!' });
     };
+
+    signUp = async (req, res) => {
+        try {
+            const {
+                email,
+                userName,
+                password,
+                phoneNumber,
+                profileImg,
+                provider,
+            } = req.body;
+
+            const { accessToken, refreshToken } =
+                await this.usersService.signUp(
+                    email,
+                    userName,
+                    password,
+                    phoneNumber,
+                    profileImg,
+                    provider
+                );
+
+            const { userId } = jwt.verify(
+                accessToken,
+                process.env.TOKEN_USER_SECRET_KEY
+            );
+            console.log(`accessToken = ${accessToken}`);
+
+            res.header({
+                accesstoken: `Bearer ${accessToken}`,
+                refreshtoken: `Bearer ${refreshToken}`,
+            });
+            res.status(200).json({
+                userId: userId,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                errorMessage: '회원가입에 실패하였습니다.',
+            });
+        }
+    };
 }
 module.exports = AuthsController;

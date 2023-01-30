@@ -145,6 +145,7 @@ class AuthsController {
 
     verifyCode = async (req, res) => {
         const { phoneNumber, verifyCode } = req.body;
+        console.log('verifyCode =======', phoneNumber, verifyCode);
 
         const CacheData = Cache.get(phoneNumber);
         if (!CacheData) {

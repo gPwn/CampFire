@@ -179,7 +179,7 @@ class AuthsController {
             } = req.body;
 
             const { accessToken, refreshToken } =
-                await this.usersService.signUp(
+                await this.authsService.signUp(
                     email,
                     userName,
                     password,

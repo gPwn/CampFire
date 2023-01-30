@@ -205,7 +205,7 @@ class AuthsService {
         profileImg,
         provider
     ) => {
-        const user = await this.usersRepository.createUser(
+        const user = await this.authsRepository.createUser(
             email,
             userName,
             hashValue,

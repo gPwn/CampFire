@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
 const Cache = require('memory-cache');
 const { createRandomNumber } = require('../../util/auth-encryption.util');
+const axios = require('axios');
 
 class AuthsController {
     authsService = new AuthsService();

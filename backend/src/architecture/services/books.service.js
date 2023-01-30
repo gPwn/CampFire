@@ -182,7 +182,6 @@ class BooksService {
             },
         });
 
-        console.log(book.cancelBooks);
         if (book.cancelBooks === true) {
             throw new InvalidParamsError('이미 유저가 취소한 예약내역입니다.');
         }

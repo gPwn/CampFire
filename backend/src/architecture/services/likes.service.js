@@ -47,7 +47,6 @@ class LikesService {
 
     getUserLikes = async (userId) => {
         const findLikesByUser = await this.likesRepository.findLikeByPk(userId);
-        console.log(findLikesByUser);
 
         return findLikesByUser.map((findLikeByUser) => {
             return {

@@ -236,55 +236,80 @@ class CampsRepository {
             where: { campId },
         });
     };
-
-    // 공공 api로 campupdate
-    createCampByPublicAPI = async (
-        hostId,
-        campMainImage,
-        campSubImages,
-        campName,
-        campAddress,
-        campDesc,
-        checkIn,
-        checkOut,
-        mapX,
-        mapY,
-        typeLists,
-        campAmenities,
-        envLists,
-        themeLists
-    ) => {
-        const createdCamp = await this.#CampsModel.create({
-            hostId,
-            campMainImage,
-            campSubImages,
-            campName,
-            campAddress,
-            campDesc,
-            checkIn,
-            checkOut,
-            mapX,
-            mapY,
-        });
-        const { campId } = createdCamp;
-        await this.#CampAmenitiesModel.create({
-            campId,
-            campAmenities: campAmenities,
-        });
-        await this.#EnvsModel.create({
-            campId,
-            envLists: envLists,
-        });
-        await this.#TypesModel.create({
-            campId,
-            typeLists: typeLists,
-        });
-        await this.#ThemesModel.create({
-            campId,
-            themeLists: themeLists,
-        });
-        return createdCamp;
-    };
 }
+
+const scheduler = require('node-schedule');
+const request = require('request');
+const env = process.env;
+const compServiceKey = env.CAMPSERVISEKEY;
+const { Camps, CampAmenities, Envs, Types, Themes } = require('../../models');
+
+let url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
+let queryParams = encodeURIComponent('MobileOS') + '=' + 'WIN';
+
+queryParams += '&' + encodeURIComponent('MobileApp') + '=' + 'campfire';
+queryParams +=
+    '&' +
+    'serviceKey' +
+    '=' +
+    encodeURIComponent(compServiceKey); /*Service Key*/
+queryParams += '&' + encodeURIComponent('_type') + '=' + 'json';
+const rule = '*/3 * * * * *';
+// const rule = '0 50 3 * * 1';
+const schedule = scheduler.scheduleJob(rule, function () {
+    request(
+        {
+            url: url + queryParams,
+            method: 'GET',
+            rejectUnauthorized: false,
+        },
+        async function (error, response, body) {
+            const obj = JSON.parse(body);
+            const data = obj.response.body.items.item;
+            console.log(data.length);
+
+            for (let i = 0; i < data.length; i++) {
+                if (typeof data[i] === undefined) continue;
+
+                // const isExistCampName = await Camps.findOne({
+                //     where: data[i].facltNm,
+                // });
+
+                // console.log(isExistCampName);
+
+                const createdCamp = await Camps.create({
+                    hostId: 0,
+                    campMainImage: data[i].firstImageUrl,
+                    campSubImages: null,
+                    campName: data[i].facltNm,
+                    campAddress: data[i].addr1,
+                    campDesc: data[i].intro,
+                    checkIn: '15:00:00',
+                    checkOut: '11:00:00',
+                    mapX: data[i].mapX,
+                    mapY: data[i].mapY,
+                });
+                const { campId } = createdCamp;
+                await CampAmenities.create({
+                    campId,
+                    campAmenities: data[i].sbrsCl,
+                });
+                await Envs.create({
+                    campId,
+                    envLists: data[i].posblFcltyCl,
+                });
+                await Types.create({
+                    campId,
+                    typeLists: data[i].induty,
+                });
+                await Themes.create({
+                    campId,
+                    themeLists: data[i].themaEnvrnCl,
+                });
+            }
+            console.log('저장 완료');
+        }
+    );
+});
 
 module.exports = CampsRepository;

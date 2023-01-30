@@ -7,7 +7,7 @@ const likeConfirmUserHostMiddleware = require('../middlewares/likeConfirmUserHos
 
 const CampsController = require('../architecture/controllers/camps.controller.js');
 const campsController = new CampsController();
-router.get('/test', campsController.postpublicAPI);
+
 // 캠핑장 등록
 router.post(
     '/',

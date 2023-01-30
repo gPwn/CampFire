@@ -274,43 +274,6 @@ class CampsService {
             themeLists
         );
     };
-
-    campListsUpdateBypublicApi = async (camps) => {
-        for (let camp of camps.item) {
-            const hostId = 0;
-            const campMainImage = camp.firstImageUrl;
-            const campSubImages = null;
-            const campName = camp.facltNm;
-            const campAddress = camp.addr1;
-            const campDesc = camp.intro;
-            const mapX = camp.mapX;
-            const mapY = camp.mapY;
-            const typeLists = camp.induty;
-            const campAmenities = camp.sbrsCl;
-            const envLists = camp.posblFcltyCl;
-            const themeLists = camp.themaEnvrnCl;
-            const checkIn = '15:00:00';
-            const checkOut = '11:00:00';
-
-            await this.campsRepository.createCampByPublicAPI(
-                hostId,
-                campMainImage,
-                campSubImages,
-                campName,
-                campAddress,
-                campDesc,
-                checkIn,
-                checkOut,
-                mapX,
-                mapY,
-                typeLists,
-                campAmenities,
-                envLists,
-                themeLists
-            );
-        }
-        return;
-    };
 }
 
 module.exports = CampsService;

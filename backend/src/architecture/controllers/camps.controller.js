@@ -2,9 +2,6 @@ const CampsService = require('../services/camps.service.js');
 const {
     InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class');
-const request = require('request');
-const env = process.env;
-const compServiceKey = env.CAMPSERVISEKEY;
 
 class CampsController {
     constructor() {
@@ -218,50 +215,6 @@ class CampsController {
             next(error);
         }
     };
-
-    //공공 캠핑장 api
-    postpublicAPI = async (req, res) => {
-        try {
-            postpublicAPI(async ({ camp } = {}) => {
-                const obj = JSON.parse(camp);
-                const camps = obj.response.body.items;
-
-                await this.campsService.campListsUpdateBypublicApi(camps);
-
-                res.status(201).json({
-                    message: '공공 API 캠핑장이 등록되었습니다.',
-                });
-            });
-        } catch (error) {
-            next(error);
-        }
-    };
 }
-
-const postpublicAPI = (callback) => {
-    let url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
-    let queryParams = encodeURIComponent('MobileOS') + '=' + 'WIN';
-
-    queryParams += '&' + encodeURIComponent('MobileApp') + '=' + 'campfire';
-    queryParams +=
-        '&' +
-        'serviceKey' +
-        '=' +
-        encodeURIComponent(compServiceKey); /*Service Key*/
-    queryParams += '&' + encodeURIComponent('_type') + '=' + 'json';
-
-    request(
-        {
-            url: url + queryParams,
-            method: 'GET',
-            rejectUnauthorized: false,
-        },
-        function (error, response, body) {
-            callback({
-                camp: body,
-            });
-        }
-    );
-};
 
 module.exports = CampsController;

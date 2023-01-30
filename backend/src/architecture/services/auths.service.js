@@ -208,7 +208,7 @@ class AuthsService {
         const user = await this.authsRepository.createUser(
             email,
             userName,
-            hashValue,
+            password,
             phoneNumber,
             profileImg,
             provider

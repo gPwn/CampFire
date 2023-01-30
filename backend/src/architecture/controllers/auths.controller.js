@@ -82,5 +82,16 @@ class AuthsController {
             res.status(400).json({ errorMessage: '구글 로그인 실패' });
         }
     };
+
+    sendMessage = async (req, res) => {
+        try {
+            const phoneNumber = req.params;
+            await this.authsService.sendMessage(phoneNumber);
+            return res.status(200).json({ message: '인증번호 발송됨!' });
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({ errorMessage: '인증번호 발송 실패' });
+        }
+    };
 }
 module.exports = AuthsController;

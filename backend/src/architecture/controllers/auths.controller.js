@@ -86,6 +86,7 @@ class AuthsController {
     sendMessage = async (req, res) => {
         try {
             const phoneNumber = req.params;
+            console.log('params = ', phoneNumber);
             await this.authsService.sendMessage(phoneNumber);
             return res.status(200).json({ message: '인증번호 발송됨!' });
         } catch (error) {

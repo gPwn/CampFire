@@ -200,6 +200,7 @@ class AuthsService {
     };
 
     sendMessage = async (phoneNumber) => {
+        console.log('phoneNumber 타입 뭐야?', typeof phoneNumber);
         const tel = phoneNumber.split('-').join('');
         const verificationCode = createRandomNumber();
         const date = Date.now().toString();

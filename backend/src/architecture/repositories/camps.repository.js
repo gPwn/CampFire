@@ -248,7 +248,7 @@ const compServiceKey = env.CAMPSERVISEKEY;
 const { Camps, CampAmenities, Envs, Types, Themes } = require('../../models');
 
 let url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
-let queryParams = encodeURIComponent('numOfRows') + '=' + 350;
+let queryParams = encodeURIComponent('numOfRows') + '=' + 200;
 
 queryParams += '&' + encodeURIComponent('pageNo') + '=' + 1;
 queryParams += '&' + encodeURIComponent('MobileOS') + '=' + 'WIN';

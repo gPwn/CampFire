@@ -148,6 +148,7 @@ class AuthsController {
         console.log('verifyCode =======', phoneNumber, verifyCode);
 
         const CacheData = Cache.get(phoneNumber);
+        console.log(CacheData);
         if (!CacheData) {
             return res
                 .status(400)

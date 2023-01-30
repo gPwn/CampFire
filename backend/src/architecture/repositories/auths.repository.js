@@ -18,9 +18,9 @@ class AuthsRepository {
         return createUser;
     };
 
-    findOneUserByEmail = async (email) => {
+    findOneUserBySnsId = async (snsId) => {
         return await this.#userModel.findOne({
-            where: { email },
+            where: { snsId },
             attributes: { exclude: ['password'] },
         });
     };

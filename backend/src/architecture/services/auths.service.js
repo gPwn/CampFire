@@ -36,6 +36,8 @@ class AuthsService {
             },
         });
 
+        console.log('=================', resultGet.data);
+
         const email = resultGet.data.kakao_account['email'];
         const userName = resultGet.data.properties['nickname'];
         const profileImg = resultGet.data.properties['profile_image'];

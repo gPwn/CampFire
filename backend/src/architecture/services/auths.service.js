@@ -3,10 +3,8 @@ const AuthsRepository = require('../repositories/auths.repository.js');
 const axios = require('axios');
 const { Users } = require('../../models');
 require('dotenv').config();
-const { hash, createRandomNumber } = require('../../util/auth-encryption.util');
 const { createUserToken } = require('../../util/auth-jwtToken.util.js');
 const { ValidationError } = require('../../middlewares/exceptions/error.class');
-const CryptoJS = require('crypto-js');
 
 class AuthsService {
     authsRepository = new AuthsRepository(Users);
@@ -197,53 +195,6 @@ class AuthsService {
         await this.authsRepository.updateRefreshToken(refreshToken, email);
 
         return { accessToken, refreshToken };
-    };
-
-    sendMessage = async (phoneNumber) => {
-        console.log('phoneNumber 타입 뭐야?', typeof phoneNumber);
-        const tel = phoneNumber.split('-').join('');
-        const verificationCode = createRandomNumber();
-        const date = Date.now().toString();
-
-        const method = 'POST';
-        const space = ' ';
-        const newLine = '\n';
-        const url = `https://sens.apigw.ntruss.com/sms/v2/services/${process.env.SMS_API_KEY}/messages`;
-        const url2 = `/sms/v2/services/${process.env.SMS_API_KEY}/messages`;
-
-        const hmac = CryptoJS.algo.HMAC.create(
-            CryptoJS.algo.SHA256,
-            process.env.SMS_SECRET_KEY
-        );
-        hmac.update(method);
-        hmac.update(space);
-        hmac.update(url2);
-        hmac.update(newLine);
-        hmac.update(date);
-        hmac.update(newLine);
-        hmac.update(process.env.SMS_ACCESS_KEY);
-        const hash = hmac.finalize();
-        const signature = hash.toString(CryptoJS.enc.Base64);
-
-        const smsRes = await axios({
-            method: method,
-            url: url,
-            headers: {
-                'Contenc-type': 'application/json; charset=utf-8',
-                'x-ncp-iam-access-key': process.env.SMS_ACCESS_KEY,
-                'x-ncp-apigw-timestamp': date,
-                'x-ncp-apigw-signature-v2': signature,
-            },
-            data: {
-                type: 'SMS',
-                countryCode: '82',
-                from: '01066307548',
-                content: `인증번호는 [${verificationCode}] 입니다.`,
-                messages: [{ to: `${tel}` }],
-            },
-        });
-
-        console.log('문자보내짐?!!', smsRes.data);
     };
 }
 

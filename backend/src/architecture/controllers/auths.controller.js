@@ -1,5 +1,8 @@
 const AuthsService = require('../services/auths.service.js');
 const jwt = require('jsonwebtoken');
+const CryptoJS = require('crypto-js');
+const Cache = require('memory-cache');
+const { createRandomNumber } = require('../../util/auth-encryption.util');
 
 class AuthsController {
     authsService = new AuthsService();
@@ -86,13 +89,77 @@ class AuthsController {
     sendMessage = async (req, res) => {
         try {
             const { phoneNumber } = req.params;
-            console.log('params = ', phoneNumber);
-            await this.authsService.sendMessage(phoneNumber);
-            return res.status(200).json({ message: '인증번호 발송됨!' });
+            const tel = phoneNumber.split('-').join('');
+            const verificationCode = createRandomNumber();
+            const date = Date.now().toString();
+
+            Cache.del(tel);
+            Cache.put(tel, verificationCode);
+
+            const method = 'POST';
+            const space = ' ';
+            const newLine = '\n';
+            const url = `https://sens.apigw.ntruss.com/sms/v2/services/${process.env.SMS_API_KEY}/messages`;
+            const url2 = `/sms/v2/services/${process.env.SMS_API_KEY}/messages`;
+
+            const hmac = CryptoJS.algo.HMAC.create(
+                CryptoJS.algo.SHA256,
+                process.env.SMS_SECRET_KEY
+            );
+            hmac.update(method);
+            hmac.update(space);
+            hmac.update(url2);
+            hmac.update(newLine);
+            hmac.update(date);
+            hmac.update(newLine);
+            hmac.update(process.env.SMS_ACCESS_KEY);
+            const hash = hmac.finalize();
+            const signature = hash.toString(CryptoJS.enc.Base64);
+
+            const smsRes = await axios({
+                method: method,
+                url: url,
+                headers: {
+                    'Contenc-type': 'application/json; charset=utf-8',
+                    'x-ncp-iam-access-key': process.env.SMS_ACCESS_KEY,
+                    'x-ncp-apigw-timestamp': date,
+                    'x-ncp-apigw-signature-v2': signature,
+                },
+                data: {
+                    type: 'SMS',
+                    countryCode: '82',
+                    from: '01066307548',
+                    content: `인증번호는 [${verificationCode}] 입니다.`,
+                    messages: [{ to: `${tel}` }],
+                },
+            });
+
+            console.log('문자보내짐?!!', smsRes.data);
         } catch (error) {
+            Cache.del(tel);
             console.log(error);
             res.status(400).json({ errorMessage: '인증번호 발송 실패' });
         }
+    };
+
+    verifyCode = async (req, res) => {
+        const { phoneNumber, verifyCode } = req.body;
+
+        const CacheData = Cache.get(phoneNumber);
+        if (!CacheData) {
+            return res
+                .status(400)
+                .json({ errorMessage: '인증번호를 다시 요청해주세요.' });
+        }
+
+        if (CacheData !== verifyCode) {
+            return res
+                .status(400)
+                .json({ errorMessage: '인증번호를 다시 요청해주세요.' });
+        }
+
+        Cache.del(phoneNumber);
+        return res.status(201).json({ message: '인증성공!' });
     };
 }
 module.exports = AuthsController;

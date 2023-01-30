@@ -10,5 +10,5 @@ router.get('/kakao', authLoginUserMiddleware, authsController.loginKakao);
 router.get('/naver', authLoginUserMiddleware, authsController.loginNaver);
 router.get('/google', authLoginUserMiddleware, authsController.loginGoogle);
 router.get('/sms/:phoneNumber', authsController.sendMessage);
-
+router.post('/sms/verify', authsController.verifyCode);
 module.exports = router;

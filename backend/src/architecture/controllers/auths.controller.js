@@ -7,22 +7,25 @@ class AuthsController {
     loginKakao = async (req, res) => {
         try {
             let code = req.query.code;
-            const { accessToken, refreshToken } =
-                await this.authsService.loginKakao(code);
+            const result = await this.authsService.loginKakao(code);
 
-            const { userId } = jwt.verify(
-                accessToken,
-                process.env.TOKEN_USER_SECRET_KEY
-            );
-            console.log(`accessToken = ${accessToken}`);
+            if (result.accessToken && result.refreshToken) {
+                const { userId } = jwt.verify(
+                    accessToken,
+                    process.env.TOKEN_USER_SECRET_KEY
+                );
+                console.log(`accessToken = ${accessToken}`);
 
-            res.header({
-                accesstoken: `Bearer ${accessToken}`,
-                refreshtoken: `Bearer ${refreshToken}`,
-            });
-            res.status(200).json({
-                userId: userId,
-            });
+                res.header({
+                    accesstoken: `Bearer ${accessToken}`,
+                    refreshtoken: `Bearer ${refreshToken}`,
+                });
+                res.status(200).json({
+                    userId: userId,
+                });
+            } else {
+                res.status(200).json({ user: result });
+            }
         } catch (error) {
             console.log(error);
             res.status(400).json({ errorMessage: '로그인 실패' });

@@ -41,6 +41,7 @@ class AuthsService {
         const profileImg = resultGet.data.properties['profile_image'];
         const phoneNumber = '';
         const provider = 'kakao';
+        const snsId = resultGet.data.id;
 
         if (!email || !userName)
             throw new ValidationError(
@@ -48,7 +49,7 @@ class AuthsService {
                 400
             );
 
-        let user = await this.authsRepository.findOneUserByEmail(email);
+        let user = await this.authsRepository.findOneUserBySnsId(snsId);
 
         if (user && user.provider !== provider) {
             throw new ValidationError(
@@ -58,13 +59,14 @@ class AuthsService {
         }
 
         if (!user) {
-            user = await this.authsRepository.createUser(
+            /* user = await this.authsRepository.createUser(
                 email,
                 userName,
                 profileImg,
                 phoneNumber,
                 provider
-            );
+            ); */
+            return resultGet.data;
         }
         const accessToken = createUserToken(user.userId, '1h');
         const refreshToken = createUserToken('refreshToken', '1d');

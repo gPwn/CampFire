@@ -13,7 +13,8 @@ class AuthsRepository {
         password,
         phoneNumber,
         profileImg,
-        provider
+        provider,
+        snsId
     ) => {
         const createUser = await this.#userModel.create({
             email,
@@ -22,6 +23,7 @@ class AuthsRepository {
             phoneNumber,
             profileImg,
             provider,
+            snsId,
         });
         return createUser;
     };

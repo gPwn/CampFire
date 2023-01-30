@@ -42,6 +42,7 @@ class AuthsService {
         const phoneNumber = '';
         const provider = 'kakao';
         const snsId = resultGet.data.id;
+        console.log('typeof snsId = ', snsId);
 
         if (!email || !userName)
             throw new ValidationError(
@@ -66,7 +67,7 @@ class AuthsService {
                 phoneNumber,
                 provider
             ); */
-            return { email, userName, profileImg, provider };
+            return { email, userName, profileImg, snsId, provider };
         }
         const accessToken = createUserToken(user.userId, '1h');
         const refreshToken = createUserToken('refreshToken', '1d');
@@ -203,7 +204,8 @@ class AuthsService {
         password,
         phoneNumber,
         profileImg,
-        provider
+        provider,
+        snsId
     ) => {
         const user = await this.authsRepository.createUser(
             email,
@@ -211,7 +213,8 @@ class AuthsService {
             password,
             phoneNumber,
             profileImg,
-            provider
+            provider,
+            snsId
         );
 
         const accessToken = createUserToken(user.userId, '1h');

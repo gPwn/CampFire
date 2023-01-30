@@ -176,6 +176,7 @@ class AuthsController {
                 phoneNumber,
                 profileImg,
                 provider,
+                snsId,
             } = req.body;
 
             const { accessToken, refreshToken } =
@@ -185,7 +186,8 @@ class AuthsController {
                     password,
                     phoneNumber,
                     profileImg,
-                    provider
+                    provider,
+                    snsId
                 );
 
             const { userId } = jwt.verify(

@@ -101,6 +101,9 @@ module.exports = (sequelize, DataTypes) => {
             mapY: {
                 type: DataTypes.STRING,
             },
+            homepage: {
+                type: DataTypes.STRING,
+            },
             createdAt: {
                 allowNull: false,
                 type: DataTypes.DATE,

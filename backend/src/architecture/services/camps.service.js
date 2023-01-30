@@ -253,6 +253,7 @@ class CampsService {
             likeStatus: likeStatus,
             mapX: camp.mapX,
             mapY: camp.mapY,
+            homepage: camp.homepage,
             createdAt: camp.createdAt,
             updatedAt: camp.updatedAt,
         };

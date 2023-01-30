@@ -136,6 +136,7 @@ class AuthsController {
             });
 
             console.log('문자보내짐?!!', smsRes.data);
+            res.status(200).json({ message: '인증번호 발송 완료!' });
         } catch (error) {
             Cache.del(tel);
             console.log(error);

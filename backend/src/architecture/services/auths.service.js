@@ -210,6 +210,10 @@ class AuthsService {
 
         return { accessToken, refreshToken };
     };
+
+    findDupPhone = async (phoneNumber) => {
+        return await this.authsRepository.findOneUserByPhone(phoneNumber);
+    };
 }
 
 module.exports = AuthsService;

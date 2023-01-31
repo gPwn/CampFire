@@ -35,6 +35,13 @@ class AuthsRepository {
         });
     };
 
+    findOneUserByPhone = async (phoneNumber) => {
+        return await this.#userModel.findOne({
+            where: { phoneNumber },
+            attributes: { exclude: ['password'] },
+        });
+    };
+
     updateRefreshToken = async (token, email) => {
         await this.#userModel.update({ token }, { where: { email: email } });
     };

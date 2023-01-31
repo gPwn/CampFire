@@ -52,12 +52,7 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserBySnsId(snsId);
 
-        let findDup = await this.authsRepository.findDupUserByEmail(
-            email,
-            snsId
-        );
-
-        if (findDup) {
+        if (user && user.provider !== provider) {
             throw new ValidationError(
                 '다른 소셜사이트로 가입된 이메일이 존재합니다.',
                 400

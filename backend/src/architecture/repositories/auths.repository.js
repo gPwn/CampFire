@@ -35,13 +35,6 @@ class AuthsRepository {
         });
     };
 
-    findDupUserByEmail = async (email, snsId) => {
-        return await this.#userModel.findOne({
-            where: { [Op.and]: [{ email }, { snsId }] },
-            attributes: { exclude: ['password'] },
-        });
-    };
-
     updateRefreshToken = async (token, email) => {
         await this.#userModel.update({ token }, { where: { email: email } });
     };

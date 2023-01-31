@@ -92,10 +92,13 @@ class AuthsService {
                 headers: { Authorization: 'Bearer ' + token },
             }
         );
+
+        console.log('=================', info_result.data.response);
+
         const email = info_result.data.response.email;
         const userName = info_result.data.response.name;
         const profileImg = info_result.data.response.profile_image;
-        const phoneNumber = info_result.data.response.mobile;
+        const phoneNumber = '';
         const provider = 'naver';
 
         let user = await this.authsRepository.findOneUserByEmail(email);

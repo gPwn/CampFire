@@ -121,9 +121,4 @@ const publicAPI = scheduler.scheduleJob(rule, function () {
     );
 });
 
-// const rule = '*/3 * * * * *';
-// const publicAPI = scheduler.scheduleJob(rule, function () {
-//     console.log('test');
-// });
-
 module.exports = publicAPI;

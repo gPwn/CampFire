@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors(corsOption));
 app.use('/api', routes);
 
-require('./modules/publicAIP.js');
+require('./modules/publicAPI.js');
 
 const ErrorHandler = require('./middlewares/error.handler.middleware');
 app.use(ErrorHandler);

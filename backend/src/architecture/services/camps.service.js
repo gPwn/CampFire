@@ -52,7 +52,9 @@ class CampsService {
         campAddress,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         const isExistValue = await this.campsRepository.getIsExistValue(
             campName,
@@ -70,7 +72,9 @@ class CampsService {
             campAddress,
             campDesc,
             checkIn,
-            checkOut
+            checkOut,
+            mapX,
+            mapY
         );
         if (!createdCamp) {
             throw new ValidationError('캠핑장 등록에 실패하였습니다.', 400);
@@ -87,7 +91,9 @@ class CampsService {
         campSubImages,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         const findHostId = await this.campsRepository.findCampById(campId);
         if (!findHostId) {
@@ -117,7 +123,9 @@ class CampsService {
             campSubImages,
             campDesc,
             checkIn,
-            checkOut
+            checkOut,
+            mapX,
+            mapY
         );
     };
 
@@ -176,7 +184,10 @@ class CampsService {
                     campName: camp.campName,
                     campAddress: camp.campAddress,
                     campMainImage: camp.campMainImage,
-                    campSubImages: camp.campSubImages.split(','),
+                    campSubImages:
+                        camp.campSubImages === null
+                            ? null
+                            : camp.campSubImages.split(','),
                     campDesc: camp.campDesc,
                     typeLists:
                         camp.Types[0].typeLists === null
@@ -186,6 +197,8 @@ class CampsService {
                     checkOut: camp.checkOut,
                     likes: camp.likes,
                     likeStatus: likeStatus,
+                    mapX: camp.mapX,
+                    mapY: camp.mapY,
                     countReviews: camp.Reviews.length,
                     createdAt: camp.createdAt,
                     updatedAt: camp.updatedAt,
@@ -223,9 +236,13 @@ class CampsService {
             campName: camp.campName,
             campAddress: camp.campAddress,
             campMainImage: camp.campMainImage,
-            campSubImages: camp.campSubImages.split(','),
+            campSubImages:
+                camp.campSubImages === null
+                    ? null
+                    : camp.campSubImages.split(','),
             campDesc: camp.campDesc,
-            phoneNumber: camp.Host.phoneNumber,
+            phoneNumber:
+                camp.Host.phoneNumber === null ? null : camp.Host.phoneNumber,
             campAmenities:
                 campAmenities === null ? null : campAmenities.split(','),
             envLists: envLists === null ? null : envLists.split(','),
@@ -234,57 +251,14 @@ class CampsService {
             checkIn: camp.checkIn,
             checkOut: camp.checkOut,
             likeStatus: likeStatus,
+            mapX: camp.mapX,
+            mapY: camp.mapY,
+            homepage: camp.homepage,
             createdAt: camp.createdAt,
             updatedAt: camp.updatedAt,
         };
     };
 
-    //캠핑장 사이트 목록 조회
-    getSiteLists = async (campId) => {
-        const camp = await this.campsRepository.findCampById(campId);
-        if (!camp) {
-            throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
-        }
-
-        return await this.campsRepository.getSiteLists(campId);
-    };
-
-    //캠핑장 사이트 상세 조회
-    getsiteById = async (campId, siteId) => {
-        const camp = await this.campsRepository.findCampById(campId);
-        if (!camp) {
-            throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
-        }
-
-        const site = await this.campsRepository.getsiteById(campId, siteId);
-        if (!site) {
-            throw new InvalidParamsError(
-                '존재하지 않는 캠핑장 사이트입니다.',
-                404
-            );
-        }
-        const { typeLists } = await this.campsRepository.findtypeList(campId);
-
-        return {
-            siteId: site.siteId,
-            campId: site.campId,
-            hostId: site.hostId,
-            siteName: site.siteName,
-            siteInfo: site.siteInfo,
-            siteDesc: site.siteDesc,
-            sitePrice: site.sitePrice,
-            siteMainImage: site.siteMainImage,
-            siteSubImages: site.siteSubImages.split(','),
-            minPeople: site.minPeople,
-            maxPeople: site.maxPeople,
-            roomCount: site.roomCount,
-            checkIn: site.Camp.checkIn,
-            checkOut: site.Camp.checkOut,
-            typeLists: typeLists === null ? null : typeLists.split(','),
-            createdAt: site.createdAt,
-            updatedAt: site.updatedAt,
-        };
-    };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (
         campId,

@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             hostId: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'Hosts',
                     key: 'hostId',
@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             campSubImages: {
                 type: DataTypes.STRING(2000),
-                allowNull: false,
+                allowNull: true,
             },
             campDesc: {
                 type: DataTypes.TEXT,
@@ -94,6 +94,15 @@ module.exports = (sequelize, DataTypes) => {
             likes: {
                 type: DataTypes.INTEGER,
                 defaultValue: 0,
+            },
+            mapX: {
+                type: DataTypes.STRING,
+            },
+            mapY: {
+                type: DataTypes.STRING,
+            },
+            homepage: {
+                type: DataTypes.STRING,
             },
             createdAt: {
                 allowNull: false,

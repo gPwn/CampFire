@@ -40,3 +40,4 @@ services:
             SMS_API_KEY: $SMS_API_KEY
             SMS_ACCESS_KEY: $SMS_ACCESS_KEY
             SMS_SECRET_KEY: $SMS_SECRET_KEY
+            CAMPSERVISEKEY: $CAMPSERVISEKEY

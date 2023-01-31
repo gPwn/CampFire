@@ -11,7 +11,7 @@ module.exports = {
             },
             hostId: {
                 type: Sequelize.DataTypes.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'Hosts',
                     key: 'hostId',
@@ -34,7 +34,7 @@ module.exports = {
             },
             campSubImages: {
                 type: Sequelize.DataTypes.STRING(2000),
-                allowNull: false,
+                allowNull: true,
             },
             campDesc: {
                 type: Sequelize.DataTypes.TEXT,
@@ -51,6 +51,15 @@ module.exports = {
             likes: {
                 type: Sequelize.DataTypes.INTEGER,
                 defaultValue: 0,
+            },
+            mapX: {
+                type: Sequelize.DataTypes.STRING,
+            },
+            mapY: {
+                type: Sequelize.DataTypes.STRING,
+            },
+            homepage: {
+                type: Sequelize.DataTypes.STRING,
             },
             createdAt: {
                 allowNull: false,

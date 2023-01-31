@@ -48,7 +48,9 @@ class CampsRepository {
         campAddress,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         const createdCamp = await this.#CampsModel.create({
             hostId,
@@ -59,6 +61,8 @@ class CampsRepository {
             campDesc,
             checkIn,
             checkOut,
+            mapX,
+            mapY,
         });
         const { campId } = createdCamp;
         await this.#CampAmenitiesModel.create({
@@ -98,7 +102,9 @@ class CampsRepository {
         campSubImages,
         campDesc,
         checkIn,
-        checkOut
+        checkOut,
+        mapX,
+        mapY
     ) => {
         return await this.#CampsModel.update(
             {
@@ -111,6 +117,8 @@ class CampsRepository {
                 campDesc,
                 checkIn,
                 checkOut,
+                mapX,
+                mapY,
             },
             {
                 where: {
@@ -188,7 +196,10 @@ class CampsRepository {
                     attributes: ['reviewId'],
                 },
             ],
-            order: [['createdAt', 'DESC']],
+            order: [
+                ['hostId', 'DESC'],
+                ['likes', 'DESC'],
+            ],
         });
         if (camps.length === 0) {
             return false;
@@ -226,39 +237,6 @@ class CampsRepository {
     findThemeLists = async (campId) => {
         return await this.#ThemesModel.findOne({
             where: { campId },
-        });
-    };
-
-    getSiteLists = async (campId) => {
-        return await this.#SitesModel.findAll({
-            where: { campId },
-            attributes: [
-                'siteId',
-                'campId',
-                'siteName',
-                'sitePrice',
-                'siteMainImage',
-                'minPeople',
-                'maxPeople',
-                'roomCount',
-                'createdAt',
-                'updatedAt',
-            ],
-            order: [['sitePrice', 'ASC']],
-        });
-    };
-
-    getsiteById = async (campId, siteId) => {
-        return await this.#SitesModel.findOne({
-            where: {
-                [Op.and]: [{ campId, siteId }],
-            },
-            include: [
-                {
-                    model: this.#CampsModel,
-                    attributes: ['checkIn', 'checkOut'],
-                },
-            ],
         });
     };
 }

@@ -2,7 +2,6 @@ const CampsService = require('../services/camps.service.js');
 const {
     InvalidParamsError,
 } = require('../../middlewares/exceptions/error.class');
-const { urlencoded } = require('express');
 
 class CampsController {
     constructor() {
@@ -11,8 +10,15 @@ class CampsController {
     // 캠핑장 업로드
     createCamp = async (req, res, next) => {
         try {
-            const { campName, campAddress, campDesc, checkIn, checkOut } =
-                req.body;
+            const {
+                campName,
+                campAddress,
+                campDesc,
+                checkIn,
+                checkOut,
+                mapX,
+                mapY,
+            } = req.body;
 
             const { hostId } = res.locals;
             let campMainImage;
@@ -32,7 +38,9 @@ class CampsController {
                 !campAddress ||
                 !campDesc ||
                 !checkIn ||
-                !checkOut
+                !checkOut ||
+                !mapX ||
+                !mapY
             ) {
                 throw new InvalidParamsError();
             }
@@ -44,7 +52,9 @@ class CampsController {
                 campAddress,
                 campDesc,
                 checkIn,
-                checkOut
+                checkOut,
+                mapX,
+                mapY
             );
             res.status(201).json({
                 message: '캠핑장이 등록되었습니다.',
@@ -57,8 +67,15 @@ class CampsController {
     // 캠핑장 수정
     updateCamps = async (req, res, next) => {
         try {
-            const { campName, campAddress, campDesc, checkIn, checkOut } =
-                req.body;
+            const {
+                campName,
+                campAddress,
+                campDesc,
+                checkIn,
+                checkOut,
+                mapX,
+                mapY,
+            } = req.body;
 
             const { hostId } = res.locals;
             const { campId } = req.params;
@@ -85,7 +102,9 @@ class CampsController {
                 campSubImages,
                 campDesc,
                 checkIn,
-                checkOut
+                checkOut,
+                mapX,
+                mapY
             );
 
             res.status(201).json({
@@ -156,46 +175,6 @@ class CampsController {
         }
     };
 
-    // 유저 라이트 캠핑장 조회
-    getLikeById = async (req, res, next) => {
-        try {
-            const { campId } = req.params;
-            const { userId } = res.locals;
-
-            const camp = await this.campsService.findCampById(campId, userId);
-
-            res.status(200).json({ camp: camp });
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    //캠핑장 사이트 목록 조회
-    getSiteLists = async (req, res, next) => {
-        try {
-            const { campId } = req.params;
-
-            const sites = await this.campsService.getSiteLists(campId);
-
-            res.status(200).json({ sites });
-        } catch (error) {
-            next(error);
-        }
-    };
-
-    //캠핑장 사이트 상세 조회
-    getsiteById = async (req, res, next) => {
-        try {
-            const { campId } = req.params;
-            const { siteId } = req.params;
-
-            const site = await this.campsService.getsiteById(campId, siteId);
-
-            res.status(200).json({ site });
-        } catch (error) {
-            next(error);
-        }
-    };
     // 캠핑장 키워드 체크박스 수정
     updateKeyword = async (req, res, next) => {
         try {

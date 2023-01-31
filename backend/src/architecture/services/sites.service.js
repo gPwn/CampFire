@@ -1,4 +1,5 @@
 const SitesRepository = require('../repositories/sites.repository.js');
+const CampsRepository = require('../repositories/camps.repository.js');
 const {
     ValidationError,
     InvalidParamsError,
@@ -15,6 +16,8 @@ const {
     Envs,
     Types,
     Themes,
+    Likes,
+    Reviews,
 } = require('../../models');
 const { deleteImage } = require('../../modules/campImg');
 const {
@@ -34,6 +37,19 @@ class SitesService {
             Envs,
             Types,
             Themes
+        );
+        this.campsRepository = new CampsRepository(
+            Books,
+            Camps,
+            Hosts,
+            Users,
+            Sites,
+            CampAmenities,
+            Envs,
+            Types,
+            Themes,
+            Likes,
+            Reviews
         );
     }
     // 캠핑장 사이트 등록
@@ -159,6 +175,53 @@ class SitesService {
         }
 
         await this.sitesRepository.deleteSite(campId, siteId, hostId);
+    };
+
+    //캠핑장 사이트 목록 조회
+    getSiteLists = async (campId) => {
+        const camp = await this.campsRepository.findCampById(campId);
+        if (!camp) {
+            throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
+        }
+
+        return await this.sitesRepository.getSiteLists(campId);
+    };
+
+    //캠핑장 사이트 상세 조회
+    getsiteById = async (campId, siteId) => {
+        const camp = await this.campsRepository.findCampById(campId);
+        if (!camp) {
+            throw new InvalidParamsError('존재하지 않는 캠핑장입니다.', 404);
+        }
+
+        const site = await this.sitesRepository.getsiteById(campId, siteId);
+        if (!site) {
+            throw new InvalidParamsError(
+                '존재하지 않는 캠핑장 사이트입니다.',
+                404
+            );
+        }
+        const { typeLists } = await this.campsRepository.findtypeList(campId);
+
+        return {
+            siteId: site.siteId,
+            campId: site.campId,
+            hostId: site.hostId,
+            siteName: site.siteName,
+            siteInfo: site.siteInfo,
+            siteDesc: site.siteDesc,
+            sitePrice: site.sitePrice,
+            siteMainImage: site.siteMainImage,
+            siteSubImages: site.siteSubImages.split(','),
+            minPeople: site.minPeople,
+            maxPeople: site.maxPeople,
+            roomCount: site.roomCount,
+            checkIn: site.Camp.checkIn,
+            checkOut: site.Camp.checkOut,
+            typeLists: typeLists === null ? null : typeLists.split(','),
+            createdAt: site.createdAt,
+            updatedAt: site.updatedAt,
+        };
     };
 }
 

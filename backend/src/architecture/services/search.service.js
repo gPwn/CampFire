@@ -84,6 +84,8 @@ class SearchService {
                             : searchList.Types[0].typeLists.split(','),
                     likes: searchList.likes,
                     likeStatus: likeStatus,
+                    mapX: searchList.mapX,
+                    mapY: searchList.mapY,
                     countReviews: searchList.Reviews.length,
                     createdAt: searchList.createdAt,
                     updatedAt: searchList.updatedAt,

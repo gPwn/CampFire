@@ -52,7 +52,10 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserBySnsId(snsId);
 
-        let findDup = await this.authsRepository.findOneUserByEmail(email);
+        let findDup = await this.authsRepository.findDupUserByEmail(
+            email,
+            snsId
+        );
 
         if (findDup) {
             throw new ValidationError(

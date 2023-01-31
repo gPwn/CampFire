@@ -97,6 +97,15 @@ class AuthsController {
     sendMessage = async (req, res) => {
         try {
             const { phoneNumber } = req.params;
+
+            const user = await this.authsService.findDupPhone(phoneNumber);
+
+            if (user) {
+                return res.status(412).json({
+                    errorMessage: '이미 사용되고 있는 핸드폰 번호입니다.',
+                });
+            }
+
             const tel = phoneNumber.split('-').join('');
             const verificationCode = createRandomNumber();
             const date = Date.now().toString();

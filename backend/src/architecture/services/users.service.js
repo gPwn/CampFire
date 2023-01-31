@@ -1,7 +1,7 @@
 const UsersRepository = require('../repositories/users.repository');
 const { Users } = require('../../models');
 require('dotenv').config();
-const hash = require('../../util/auth-encryption.util');
+const { hash } = require('../../util/auth-encryption.util');
 const { createUserToken } = require('../../util/auth-jwtToken.util.js');
 
 class UsersService {

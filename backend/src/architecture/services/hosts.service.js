@@ -1,7 +1,7 @@
 const HostsRepository = require('../repositories/hosts.repository');
 const { Hosts, Camps } = require('../../models');
 require('dotenv').config();
-const hash = require('../../util/auth-encryption.util');
+const { hash } = require('../../util/auth-encryption.util');
 const { createHostToken } = require('../../util/auth-jwtToken.util.js');
 
 class HostsService {

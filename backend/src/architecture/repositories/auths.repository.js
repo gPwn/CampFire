@@ -7,20 +7,30 @@ class AuthsRepository {
         this.#userModel = UserModel;
     }
 
-    createUser = async (email, userName, profileImg, phoneNumber, provider) => {
+    createUser = async (
+        email,
+        userName,
+        password,
+        phoneNumber,
+        profileImg,
+        provider,
+        snsId
+    ) => {
         const createUser = await this.#userModel.create({
             email,
             userName,
-            profileImg,
+            password,
             phoneNumber,
+            profileImg,
             provider,
+            snsId,
         });
         return createUser;
     };
 
-    findOneUserByEmail = async (email) => {
+    findOneUserBySnsId = async (snsId) => {
         return await this.#userModel.findOne({
-            where: { email },
+            where: { snsId },
             attributes: { exclude: ['password'] },
         });
     };

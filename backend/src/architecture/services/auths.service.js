@@ -42,7 +42,7 @@ class AuthsService {
         const phoneNumber = '';
         const provider = 'kakao';
         const snsId = resultGet.data.id;
-        console.log('typeof snsId = ', snsId);
+        console.log('typeof snsId = ', typeof snsId);
 
         if (!email || !userName)
             throw new ValidationError(
@@ -52,7 +52,9 @@ class AuthsService {
 
         let user = await this.authsRepository.findOneUserBySnsId(snsId);
 
-        if (user && user.provider !== provider) {
+        let findDup = await this.authsRepository.findOneUserByEmail(user.email);
+
+        if (findDup) {
             throw new ValidationError(
                 '다른 소셜사이트로 가입된 이메일이 존재합니다.',
                 400
@@ -60,13 +62,6 @@ class AuthsService {
         }
 
         if (!user) {
-            /* user = await this.authsRepository.createUser(
-                email,
-                userName,
-                profileImg,
-                phoneNumber,
-                provider
-            ); */
             return { email, userName, profileImg, snsId, provider };
         }
         const accessToken = createUserToken(user.userId, '1h');

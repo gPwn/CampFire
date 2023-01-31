@@ -35,6 +35,13 @@ class AuthsRepository {
         });
     };
 
+    findOneUserByEmail = async (email) => {
+        return await this.#userModel.findOne({
+            where: { email },
+            attributes: { exclude: ['password'] },
+        });
+    };
+
     updateRefreshToken = async (token, email) => {
         await this.#userModel.update({ token }, { where: { email: email } });
     };

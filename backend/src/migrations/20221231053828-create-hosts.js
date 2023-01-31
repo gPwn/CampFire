@@ -12,25 +12,25 @@ module.exports = {
             email: {
                 type: Sequelize.DataTypes.STRING,
                 unique: true,
-                allowNull: false,
+                allowNull: true,
             },
             hostName: {
                 type: Sequelize.DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             brandName: {
                 type: Sequelize.DataTypes.STRING,
                 unique: true,
-                allowNull: false,
+                allowNull: true,
             },
             companyNumber: {
                 type: Sequelize.DataTypes.STRING,
                 unique: true,
-                allowNull: false,
+                allowNull: true,
             },
             password: {
                 type: Sequelize.DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             phoneNumber: {
                 type: Sequelize.DataTypes.STRING,
@@ -39,7 +39,7 @@ module.exports = {
             },
             profileImg: {
                 type: Sequelize.DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             token: {
                 type: Sequelize.DataTypes.STRING,

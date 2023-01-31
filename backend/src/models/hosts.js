@@ -34,20 +34,20 @@ module.exports = (sequelize, DataTypes) => {
             email: {
                 type: DataTypes.STRING,
                 unique: true,
-                allowNull: false,
+                allowNull: true,
             },
             hostName: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             password: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             brandName: {
                 type: DataTypes.STRING,
                 unique: true,
-                allowNull: false,
+                allowNull: true,
             },
             companyNumber: {
                 type: DataTypes.STRING,
@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             profileImg: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             token: {
                 type: DataTypes.STRING,

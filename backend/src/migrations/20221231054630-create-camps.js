@@ -11,7 +11,7 @@ module.exports = {
             },
             hostId: {
                 type: Sequelize.DataTypes.INTEGER,
-                allowNull: true,
+                allowNull: false,
                 references: {
                     model: 'Hosts',
                     key: 'hostId',
@@ -60,6 +60,11 @@ module.exports = {
             },
             homepage: {
                 type: Sequelize.DataTypes.STRING,
+            },
+            premium: {
+                type: Sequelize.DataTypes.BOOLEAN,
+                defaultValue: true,
+                allowNull: false,
             },
             createdAt: {
                 allowNull: false,

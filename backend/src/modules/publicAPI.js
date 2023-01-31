@@ -65,7 +65,7 @@ const publicAPI = scheduler.scheduleJob(rule, function () {
                         );
                         var dataHostId = hostId;
                     } else {
-                        let { hostId } = await Hosts.create({
+                        const { hostId } = await Hosts.create({
                             companyNumber: data[i].bizrno,
                             phoneNumber: data[i].tel,
                         });

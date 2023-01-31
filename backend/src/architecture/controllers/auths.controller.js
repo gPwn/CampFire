@@ -15,14 +15,14 @@ class AuthsController {
 
             if (result.accessToken && result.refreshToken) {
                 const { userId } = jwt.verify(
-                    accessToken,
+                    result.accessToken,
                     process.env.TOKEN_USER_SECRET_KEY
                 );
-                console.log(`accessToken = ${accessToken}`);
+                console.log(`accessToken = ${result.accessToken}`);
 
                 res.header({
-                    accesstoken: `Bearer ${accessToken}`,
-                    refreshtoken: `Bearer ${refreshToken}`,
+                    accesstoken: `Bearer ${result.accessToken}`,
+                    refreshtoken: `Bearer ${result.refreshToken}`,
                 });
                 res.status(200).json({
                     userId: userId,

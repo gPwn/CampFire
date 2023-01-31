@@ -39,7 +39,6 @@ class AuthsService {
         const email = resultGet.data.kakao_account['email'];
         const userName = resultGet.data.properties['nickname'];
         const profileImg = resultGet.data.properties['profile_image'];
-        const phoneNumber = '';
         const provider = 'kakao';
         const snsId = resultGet.data.id;
         console.log('typeof snsId = ', typeof snsId);
@@ -93,15 +92,19 @@ class AuthsService {
             }
         );
 
-        console.log('=================', info_result.data.response);
-
         const email = info_result.data.response.email;
         const userName = info_result.data.response.name;
         const profileImg = info_result.data.response.profile_image;
-        const phoneNumber = '';
+        const snsId = info_result.data.response.id;
         const provider = 'naver';
 
-        let user = await this.authsRepository.findOneUserByEmail(email);
+        if (!email || !userName)
+            throw new ValidationError(
+                '네이버 인증 정보가 올바르지 않습니다.',
+                400
+            );
+
+        let user = await this.authsRepository.findOneUserBySnsId(snsId);
 
         if (user && user.provider !== provider) {
             throw new ValidationError(
@@ -111,13 +114,7 @@ class AuthsService {
         }
 
         if (!user) {
-            user = await this.authsRepository.createUser(
-                email,
-                userName,
-                profileImg,
-                phoneNumber,
-                provider
-            );
+            return { email, userName, profileImg, snsId, provider };
         }
         const accessToken = createUserToken(user.userId, '1h');
         const refreshToken = createUserToken('refreshToken', '1d');
@@ -159,7 +156,7 @@ class AuthsService {
         const email = userInfo.email;
         const userName = userInfo.name;
         const profileImg = userInfo.picture;
-        const phoneNumber = '';
+        const snsId = userInfo.id;
         const provider = 'google';
 
         if (!email || !userName) {
@@ -169,7 +166,7 @@ class AuthsService {
             );
         }
 
-        let user = await this.authsRepository.findOneUserByEmail(email);
+        let user = await this.authsRepository.findOneUserBySnsId(snsId);
 
         if (user && user.provider !== provider) {
             throw new ValidationError(
@@ -179,13 +176,7 @@ class AuthsService {
         }
 
         if (!user) {
-            user = await this.authsRepository.createUser(
-                email,
-                userName,
-                profileImg,
-                phoneNumber,
-                provider
-            );
+            return { email, userName, profileImg, snsId, provider };
         }
         const accessToken = createUserToken(user.userId, '1h');
         const refreshToken = createUserToken('refreshToken', '1d');

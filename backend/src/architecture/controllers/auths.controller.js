@@ -41,21 +41,25 @@ class AuthsController {
             const code = req.query.code;
             const state = req.query.state;
 
-            const { accessToken, refreshToken } =
-                await this.authsService.loginNaver(code, state);
-            const { userId } = jwt.verify(
-                accessToken,
-                process.env.TOKEN_USER_SECRET_KEY
-            );
-            console.log(`accessToken = ${accessToken}`);
+            const result = await this.authsService.loginNaver(code, state);
 
-            res.header({
-                accesstoken: `Bearer ${accessToken}`,
-                refreshtoken: `Bearer ${refreshToken}`,
-            });
-            res.status(200).json({
-                userId: userId,
-            });
+            if (result.accessToken && result.refreshToken) {
+                const { userId } = jwt.verify(
+                    result.accessToken,
+                    process.env.TOKEN_USER_SECRET_KEY
+                );
+                console.log(`accessToken = ${result.accessToken}`);
+
+                res.header({
+                    accesstoken: `Bearer ${result.accessToken}`,
+                    refreshtoken: `Bearer ${result.refreshToken}`,
+                });
+                res.status(200).json({
+                    userId: userId,
+                });
+            } else {
+                res.status(200).json({ user: result });
+            }
         } catch (error) {
             console.log(error);
             res.status(400).json({ errorMessage: '네이버 로그인 실패' });
@@ -65,22 +69,25 @@ class AuthsController {
     loginGoogle = async (req, res) => {
         try {
             let code = req.query.code;
-            const { accessToken, refreshToken } =
-                await this.authsService.loginGoogle(code);
+            const result = await this.authsService.loginGoogle(code);
 
-            const { userId } = jwt.verify(
-                accessToken,
-                process.env.TOKEN_USER_SECRET_KEY
-            );
-            console.log(`accessToken = ${accessToken}`);
+            if (result.accessToken && result.refreshToken) {
+                const { userId } = jwt.verify(
+                    result.accessToken,
+                    process.env.TOKEN_USER_SECRET_KEY
+                );
+                console.log(`accessToken = ${result.accessToken}`);
 
-            res.header({
-                accesstoken: `Bearer ${accessToken}`,
-                refreshtoken: `Bearer ${refreshToken}`,
-            });
-            res.status(200).json({
-                userId: userId,
-            });
+                res.header({
+                    accesstoken: `Bearer ${result.accessToken}`,
+                    refreshtoken: `Bearer ${result.refreshToken}`,
+                });
+                res.status(200).json({
+                    userId: userId,
+                });
+            } else {
+                res.status(200).json({ user: result });
+            }
         } catch (error) {
             console.log(error);
             res.status(400).json({ errorMessage: '구글 로그인 실패' });

@@ -196,10 +196,7 @@ class CampsRepository {
                     attributes: ['reviewId'],
                 },
             ],
-            order: [
-                ['premium', 'DESC'],
-                ['likes', 'DESC'],
-            ],
+            order: [['premium', 'DESC']],
         });
         if (camps.length === 0) {
             return false;

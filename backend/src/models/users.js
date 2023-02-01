@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
             },
             snsId: {
-                allowNull: false,
+                allowNull: true,
                 type: DataTypes.STRING,
             },
         },

@@ -117,6 +117,29 @@ class UsersService {
 
         return provider;
     };
+
+    // 유저 이메일 찾기
+    findUserEmail = async (phoneNumber) => {
+        const user = await this.usersRepository.findUserEmail(phoneNumber);
+
+        if (!user) throw new Error('존재하지않는 사용자입니다.');
+        if (user.provider !== null)
+            throw new Error('sns는 이메일을 찾을 수 없습니다.');
+        return user.email;
+    };
+    // 유저 비밀번호 변경하기
+    updateUserPW = async (email, phoneNumber, password) => {
+        const hashValue = hash(password);
+        const user = await this.usersRepository.updateUserPW(
+            email,
+            phoneNumber,
+            hashValue
+        );
+
+        if (!user) throw new Error('존재하지않는 사용자입니다.');
+
+        return user.email;
+    };
 }
 
 module.exports = UsersService;

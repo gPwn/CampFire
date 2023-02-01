@@ -86,6 +86,7 @@ class SearchService {
                     likeStatus: likeStatus,
                     mapX: searchList.mapX,
                     mapY: searchList.mapY,
+                    premium: searchList.premium,
                     countReviews: searchList.Reviews.length,
                     createdAt: searchList.createdAt,
                     updatedAt: searchList.updatedAt,

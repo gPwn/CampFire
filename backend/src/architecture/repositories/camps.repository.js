@@ -197,7 +197,7 @@ class CampsRepository {
                 },
             ],
             order: [
-                ['hostId', 'DESC'],
+                ['premium', 'DESC'],
                 ['likes', 'DESC'],
             ],
         });

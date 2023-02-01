@@ -2,10 +2,17 @@ const scheduler = require('node-schedule');
 const request = require('request');
 const env = process.env;
 const compServiceKey = env.CAMPSERVISEKEY;
-const { Camps, CampAmenities, Envs, Types, Themes } = require('../models');
+const {
+    Camps,
+    CampAmenities,
+    Envs,
+    Types,
+    Themes,
+    Hosts,
+} = require('../models');
 
 let url = 'https://apis.data.go.kr/B551011/GoCamping/basedList?'; /*URL*/
-let queryParams = encodeURIComponent('numOfRows') + '=' + 200;
+let queryParams = encodeURIComponent('numOfRows') + '=' + 500;
 
 queryParams += '&' + encodeURIComponent('pageNo') + '=' + 1;
 queryParams += '&' + encodeURIComponent('MobileOS') + '=' + 'WIN';
@@ -38,10 +45,39 @@ const publicAPI = scheduler.scheduleJob(rule, function () {
             for (let i = 0; i < data.length; i++) {
                 if (typeof data[i] === undefined) continue;
 
+                if (
+                    data[i].bizrno.length === 12 &&
+                    data[i].bizrno.indexOf(' ') === -1 &&
+                    (data[i].tel.length === 12 || data[i].tel.length === 13) &&
+                    data[i].tel.indexOf(' ') === -1
+                ) {
+                    const isExistHost = await Hosts.findOne({
+                        where: { companyNumber: data[i].bizrno },
+                    });
+                    if (isExistHost) {
+                        const { hostId } = isExistHost;
+                        await Hosts.update(
+                            {
+                                companyNumber: data[i].bizrno,
+                                phoneNumber: data[i].tel,
+                            },
+                            { where: { hostId } }
+                        );
+                        var dataHostId = hostId;
+                    } else {
+                        const { hostId } = await Hosts.create({
+                            companyNumber: data[i].bizrno,
+                            phoneNumber: data[i].tel,
+                        });
+                        var dataHostId = hostId;
+                    }
+                } else {
+                    continue;
+                }
+
                 const isExistCampName = await Camps.findOne({
                     where: { campName: data[i].facltNm },
                 });
-
                 if (isExistCampName) {
                     const { campId } = isExistCampName;
                     await Camps.update(
@@ -55,6 +91,7 @@ const publicAPI = scheduler.scheduleJob(rule, function () {
                             checkOut: '11:00:00',
                             mapX: data[i].mapX,
                             mapY: data[i].mapY,
+                            premium: false,
                         },
                         { where: { campId } }
                     );
@@ -84,7 +121,7 @@ const publicAPI = scheduler.scheduleJob(rule, function () {
                     );
                 } else {
                     const createdCamp = await Camps.create({
-                        hostId: 0,
+                        hostId: dataHostId,
                         campMainImage: data[i].firstImageUrl,
                         campSubImages: null,
                         campName: data[i].facltNm,
@@ -95,6 +132,7 @@ const publicAPI = scheduler.scheduleJob(rule, function () {
                         mapX: data[i].mapX,
                         mapY: data[i].mapY,
                         homepage: data[i].homepage,
+                        premium: false,
                     });
                     const { campId } = createdCamp;
                     await CampAmenities.create({

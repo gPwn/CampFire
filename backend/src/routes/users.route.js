@@ -16,6 +16,6 @@ router.put(
     upload.single('profileImg'),
     usersController.updateUser
 );
-router.delete('/:userId', authUserMiddleware, usersController.deleteUser);
+router.delete('/', authUserMiddleware, usersController.deleteUser);
 
 module.exports = router;

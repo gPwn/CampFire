@@ -103,13 +103,19 @@ class UsersService {
         );
     };
 
-    deleteUser = async (userId, password) => {
-        const hashValue = hash(password);
+    deleteUser = async (userId) => {
         const user = await this.usersRepository.findOneUser(userId);
-        if (user.password !== hashValue)
-            throw new Error('비밀번호가 일치하지 않습니다.');
 
         await this.usersRepository.deleteUser(userId);
+
+        let alert = ';';
+        if (user.provider === null) {
+            alert = `${user.email}, 회원 탈퇴하셨습니다.`;
+        } else {
+            alert = `${user.provider}으로 다시 회원가입을 할 수 없습니다.`;
+        }
+
+        return alert;
     };
 }
 

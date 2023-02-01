@@ -155,21 +155,16 @@ class UsersController {
     };
 
     deleteUser = async (req, res) => {
-        const { password } = req.body;
         const userId = res.locals.userId;
         try {
-            await this.usersService.deleteUser(userId, password);
+            const alert = await this.usersService.deleteUser(userId);
             return res.status(200).json({
+                userId,
+                alert,
                 message: '회원탈퇴에 성공하였습니다.',
             });
         } catch (error) {
             console.log(error);
-
-            if (error.message === '비밀번호가 일치하지 않습니다.')
-                return res
-                    .status(412)
-                    .json({ errorMessage: '비밀번호가 일치하지 않습니다.' });
-
             res.status(400).json({
                 errorMessage: '회원탈퇴에 실패하였습니다',
             });

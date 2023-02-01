@@ -125,20 +125,24 @@ class UsersService {
         if (!user) throw new Error('존재하지않는 사용자입니다.');
         if (user.provider !== null)
             throw new Error('sns는 이메일을 찾을 수 없습니다.');
+
         return user.email;
     };
     // 유저 비밀번호 변경하기
     updateUserPW = async (email, phoneNumber, password) => {
+        const user = await this.usersRepository.findUserEmail(phoneNumber);
+        if (!user) throw new Error('존재하지않는 사용자입니다.');
+        if (user.email !== email)
+            throw new Error('이메일과 전화번호를 확인하세요.');
+        if (user.provider !== null)
+            throw new Error('sns는 이메일을 찾을 수 없습니다.');
+
         const hashValue = hash(password);
-        const user = await this.usersRepository.updateUserPW(
+        return await this.usersRepository.updateUserPW(
             email,
             phoneNumber,
             hashValue
         );
-
-        if (!user) throw new Error('존재하지않는 사용자입니다.');
-
-        return user.email;
     };
 }
 

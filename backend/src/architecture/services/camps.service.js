@@ -245,7 +245,9 @@ class CampsService {
             phoneNumber:
                 camp.Host.phoneNumber === null ? null : camp.Host.phoneNumber,
             campAmenities:
-                campAmenities === null ? null : campAmenities.split(','),
+                campAmenities === null || campAmenities.length === 0
+                    ? null
+                    : campAmenities.split(','),
             envLists: envLists === null ? null : envLists.split(','),
             typeLists: typeLists === null ? null : typeLists.split(','),
             themeLists: themeLists === null ? null : themeLists.split(','),

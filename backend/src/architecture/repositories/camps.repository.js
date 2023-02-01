@@ -180,7 +180,7 @@ class CampsRepository {
     };
 
     // 캠핑장 페이지 조회
-    getCampsByPage = async (pageNo, userId) => {
+    getCampsByPage = async (pageNo) => {
         const camps = await this.#CampsModel.findAll({
             offset: pageNo,
             limit: 16,
@@ -196,7 +196,10 @@ class CampsRepository {
                     attributes: ['reviewId'],
                 },
             ],
-            order: [['premium', 'DESC']],
+            order: [
+                ['premium', 'DESC'],
+                ['hostId', 'ASC'],
+            ],
         });
         if (camps.length === 0) {
             return false;

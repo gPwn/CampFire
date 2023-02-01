@@ -157,10 +157,10 @@ class UsersController {
     deleteUser = async (req, res) => {
         const userId = res.locals.userId;
         try {
-            const alert = await this.usersService.deleteUser(userId);
+            const provider = await this.usersService.deleteUser(userId);
             return res.status(200).json({
                 userId,
-                alert,
+                provider,
                 message: '회원탈퇴에 성공하였습니다.',
             });
         } catch (error) {

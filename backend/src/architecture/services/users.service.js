@@ -108,14 +108,14 @@ class UsersService {
 
         await this.usersRepository.deleteUser(userId);
 
-        let alert = ';';
+        let provider = '';
         if (user.provider === null) {
-            alert = `${user.email}, 회원 탈퇴하셨습니다.`;
+            provider = user.email;
         } else {
-            alert = `${user.provider}으로 다시 회원가입을 할 수 없습니다.`;
+            provider = user.provider;
         }
 
-        return alert;
+        return provider;
     };
 }
 

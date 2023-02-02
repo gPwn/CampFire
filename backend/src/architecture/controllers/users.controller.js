@@ -181,6 +181,13 @@ class UsersController {
 
         const tel = phoneNumber.split('-').join('');
         try {
+            const isExistPhoneNumber =
+                await this.usersService.isExistPhoneNumber(phoneNumber);
+
+            if (!isExistPhoneNumber) {
+                throw new Error('해당하는 이메일 혹은 비밀번호가 없습니다.');
+            }
+
             const verificationCode = createRandomNumber();
             const date = Date.now().toString();
 
@@ -230,6 +237,11 @@ class UsersController {
         } catch (error) {
             Cache.del(tel);
             console.log(error);
+            if (error.message === '해당하는 이메일 혹은 비밀번호가 없습니다.') {
+                return res.status(412).json({
+                    errorMessage: '해당하는 이메일 혹은 비밀번호가 없습니다.',
+                });
+            }
             res.status(400).json({ errorMessage: '인증번호 발송 실패' });
         }
     };
@@ -297,11 +309,9 @@ class UsersController {
                     .json({ errorMessage: '존재하지않는 사용자입니다.' });
             }
             if (error.message === 'sns는 비밀번호를 변경 할 수 없습니다.') {
-                return res
-                    .status(412)
-                    .json({
-                        errorMessage: 'sns는 비밀번호를 변경 할 수 없습니다.',
-                    });
+                return res.status(412).json({
+                    errorMessage: 'sns는 비밀번호를 변경 할 수 없습니다.',
+                });
             }
             if (error.message === '이메일과 전화번호를 확인하세요.') {
                 return res

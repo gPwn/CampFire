@@ -144,6 +144,10 @@ class UsersService {
             hashValue
         );
     };
+
+    isExistPhoneNumber = async (phoneNumber) => {
+        return await this.usersRepository.findUserEmail(phoneNumber);
+    };
 }
 
 module.exports = UsersService;

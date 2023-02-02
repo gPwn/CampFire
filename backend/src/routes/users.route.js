@@ -16,6 +16,13 @@ router.put(
     upload.single('profileImg'),
     usersController.updateUser
 );
-router.delete('/:userId', authUserMiddleware, usersController.deleteUser);
+router.delete('/', authUserMiddleware, usersController.deleteUser);
+// 문자 인증
+router.get('/sms/:phoneNumber', usersController.sendMessage);
+router.post('/sms/verify', usersController.verifyCode);
+// 유저 이메일 찾기
+router.get('/find/userEmail', usersController.findUserEmail);
+// 유저 비밀번호 변경하기
+router.put('/update/userPW', usersController.updateUserPW);
 
 module.exports = router;

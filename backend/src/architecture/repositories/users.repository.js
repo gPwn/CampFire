@@ -80,6 +80,22 @@ class UsersRepository {
 
         return bookList;
     };
+
+    // 유저 이메일 찾기
+    findUserEmail = async (phoneNumber) => {
+        return await this.#userModel.findOne({
+            where: { phoneNumber },
+        });
+    };
+    // 유저 비밀번호 변경하기
+    updateUserPW = async (email, phoneNumber, password) => {
+        return await this.#userModel.update(
+            { password },
+            {
+                where: { [Op.and]: [{ email }, { phoneNumber }] },
+            }
+        );
+    };
 }
 
 module.exports = UsersRepository;

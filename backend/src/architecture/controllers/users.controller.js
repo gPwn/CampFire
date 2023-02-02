@@ -259,7 +259,7 @@ class UsersController {
     // 유저 이메일 찾기
     findUserEmail = async (req, res, next) => {
         try {
-            const { phoneNumber } = req.body;
+            const { phoneNumber } = req.query;
 
             const email = await this.usersService.findUserEmail(phoneNumber);
             res.status(200).json({
@@ -267,6 +267,16 @@ class UsersController {
                 message: '이메일 찾기에 성공하였습니다.',
             });
         } catch (error) {
+            if (error.message === '존재하지않는 사용자입니다.') {
+                return res
+                    .status(404)
+                    .json({ errorMessage: '존재하지않는 사용자입니다.' });
+            }
+            if (error.message === 'sns는 이메일을 찾을 수 없습니다.') {
+                return res
+                    .status(412)
+                    .json({ errorMessage: 'sns는 이메일을 찾을 수 없습니다.' });
+            }
             next(error);
         }
     };
@@ -276,11 +286,28 @@ class UsersController {
             const { email, phoneNumber, password } = req.body;
 
             await this.usersService.updateUserPW(email, phoneNumber, password);
-            res.status(200).json({
+            res.status(201).json({
                 email,
                 message: '비밀번호 변경에 성공하였습니다.',
             });
         } catch (error) {
+            if (error.message === '존재하지않는 사용자입니다.') {
+                return res
+                    .status(404)
+                    .json({ errorMessage: '존재하지않는 사용자입니다.' });
+            }
+            if (error.message === 'sns는 비밀번호를 변경 할 수 없습니다.') {
+                return res
+                    .status(412)
+                    .json({
+                        errorMessage: 'sns는 비밀번호를 변경 할 수 없습니다.',
+                    });
+            }
+            if (error.message === '이메일과 전화번호를 확인하세요.') {
+                return res
+                    .status(412)
+                    .json({ errorMessage: '이메일과 전화번호를 확인하세요.' });
+            }
             next(error);
         }
     };

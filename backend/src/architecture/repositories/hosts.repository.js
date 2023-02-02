@@ -86,6 +86,22 @@ class HostsRepository {
         });
         return campList;
     };
+
+    // 호스트 이메일 찾기
+    findHostEmail = async (phoneNumber) => {
+        return await this.#hostModel.findOne({
+            where: { phoneNumber },
+        });
+    };
+    // 호스트 비밀번호 변경하기
+    updateHostPW = async (email, phoneNumber, password) => {
+        return await this.#hostModel.update(
+            { password },
+            {
+                where: { [Op.and]: [{ email }, { phoneNumber }] },
+            }
+        );
+    };
 }
 
 module.exports = HostsRepository;

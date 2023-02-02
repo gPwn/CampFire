@@ -119,6 +119,29 @@ class HostsService {
 
         await this.hostsRepository.deleteHost(hostId);
     };
+
+    // 호스트 이메일 찾기
+    findHostEmail = async (phoneNumber) => {
+        const host = await this.hostsRepository.findHostEmail(phoneNumber);
+
+        if (!host) throw new Error('존재하지않는 사용자입니다.');
+
+        return host.email;
+    };
+    // 호스트 비밀번호 변경하기
+    updateHostPW = async (email, phoneNumber, password) => {
+        const host = await this.hostsRepository.findHostEmail(phoneNumber);
+        if (!host) throw new Error('존재하지않는 사용자입니다.');
+        if (host.email !== email)
+            throw new Error('이메일과 전화번호를 확인하세요.');
+
+        const hashValue = hash(password);
+        return await this.hostsRepository.updateHostPW(
+            email,
+            phoneNumber,
+            hashValue
+        );
+    };
 }
 
 module.exports = HostsService;

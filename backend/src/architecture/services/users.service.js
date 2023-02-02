@@ -135,7 +135,7 @@ class UsersService {
         if (user.email !== email)
             throw new Error('이메일과 전화번호를 확인하세요.');
         if (user.provider !== null)
-            throw new Error('sns는 이메일을 찾을 수 없습니다.');
+            throw new Error('sns는 비밀번호를 변경할 수 없습니다.');
 
         const hashValue = hash(password);
         return await this.usersRepository.updateUserPW(

@@ -14,7 +14,6 @@ class EventsRepository {
     getPremiumCamps = async () => {
         return await this.#CampsModel.findAll({
             where: { premium: true },
-            limit: 20,
             include: [
                 {
                     model: this.#TypesModel,

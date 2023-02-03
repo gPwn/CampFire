@@ -90,7 +90,7 @@ class EventsService {
         reviewsArr.sort(function (a, b) {
             return b[sortingField] - a[sortingField];
         });
-        reviewsArr = reviewsArr.slice(0, 20);
+        reviewsArr = reviewsArr.slice(0, 9);
 
         return reviewsArr;
     };

@@ -31,7 +31,7 @@ class EventsRepository {
 
     getLikesCamps = async () => {
         return await this.#CampsModel.findAll({
-            limit: 20,
+            limit: 9,
             attributes: ['campName', 'campId', 'likes'],
             order: [['likes', 'DESC']],
         });

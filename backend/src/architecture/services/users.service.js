@@ -89,19 +89,7 @@ class UsersService {
         const user = await this.usersRepository.findOneUser(userId);
         if (!user) throw new Error('존재하지않는 사용자입니다.');
 
-        if (
-            (userName === undefined ||
-                userName === null ||
-                userName === user.userName) &&
-            (profileImg === undefined || profileImg === null)
-        ) {
-            throw new Error('수정사항이 없습니다.');
-        }
-
-        if (userName === undefined || userName === null)
-            userName = user.userName;
-        if (profileImg === undefined || profileImg === null)
-            profileImg = user.profileImg;
+        if (profileImg === null) profileImg = user.profileImg;
 
         await this.usersRepository.updateUser(userId, userName, profileImg);
     };

@@ -122,13 +122,9 @@ class UsersController {
             let profileImg = undefined;
             if (req.file) {
                 profileImg = req.file.location;
-            } else if (req.body.profileImg === 'null') {
-                profileImg = undefined;
+            } else {
+                profileImg = req.body.profileImg;
             }
-
-            if (userName === 'null') {
-                userName = null;
-            } else userName = userName;
 
             await this.usersService.updateUser(userId, userName, profileImg);
             return res

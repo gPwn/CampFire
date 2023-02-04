@@ -48,9 +48,9 @@ class UsersRepository {
         });
     };
 
-    updateUser = async (userId, userName, phoneNumber, profileImg) => {
+    updateUser = async (userId, userName, profileImg) => {
         return await this.#userModel.update(
-            { userName, phoneNumber, profileImg },
+            { userName, profileImg },
             { where: { userId } }
         );
     };
@@ -69,7 +69,7 @@ class UsersRepository {
 
     findBooksListByUser = async (userId) => {
         const query = `SELECT * FROM Books WHERE userId = :userId`;
-        console.log(typeof userId);
+        // console.log(typeof userId);
         const bookList = await sequelize.query(query, {
             replacements: { userId: userId },
             type: sequelize.QueryTypes.SELECT,

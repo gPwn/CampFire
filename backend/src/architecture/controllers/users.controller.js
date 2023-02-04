@@ -98,7 +98,7 @@ class UsersController {
 
     findOneUser = async (req, res) => {
         try {
-            const { userId } = req.params;
+            const userId = res.locals.userId;
             const user = await this.usersService.findOneUser(userId);
             res.status(200).json({ user });
         } catch (error) {
@@ -116,27 +116,17 @@ class UsersController {
 
     updateUser = async (req, res) => {
         try {
-            const { userId } = req.params;
+            const userId = res.locals.userId;
+            let { userName } = req.body;
 
-            const tokenUserId = res.locals.userId;
-            console.log(tokenUserId);
-            const { userName, phoneNumber } = req.body;
             let profileImg = undefined;
-
             if (req.file) {
                 profileImg = req.file.location;
-            } else if (req.body.profileImg === 'null') {
-                profileImg =
-                    'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            } else {
+                profileImg = req.body.profileImg;
             }
 
-            await this.usersService.updateUser(
-                userId,
-                userName,
-                phoneNumber,
-                tokenUserId,
-                profileImg
-            );
+            await this.usersService.updateUser(userId, userName, profileImg);
             return res
                 .status(201)
                 .json({ message: '사용자 정보가 수정되었습니다.' });
@@ -147,10 +137,10 @@ class UsersController {
                     .status(404)
                     .json({ errorMessage: '존재하지않는 사용자입니다.' });
             }
-            if (error.message === '권한이 없습니다.') {
+            if (error.message === '수정사항이 없습니다.') {
                 return res
                     .status(401)
-                    .json({ errorMessage: '권한이 없습니다.' });
+                    .json({ errorMessage: '수정사항이 없습니다.' });
             }
             res.status(400).json({
                 errorMessage: '사용자 정보 수정에 실패하였습니다.',

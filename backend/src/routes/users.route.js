@@ -6,16 +6,22 @@ const upload = require('../modules/profileImg.js');
 const authLoginUserMiddleware = require('../middlewares/authLoginUser.middleware');
 const authUserMiddleware = require('../middlewares/authUser.middleware');
 
+// 회원가입
 router.post('/signup', upload.single('profileImg'), usersController.signUp);
+// 회원가입시 중복 검사
 router.get('/signup/findDup', usersController.findDup);
+//로그인
 router.post('/login', authLoginUserMiddleware, usersController.logIn);
-router.get('/:userId', usersController.findOneUser);
+//회원 상세 정보
+router.get('/', authUserMiddleware, usersController.findOneUser);
+// 회원 정보 수정
 router.put(
-    '/:userId',
+    '/',
     authUserMiddleware,
     upload.single('profileImg'),
     usersController.updateUser
 );
+// 회원 탈퇴
 router.delete('/', authUserMiddleware, usersController.deleteUser);
 // 문자 인증
 router.get('/sms/:phoneNumber', usersController.sendMessage);

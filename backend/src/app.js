@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const app = express();
 const routes = require('./routes');
 const cors = require('cors');
@@ -13,6 +14,7 @@ const corsOption = {
 require('dotenv').config();
 const env = process.env;
 
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(cors(corsOption));
 app.use('/api', routes);

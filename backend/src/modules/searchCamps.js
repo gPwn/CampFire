@@ -88,10 +88,31 @@ const getThemesIncludecondition = function (Array) {
         };
     }
 };
+const getLocationIncludecondition = function (str) {
+    if (str.length === 0) {
+        return { [Op.like]: '%' + ' ' + '%' };
+    } else if (str.length === 2) {
+        return { [Op.like]: '%' + str + '%' };
+    } else if (str.length === 3) {
+        const str2 = str[0] + str[1];
+        return {
+            [Op.like]: '%' + str2 + '%',
+        };
+    } else if (str.length === 4) {
+        const str2 = str[0] + str[2];
+        return {
+            [Op.or]: [
+                { [Op.like]: '%' + str + '%' },
+                { [Op.like]: '%' + str2 + '%' },
+            ],
+        };
+    }
+};
 
 module.exports = {
     getTypesIncludecondition,
     getCampAmenitiesIncludecondition,
     getEnvsIncludecondition,
     getThemesIncludecondition,
+    getLocationIncludecondition,
 };

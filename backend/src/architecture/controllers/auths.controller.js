@@ -2,11 +2,17 @@ const AuthsService = require('../services/auths.service.js');
 const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
 const Cache = require('memory-cache');
+const redis = require('redis');
 const { createRandomNumber } = require('../../util/auth-encryption.util');
 const axios = require('axios');
 
 class AuthsController {
     authsService = new AuthsService();
+
+    redisClient = redis.createClient({
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+    });
 
     loginKakao = async (req, res) => {
         try {
@@ -112,6 +118,9 @@ class AuthsController {
 
             Cache.del(tel);
             Cache.put(tel, verificationCode);
+            const x = await this.redisClient.get();
+            console.log(x);
+            await this.redisClient.set(tel, verificationCode);
 
             const method = 'POST';
             const space = ' ';
@@ -154,7 +163,6 @@ class AuthsController {
             console.log('문자보내짐?!!', smsRes.data);
             res.status(200).json({ message: '인증번호 발송 완료!' });
         } catch (error) {
-            Cache.del(tel);
             console.log(error);
             res.status(400).json({ errorMessage: '인증번호 발송 실패' });
         }
@@ -166,7 +174,8 @@ class AuthsController {
         const tel = phoneNumber.split('-').join('');
 
         const CacheData = Cache.get(tel);
-        console.log(CacheData);
+        const redisData = this.redisClient.get(tel);
+        console.log(redisData);
         if (!CacheData) {
             return res
                 .status(400)
@@ -180,6 +189,7 @@ class AuthsController {
         }
 
         Cache.del(phoneNumber);
+        await this.redisClient.del(phoneNumber);
         return res.status(201).json({ message: '인증성공!' });
     };
 

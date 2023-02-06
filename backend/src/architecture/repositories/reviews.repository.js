@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 
 class ReviewsRepository {
     #CampsModel;
@@ -79,6 +79,12 @@ class ReviewsRepository {
             order: [['createdAt', 'ASC']],
         });
         return reviews;
+    };
+
+    getUserInfo = async (userId) => {
+        return await this.#UsersModel.findOne({
+            where: { userId },
+        });
     };
 }
 function getToday() {

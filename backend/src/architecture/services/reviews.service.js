@@ -117,6 +117,26 @@ class ReviewsService {
                 404
             );
         }
+
+        return await Promise.all(
+            reviews.map(async (review) => {
+                const findUserInfo = await this.reviewsRepository.getUserInfo(
+                    review.userId
+                );
+
+                return {
+                    reviewId: review.reviewId,
+                    campId: review.campId,
+                    userId: review.userId,
+                    userName: findUserInfo.userName,
+                    profileImg: findUserInfo.profileImg,
+                    content: review.content,
+                    createdAt: review.createdAt,
+                    updatedAt: review.updatedAt,
+                };
+            })
+        );
+
         return reviews;
     };
 }

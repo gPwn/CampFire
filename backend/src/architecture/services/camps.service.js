@@ -104,14 +104,23 @@ class CampsService {
             throw new ValidationError('캠핑장 수정 권한이 없습니다.', 400);
         }
 
-        const campMainImageName = getMainImageName(findHostId['campMainImage']);
-        const campSubImageNames = getSubImagesNames(
-            findHostId['campSubImages']
-        );
+        if (campMainImage === undefined) {
+            campMainImage = findHostId.campMainImage;
+        } else {
+            const campMainImageName = getMainImageName(
+                findHostId['campMainImage']
+            );
+            await deleteImage(campMainImageName);
+        }
 
-        await deleteImage(campMainImageName);
-        for (let campSubImageName of campSubImageNames) {
-            await deleteImage(campSubImageName);
+        if (campSubImages !== findHostId.campSubImageNames) {
+            const campSubImageNames = getSubImagesNames(
+                findHostId['campSubImages']
+            );
+
+            for (let campSubImageName of campSubImageNames) {
+                await deleteImage(campSubImageName);
+            }
         }
 
         return await this.campsRepository.updateCamps(

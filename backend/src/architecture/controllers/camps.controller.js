@@ -81,16 +81,33 @@ class CampsController {
             const { campId } = req.params;
 
             let campMainImage;
-            const campSubImagesArray = [];
 
-            if (req.files) {
+            if (req.files.campMainImage) {
                 campMainImage = req.files.campMainImage[0].location;
+            } else {
+                campMainImage = req.body.campMainImage;
+            }
+
+            let campSubImagesArray = [];
+            const subImages = req.body.campSubImages;
+
+            if (req.files.campSubImages) {
                 for (const img of req.files.campSubImages) {
                     campSubImagesArray.push(img.location);
                 }
+                if (subImages !== undefined) {
+                    let subImagesArr = subImages.split(',');
+                    for (let img of subImagesArr) {
+                        campSubImagesArray.push(img);
+                    }
+                }
             } else {
-                throw new InvalidParamsError();
+                let subImagesArr = subImages.split(',');
+                for (let img of subImagesArr) {
+                    campSubImagesArray.push(img);
+                }
             }
+
             const campSubImages = campSubImagesArray.toString();
 
             await this.campsService.updateCamps(

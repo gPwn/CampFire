@@ -81,16 +81,31 @@ class SitesController {
             } = req.body;
 
             let siteMainImage;
-            const siteSubImagesArray = [];
-
-            if (req.files) {
+            if (req.files.siteMainImage) {
                 siteMainImage = req.files.siteMainImage[0].location;
+            } else {
+                siteMainImage = req.body.siteMainImage;
+            }
+
+            let siteSubImagesArray = [];
+            const subImages = req.body.siteSubImages;
+            if (req.files.siteSubImages) {
                 for (const img of req.files.siteSubImages) {
                     siteSubImagesArray.push(img.location);
                 }
+                if (subImages !== undefined) {
+                    let a = subImages.split(',');
+                    for (let img of a) {
+                        siteSubImagesArray.push(img);
+                    }
+                }
             } else {
-                throw new InvalidParamsError();
+                let a = subImages.split(',');
+                for (let img of a) {
+                    siteSubImagesArray.push(img);
+                }
             }
+
             const siteSubImages = siteSubImagesArray.toString();
 
             await this.sitesService.updateSite(

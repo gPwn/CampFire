@@ -67,8 +67,6 @@ class CampsController {
     // 캠핑장 수정
     updateCamps = async (req, res, next) => {
         try {
-            console.log(req.files);
-            console.log(req.body);
             const {
                 campName,
                 campAddress,
@@ -83,9 +81,6 @@ class CampsController {
             const { campId } = req.params;
 
             let campMainImage;
-            const campSubImagesArray = req.body.campSubImages;
-            console.log(campSubImagesArray);
-            console.log(typeof campSubImagesArray);
 
             if (req.files.campMainImage) {
                 campMainImage = req.files.campMainImage[0].location;
@@ -93,9 +88,23 @@ class CampsController {
                 campMainImage = req.body.campMainImage;
             }
 
+            let campSubImagesArray = [];
+            const subImages = req.body.campSubImages;
+
             if (req.files.campSubImages) {
                 for (const img of req.files.campSubImages) {
                     campSubImagesArray.push(img.location);
+                }
+                if (subImages !== undefined) {
+                    let a = subImages.split(',');
+                    for (let img of a) {
+                        campSubImagesArray.push(img);
+                    }
+                }
+            } else {
+                let a = subImages.split(',');
+                for (let img of a) {
+                    campSubImagesArray.push(img);
                 }
             }
 

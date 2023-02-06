@@ -52,6 +52,11 @@ class SearchService {
                 400
             );
         }
+
+        if (search.indexOf(' ') !== -1) {
+            search = search.replace(/(\s*)/g, '');
+        }
+
         const searchLists = await this.searchRepository.getSearchCampLists(
             search,
             types,

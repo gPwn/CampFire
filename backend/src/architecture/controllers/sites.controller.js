@@ -94,14 +94,14 @@ class SitesController {
                     siteSubImagesArray.push(img.location);
                 }
                 if (subImages !== undefined) {
-                    let a = subImages.split(',');
-                    for (let img of a) {
+                    let subImagesArr = subImages.split(',');
+                    for (let img of subImagesArr) {
                         siteSubImagesArray.push(img);
                     }
                 }
             } else {
-                let a = subImages.split(',');
-                for (let img of a) {
+                let subImagesArr = subImages.split(',');
+                for (let img of subImagesArr) {
                     siteSubImagesArray.push(img);
                 }
             }

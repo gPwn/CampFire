@@ -96,14 +96,14 @@ class CampsController {
                     campSubImagesArray.push(img.location);
                 }
                 if (subImages !== undefined) {
-                    let a = subImages.split(',');
-                    for (let img of a) {
+                    let subImagesArr = subImages.split(',');
+                    for (let img of subImagesArr) {
                         campSubImagesArray.push(img);
                     }
                 }
             } else {
-                let a = subImages.split(',');
-                for (let img of a) {
+                let subImagesArr = subImages.split(',');
+                for (let img of subImagesArr) {
                     campSubImagesArray.push(img);
                 }
             }

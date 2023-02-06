@@ -12,8 +12,6 @@ const s3 = new aws.S3();
 
 const deleteImage = async function (imageName) {
     try {
-        console.log(imageName);
-        console.log(',');
         await s3.deleteObject(
             {
                 Bucket: process.env.POSTIMG_BUCKETNAME,
